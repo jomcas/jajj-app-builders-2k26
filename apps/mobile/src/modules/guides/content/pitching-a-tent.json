@@ -1,0 +1,96 @@
+{
+  "id": "pitching-a-tent",
+  "kind": "ordinary",
+  "category": "camp",
+  "order": 14,
+  "title": { "en": "Pitching a tent", "fil": "Pagtatayo ng tent" },
+  "summary": {
+    "en": "Pick a large, flat spot away from flood paths, dead branches and exposed peaks, and set up camp before dark. Practise pitching your tent at home first.",
+    "fil": "Pumili ng malawak at patag na puwesto na malayo sa daanan ng baha, patay na sanga at nakalantad na tuktok, at magtayo ng kampo bago dumilim. Magpraktis munang magtayo ng tent sa bahay."
+  },
+  "callForHelp": {
+    "en": "Pitching a tent is not an emergency. If a storm, rising water or an injury happens at camp, open the matching Emergency Guide, and call 911 or the Philippine Red Cross hotline 143 if anyone is in danger.",
+    "fil": "Hindi emergency ang pagtatayo ng tent. Kung may bagyo, tumataas na tubig o may nasaktan sa kampo, buksan ang katugmang Emergency Guide, at tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 kung may nasa panganib."
+  },
+  "steps": {
+    "en": [
+      "Practise setting up your tent at home before the hike.",
+      "Use the designated campsite where there is one, and ask ahead whether campfires are allowed and where.",
+      "Arrive and set up camp before dark, so you can see the ground.",
+      "Choose a large, flat spot. Avoid low, sunken ground that collects rain, and ravines or stream beds that could flood.",
+      "Look up. Do not pitch under dead trees or dead branches.",
+      "Avoid ledges and high, exposed peaks, where wind and lightning are more dangerous.",
+      "Clear the spot of sticks, rocks and other debris. Lay down the tent's groundsheet; if you use a tarp instead, fold any extra under so it doesn't catch rain.",
+      "Set up the tent as the maker's instructions say. Sleep with your head uphill.",
+      "Keep stakes and guy lines out of paths where people could trip, and keep the tent well away from any campfire.",
+      "Keep the cooking area apart from the sleeping area."
+    ],
+    "fil": [
+      "Magpraktis magtayo ng tent sa bahay bago ang hike.",
+      "Gamitin ang itinakdang campsite kung mayroon, at itanong muna kung pinapayagan ang siga at kung saan.",
+      "Dumating at magtayo ng kampo bago dumilim, para makita mo ang lupa.",
+      "Pumili ng malawak at patag na puwesto. Iwasan ang mababa at lubog na lupang iniipunan ng ulan, at ang mga bangin o daluyan ng tubig na puwedeng bahain.",
+      "Tumingala. Huwag magtayo sa ilalim ng patay na puno o patay na sanga.",
+      "Iwasan ang mga gilid ng bangin at matataas at nakalantad na tuktok, kung saan mas delikado ang hangin at kidlat.",
+      "Linisin ang puwesto mula sa patpat, bato at iba pang kalat. Ilatag ang groundsheet ng tent; kung tarp ang gamit, itupi pailalim ang sobra para hindi ito sumalo ng ulan.",
+      "Itayo ang tent ayon sa instruksyon ng gumawa nito. Matulog nang nasa mataas na bahagi ang ulo.",
+      "Ilayo ang mga stake at tali sa daanan para walang matisod, at ilayo nang husto ang tent sa anumang siga.",
+      "Paghiwalayin ang lutuan at tulugan."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not pitch in a dry stream bed, ravine or other low spot that could flood.",
+      "Do not pitch under dead trees or branches.",
+      "Do not rely on your tent in a thunderstorm. It gives no protection from lightning.",
+      "Do not pitch close to a campfire. Sparks can melt holes in a tent or set it on fire."
+    ],
+    "fil": [
+      "Huwag magtayo sa tuyong daluyan ng tubig, bangin o ibang mababang lugar na puwedeng bahain.",
+      "Huwag magtayo sa ilalim ng patay na puno o sanga.",
+      "Huwag umasa sa tent kapag may thunderstorm. Walang proteksyon ang tent laban sa kidlat.",
+      "Huwag magtayo malapit sa siga. Puwedeng butasin ng tilamsik ng apoy ang tent o sunugin ito."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Water rising near camp, or a stream getting louder or muddier. Move to higher ground and open the Flash floods Guide.",
+      "Thunder. Open the Lightning Guide.",
+      "Strong wind with dead trees or branches nearby."
+    ],
+    "fil": [
+      "Tumataas ang tubig malapit sa kampo, o lumalakas ang ugong o lumalabo ang ilog. Umakyat sa mas mataas na lugar at buksan ang Guide sa Biglaang baha.",
+      "Kulog. Buksan ang Guide sa Kidlat.",
+      "Malakas na hangin habang may patay na puno o sanga sa malapit."
+    ]
+  },
+  "keywords": {
+    "en": ["tent", "pitch a tent", "pitching a tent", "set up a tent", "set up camp", "campsite", "where to camp", "camping", "groundsheet", "tarp"],
+    "fil": ["tent", "tolda", "magtayo ng tent", "pagtatayo ng tent", "mag-pitch ng tent", "mag-set up ng tent", "kampo", "magkampo", "campsite", "saan magtatayo ng tent", "saan magkakampo"]
+  },
+  "sources": [
+    {
+      "title": "Finding and Setting Up a Campsite",
+      "org": "U.S. National Park Service",
+      "url": "https://www.nps.gov/subjects/camping/finding-and-setting-up-a-campsite.htm",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "During a Flood ('If you are camping in a low lying area, get to higher ground immediately')",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/safety/flood-during",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Lightning Safety Outdoors ('a tent offers NO protection from lightning')",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/safety/lightning-outdoors",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: none. No Philippine Red Cross material on pitching a tent exists; it is a camp skill, not first aid, so there is nothing to check against PRC. A human should still read it. Steps follow the US National Park Service 'Finding and Setting Up a Campsite': practise at home; established sites; ask whether campfires are allowed; make camp before dark; watch for flash flooding, lightning, wind and dead trees or branches; avoid ledges and high peaks; don't camp under dead branches; stay away from ravines that could flood; large flat spot cleared of debris; avoid low sunken ground; head uphill; groundcloth or footprint, fold excess tarp under; follow the manufacturer's instructions; stakes and lines can be trip hazards; keep the tent away from the fire ring; keep cooking and sleeping areas apart (NPS gives 200 feet in bear country, not relevant in the PH, so no distance is given). NWS adds the low-lying-camp flood warning and 'a tent offers NO protection from lightning'. PH-specific campsite rules (DENR or LGU registration, designated campsites, Leave No Trace, distance from water sources) are not covered because no source was fetched. Leave No Trace's page returned 403. Reviewer may want to add a PH protected-area rule source."
+  }
+}

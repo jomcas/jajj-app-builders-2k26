@@ -47,7 +47,8 @@ Rules:
   - **hotline only**: the only PRC source cited is the one that confirms the 143 hotline.
   - **none**: no PRC source is cited, and the notes must say why ("No Philippine Red Cross …").
 - The PH emergency number is **911** (Emergency 911 National Office, <https://en.wikipedia.org/wiki/911_(Philippines)>). The PRC 24/7 hotline **143** is confirmed by PRC's own advisory at <https://redcross.org.ph/?p=7916>.
-- The Flare is described as "tap SOS at the top of the screen", matching the shell's SOS control label. CONTEXT.md says to avoid the term "SOS button".
+- The Flare is described as "tap SOS at the top of the screen, then press and hold", matching the shell's SOS control and the Flare screen's hold-to-fire control. CONTEXT.md says to avoid the term "SOS button".
+- The Filipino titles of the five Guides linked from the Flare screen match `src/modules/flare/strings.ts`.
 
 | id | kind | category |
 |---|---|---|
@@ -74,4 +75,4 @@ python3 -I apps/mobile/src/modules/guides/content/validate.py            # all 1
 python3 -I apps/mobile/src/modules/guides/content/validate.py --partial  # only the files present
 ```
 
-Standard library only. It checks that every id is present, that kinds and categories match CONTEXT.md and docs/plan.md, `en`/`fil` parity, non-empty fields, the step count, 911 in Emergency Guides, the source fields, and that each Guide has a Philippine Red Cross source or a note saying why not. It also prints how many Guides a human has checked.
+Standard library only. It checks that every id is present, that kinds and categories match CONTEXT.md and docs/plan.md, `en`/`fil` parity, non-empty fields, the step count, summaries of at most 2 sentences, 911 in Emergency Guides, the source fields, and that each Guide has a Philippine Red Cross source or a note saying why not. It also prints how many Guides a human has checked.

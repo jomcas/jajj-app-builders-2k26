@@ -1,0 +1,100 @@
+{
+  "id": "lightning",
+  "kind": "emergency",
+  "category": "hazard",
+  "order": 11,
+  "title": { "en": "Lightning", "fil": "Kidlat" },
+  "summary": {
+    "en": "If you can hear thunder, you are close enough to be struck: get off peaks and ridges, keep away from lone trees and water, and spread out if you are in a group. A person struck by lightning is safe to touch and may need CPR.",
+    "fil": "Kung naririnig mo ang kulog, sapat na ang lapit mo para tamaan ng kidlat: bumaba mula sa tuktok at tagaytay, lumayo sa nag-iisang puno at sa tubig, at maghiwa-hiwalay kung grupo kayo. Ligtas hawakan ang taong tinamaan ng kidlat, at baka kailangan niya ng CPR."
+  },
+  "callForHelp": {
+    "en": "If someone is struck, call 911 or the Philippine Red Cross hotline 143 right away. Lightning can stop the heart. A person struck by lightning carries no electrical charge, so you can touch and help them at once. Start CPR if they are not breathing and you are trained. If there is no signal, send someone for help.",
+    "fil": "Kung may tinamaan, tumawag agad sa 911 o sa hotline ng Philippine Red Cross na 143. Puwedeng patigilin ng kidlat ang puso. Walang kuryenteng naiiwan sa taong tinamaan ng kidlat, kaya puwede mo siyang hawakan at tulungan agad. Simulan ang CPR kung hindi siya humihinga at sinanay ka. Kung walang signal, magpadala ng tao para humingi ng tulong."
+  },
+  "steps": {
+    "en": [
+      "Plan to be off summits and ridges early. Thunderstorms often build in the early afternoon. Check the Forecast before you go.",
+      "As soon as you hear thunder, head for safety: a solid building or a hard-topped vehicle, if one is near.",
+      "If there is no safe shelter, get off peaks, ridges and hilltops right away and move to lower ground.",
+      "Keep away from isolated tall trees, poles and towers, and from metal fences and wires.",
+      "Get out of and away from rivers, lakes and other water.",
+      "If you are in a group, spread out so that one strike cannot hit everyone.",
+      "Wait at least 30 minutes after the last thunder before going back up or out into the open.",
+      "If someone is struck: move them to a safer place if you can, call for help, check their breathing, and start CPR if they are not breathing and you are trained."
+    ],
+    "fil": [
+      "Magplanong makababa na mula sa tuktok at tagaytay nang maaga. Madalas mabuo ang thunderstorm sa unang bahagi ng hapon. Tingnan ang Forecast bago umalis.",
+      "Sa sandaling makarinig ng kulog, pumunta sa ligtas na lugar: matibay na gusali o sasakyang may bubong na metal, kung may malapit.",
+      "Kung walang ligtas na masisilungan, bumaba agad mula sa tuktok, tagaytay at burol papunta sa mas mababang lugar.",
+      "Lumayo sa nag-iisang matataas na puno, poste at tore, at sa mga bakod at kawad na metal.",
+      "Umahon at lumayo sa ilog, lawa at iba pang tubig.",
+      "Kung grupo kayo, maghiwa-hiwalay para hindi tamaan ang lahat ng iisang kidlat.",
+      "Maghintay nang hindi bababa sa 30 minuto mula sa huling kulog bago muling umakyat o lumabas sa bukas na lugar.",
+      "Kung may tinamaan: ilipat siya sa mas ligtas na lugar kung kaya, humingi ng tulong, tingnan ang kanyang paghinga, at simulan ang CPR kung hindi siya humihinga at sinanay ka."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not shelter under a lone tree.",
+      "Do not shelter under a cliff or rock overhang.",
+      "Do not lie flat on the ground.",
+      "Do not count on your tent to protect you. A tent gives no protection from lightning.",
+      "Do not wait for rain before you act. Lightning can strike far from the rain, even under blue sky."
+    ],
+    "fil": [
+      "Huwag sumilong sa ilalim ng nag-iisang puno.",
+      "Huwag sumilong sa ilalim ng bangin o nakausling bato.",
+      "Huwag humiga nang padapa o patihaya sa lupa.",
+      "Huwag umasa sa tent para protektahan ka. Walang proteksyon ang tent laban sa kidlat.",
+      "Huwag hintayin ang ulan bago kumilos. Puwedeng tumama ang kidlat malayo sa ulan, kahit maaliwalas ang langit."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Thunder you can hear, or tall, dark storm clouds building.",
+      "A person who was struck and is not breathing or not responding.",
+      "Anyone who was struck, even if they seem fine. They need medical care."
+    ],
+    "fil": [
+      "Kulog na naririnig mo, o matataas at madidilim na ulap na nabubuo.",
+      "Taong tinamaan na hindi humihinga o hindi sumasagot.",
+      "Sinumang tinamaan, kahit mukhang ayos lang. Kailangan niyang magpatingin sa doktor."
+    ]
+  },
+  "keywords": {
+    "en": ["lightning", "thunder", "thunderstorm", "storm", "struck by lightning", "lightning strike", "electric storm"],
+    "fil": ["kidlat", "kulog", "kumikidlat", "kumukulog", "may kulog", "may kidlat", "tinamaan ng kidlat", "nakidlatan", "thunderstorm", "bagyong may kidlat", "ulan na may kulog"]
+  },
+  "sources": [
+    {
+      "title": "Lightning Safety for You and Your Family (brochure, NOAA PA 201752)",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/media/safety/Lightning-Brochure18.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Lightning Safety Tips and Resources: 'Last Resort Outdoor Risk Reduction Tips'",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/safety/lightning-tips",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Lightning Safety Outdoors",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/safety/lightning-outdoors",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: hotline only. No Philippine Red Cross lightning safety material could be found online, and IFRC 2020 has no lightning section. The PRC source is cited only for hotline 143. Steps follow the US National Weather Service. Brochure: no place outside is safe; get inside a substantial building or hard-topped vehicle when you hear thunder; avoid open areas and being the tallest object; stay away from isolated tall trees, towers, poles and metal conductors; groups spread out; lightning can strike 10 miles from rain; wait 30 minutes after the last thunder; victims carry no charge; call for help, begin CPR if trained, use an AED, move the victim to a safer place. 'Last resort' tips: get off hills, ridges and peaks; get away from water; never lie flat; never shelter under an isolated tree or a cliff or overhang. 'Lightning Safety Outdoors': hike early because storms develop in the early afternoon; spread out in a group; a tent offers no protection. PH context: a 2017 Inquirer article quoting PAGASA says wait 30 to 45 minutes after the storm and that high areas are more prone (search excerpt only, not used as a source). The 'lightning crouch' was deliberately left out: none of the NWS pages fetched mention it, and a search summary of a US radio guide does. Reviewer may decide. CPR is only referenced, since there is no CPR Guide in the library. The reviewer may want to add a CPR Guide or a pointer to PRC CPR training."
+  }
+}
