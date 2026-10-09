@@ -34,8 +34,7 @@ const FALLBACK_FONT = FONT_IDS['Noto Sans Regular'];
 
 // The basemap is muted so the Trail and Waypoints are the only strong colours on the map
 // (docs/plan.md, "Map style"). Day: earth tones, greens pulled towards sage. Night: the
-// Protomaps dark flavor on near-black. POI text that Protomaps colours red or pink is
-// recoloured, because red means danger only (ADR 0004).
+// Protomaps dark flavor on near-black.
 const DAY_FLAVOR: Partial<Flavor> = {
   background: '#E6E0D2',
   earth: '#EEE9DD',
@@ -81,9 +80,19 @@ export function hikeFlavor(mode: ThemeMode): Flavor {
   const base = namedFlavor(mode === 'day' ? 'light' : 'dark');
   const flavor: Flavor = { ...base, ...(mode === 'day' ? DAY_FLAVOR : NIGHT_FLAVOR) };
   if (mode === 'day') flavor.landcover = LANDCOVER_DAY;
-  if (flavor.pois) {
-    flavor.pois = { ...flavor.pois, red: flavor.pois.tangerine, pink: flavor.pois.slategray };
-  }
+  // POI names in one muted ink: Protomaps colours them by kind (green, pink, red), which
+  // would compete with the Trail and the pins, and red means danger only.
+  const poiInk = mode === 'day' ? '#5F5B4E' : '#9A9F95';
+  flavor.pois = {
+    blue: poiInk,
+    green: poiInk,
+    lapis: poiInk,
+    pink: poiInk,
+    red: poiInk,
+    slategray: poiInk,
+    tangerine: poiInk,
+    turquoise: poiInk,
+  };
   return flavor;
 }
 

@@ -108,11 +108,11 @@ for (const mode of MODES) {
     ]);
   });
 
-  test(`${mode} flavor: no red or pink POI text (red means danger only)`, () => {
+  test(`${mode} flavor: POI names in one muted ink, no red (red means danger only)`, () => {
     const pois = hikeFlavor(mode).pois;
     assert.ok(pois);
+    assert.equal(new Set(Object.values(pois)).size, 1);
     assert.notEqual(pois.red.toUpperCase(), '#F2567A');
-    assert.notEqual(pois.pink.toUpperCase(), '#EF56BA');
   });
 }
 
