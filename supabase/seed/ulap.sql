@@ -16,7 +16,7 @@ values
    'A pine and grass ridge in Itogon, Benguet, south of Baguio, about 1,846 m high. The Mt. Ulap Eco-Trail starts in Ampucao and passes Ambanaw-Paoay and Gungal Rock on the way to the summit (about 5 km); most hikers then continue down to Sta. Fe. Guides are required, there is no reliable water, and the trail closes in storms and fire season.',
    'Isang tagaytay ng pine at damo sa Itogon, Benguet, sa timog ng Baguio, mga 1,846 m ang taas. Nagsisimula ang Mt. Ulap Eco-Trail sa Ampucao at dumadaan sa Ambanaw-Paoay at Gungal Rock papunta sa tuktok (mga 5 km); karamihan ay bumababa pagkatapos sa Sta. Fe. Kailangan ng guide, walang maaasahang tubig, at isinasara ang trail kapag may bagyo o sa panahon ng sunog.',
    16.2904204, 120.6311489, 1846,
-   1, 'ulap-v1.pmtiles', 1788256, false, now())
+   1, 'ulap-v1.pmtiles', 1788257, false, now())
 on conflict (id) do update set
   name = excluded.name, region = excluded.region,
   summary_en = excluded.summary_en, summary_fil = excluded.summary_fil,
