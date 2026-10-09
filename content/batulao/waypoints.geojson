@@ -9,9 +9,9 @@
  "features": [
   {
    "type": "Feature",
-   "id": "batulao-new-trail-01-jump_off",
+   "id": "batulao-new-trail-01-jump-off",
    "properties": {
-    "id": "batulao-new-trail-01-jump_off",
+    "id": "batulao-new-trail-01-jump-off",
     "trail": "batulao-new-trail",
     "type": "jump_off",
     "name": "Batulao jump-off",
@@ -83,9 +83,9 @@
   },
   {
    "type": "Feature",
-   "id": "batulao-old-trail-01-jump_off",
+   "id": "batulao-old-trail-01-jump-off",
    "properties": {
-    "id": "batulao-old-trail-01-jump_off",
+    "id": "batulao-old-trail-01-jump-off",
     "trail": "batulao-old-trail",
     "type": "jump_off",
     "name": "Batulao jump-off",

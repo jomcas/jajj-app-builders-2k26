@@ -198,7 +198,7 @@ def main(raw_path):
         for order, (along, offset, pt, el, spec) in enumerate(rows, start=1):
             tags = el.get("tags") or {}
             props = {
-                "id": f'{trail_id}-{order:02d}-{spec["type"]}',
+                "id": f'{trail_id}-{order:02d}-{spec["type"].replace("_", "-")}',
                 "trail": trail_id,
                 "type": spec["type"],
                 "name": spec["name"],

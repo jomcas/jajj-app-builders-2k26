@@ -117,10 +117,23 @@ As links: `© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap co
 | Protomaps basemap (`batulao.pmtiles`) | The tile data is OpenStreetMap (ODbL) plus Natural Earth (public domain), so the OSM credit is the legal requirement. The Protomaps credit is shown because #5 asks for it and as a courtesy to the build's provider. The archive's own attribution string is `© OpenStreetMap`. |
 | Passages | Original text written for Tahak that paraphrases and cites the sources below. Nothing is copied beyond short quoted phrases. The blogs keep their own copyright. Sources: TransitPinas (2022), LakbayPinas (2026), The Travelling Foxes (2024), A Wanderful Sole (2024), Pinoy Mountaineer (2013, 2015), S1 Expeditions (2012), Chase Jase (around 2017), Outdoor Holiday (2025). |
 
-## Loading into Supabase (draft, finish once #4's schema lands)
+## Loading into Supabase
 
-- **Destination:** `mt-batulao`, Nasugbu, Batangas. Use the bbox from `pmtiles show --header-json batulao.pmtiles`.
-- **Trails:** one row per feature in `trail.geojson`. Store the geometry as a PostGIS `LineString` (SRID 4326) or as GeoJSON in `jsonb`, keep `length_m`, `is_main`, and the names. Keep `osm_ids` and `osm_timestamp` as provenance.
-- **Waypoints:** one row per feature in `waypoints.geojson`, keyed to the Trail by `properties.trail`. Map `type` to the schema's enum. Note that the app's copy says "jump-off", while the data says `jump_off`.
-- **Passages:** one row per item in `passages.json`. Store the `sources` array as `jsonb` so the Assistant can cite title and URL. The RAG step embeds the passages when the pack downloads.
-- **Map:** upload `batulao.pmtiles` to Storage (for example `packs/mt-batulao/batulao.pmtiles`) and save its size and checksum on the Destination row so the app can show the download size.
+`supabase/seed/seed-batulao.sh` (run from the repo root, after `supabase link`) does it all:
+
+1. Uses `content/batulao/batulao.pmtiles`, and runs `make-pmtiles.sh` first if the file is missing.
+2. Runs `scripts/build_seed.py --map-bytes <size>`, which writes `supabase/seed/batulao.sql` from `trail.geojson`, `waypoints.geojson` and `passages.json`.
+3. Uploads the map to the public `maps` bucket as `batulao-v<PACK_VERSION>.pmtiles`. A new path per version means a CDN-cached old map is never served for a new pack.
+4. Applies the SQL in one transaction. It upserts the `batulao` Destination with `is_placeholder = false`, the summaries in English and Filipino, and the map path and size. Then it replaces every Batulao Trail (New Trail first), Waypoint and passage.
+
+Column mapping:
+
+| File | Table and columns |
+|---|---|
+| `trail.geojson` | `trails`: `id`, `name`, `name_fil`\*, `distance_m` = `length_m`, `geometry` (the LineString) |
+| `waypoints.geojson` | `waypoints`: `id`, `trail_id` = `trail`, `type`, `name`, `name_fil`\*, `note`\*, `latitude`/`longitude`, `elevation_m`, `position` = `order`, `distance_m` = `distance_from_start_m` |
+| `passages.json` | `reference_passages`: `id` = `batulao-<id>`, `topic`, `language` = `lang`, `text`, `source` (readable summary such as `transitpinas.com (2022), lakbaypinas.com (2026)`), `sources`\* (the full jsonb array), `as_of`\* |
+
+\* These columns come from the additive migration `20261009183000_content_extras.sql`. They are nullable, and the app ignores them until it reads them.
+
+**Versioning.** The Destination's `pack_version` becomes `greatest(PACK_VERSION, current + 1 if the map path or size changed)`. Re-running the seed with the same files keeps the version. When you change Trails, Waypoints or passages, bump `PACK_VERSION` in `scripts/build_seed.py` so phones re-download.
