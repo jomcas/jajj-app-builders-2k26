@@ -1,0 +1,58 @@
+// This module's own UI text. Pure data with no imports (see src/i18n/types.ts).
+// {name} placeholders are filled in with fill() from ./format.
+
+const en = {
+  title: 'Assistant spike',
+  intro: 'A test screen for the on-device model. It is not the real chat yet.',
+  statusIdle: 'Model not loaded',
+  statusLoading: 'Loading the model… {percent}%',
+  statusLoadingVision: 'Loading the vision file…',
+  statusReadyCpu: 'Model ready on the CPU ({threads} threads)',
+  statusReadyGpu: 'Model ready on the GPU ({layers} layers offloaded)',
+  statusError: 'Could not load the model: {error}',
+  loadTimes: 'Load time: model {model} ms, vision file {mmproj} ms',
+  loadCpu: 'Load on CPU',
+  loadGpu: 'Load on GPU',
+  questionPlaceholder: 'Ask the Assistant…',
+  send: 'Send',
+  takePhoto: 'Take photo',
+  photoAttached: 'Photo attached to your next question',
+  photoPreview: 'Attached photo',
+  removePhoto: 'Remove photo',
+  cameraDenied: 'Camera permission was denied.',
+  answering: 'Answering…',
+  answerError: 'The Assistant could not answer: {error}',
+  speed: '{tps} tokens/s · prompt {ptps} tokens/s · first token after {ttft} ms',
+  benchRunning: 'Benchmark running: step {step} of {steps}',
+  benchDone: 'Benchmark finished. The results are in logcat under TAHAK_BENCH.',
+  benchFailed: 'Benchmark failed: {error}',
+};
+
+const fil: Record<keyof typeof en, string> = {
+  title: 'Spike ng Assistant',
+  intro: 'Test screen ito para sa model sa phone. Hindi pa ito ang totoong chat.',
+  statusIdle: 'Hindi pa naka-load ang model',
+  statusLoading: 'Nilo-load ang model… {percent}%',
+  statusLoadingVision: 'Nilo-load ang file para sa paningin…',
+  statusReadyCpu: 'Handa na ang model sa CPU ({threads} thread)',
+  statusReadyGpu: 'Handa na ang model sa GPU ({layers} layer ang nasa GPU)',
+  statusError: 'Hindi ma-load ang model: {error}',
+  loadTimes: 'Tagal ng pag-load: model {model} ms, file para sa paningin {mmproj} ms',
+  loadCpu: 'I-load sa CPU',
+  loadGpu: 'I-load sa GPU',
+  questionPlaceholder: 'Magtanong sa Assistant…',
+  send: 'Ipadala',
+  takePhoto: 'Kumuha ng litrato',
+  photoAttached: 'May kasamang litrato ang susunod mong tanong',
+  photoPreview: 'Nakalakip na litrato',
+  removePhoto: 'Alisin ang litrato',
+  cameraDenied: 'Hindi pinayagan ang camera.',
+  answering: 'Sumasagot…',
+  answerError: 'Hindi nakasagot ang Assistant: {error}',
+  speed: '{tps} token/s · prompt {ptps} token/s · unang token pagkalipas ng {ttft} ms',
+  benchRunning: 'Tumatakbo ang benchmark: hakbang {step} sa {steps}',
+  benchDone: 'Tapos na ang benchmark. Nasa logcat ang resulta, sa ilalim ng TAHAK_BENCH.',
+  benchFailed: 'Pumalya ang benchmark: {error}',
+};
+
+export default { en, fil };
