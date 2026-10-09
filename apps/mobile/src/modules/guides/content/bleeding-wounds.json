@@ -3,7 +3,7 @@
   "kind": "emergency",
   "category": "injury",
   "order": 5,
-  "title": { "en": "Bleeding wounds", "fil": "Sugat na dumudugo" },
+  "title": { "en": "Bleeding wounds", "fil": "Mga sugat na dumudugo" },
   "summary": {
     "en": "Press hard and directly on the wound right away, and keep pressing until the bleeding stops. Once it stops, cover the wound; clean small cuts with clean water first.",
     "fil": "Diinan agad nang mariin at direkta ang sugat, at ituloy ang pagdiin hanggang tumigil ang pagdurugo. Kapag tumigil na, takpan ang sugat; hugasan muna ng malinis na tubig ang maliliit na hiwa."

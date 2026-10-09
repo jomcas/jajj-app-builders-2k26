@@ -3,7 +3,7 @@
   "kind": "emergency",
   "category": "injury",
   "order": 7,
-  "title": { "en": "Hypothermia", "fil": "Hypothermia (labis na ginaw)" },
+  "title": { "en": "Hypothermia", "fil": "Hypothermia (sobrang lamig ng katawan)" },
   "summary": {
     "en": "Hypothermia can happen even in the tropics when you are wet, tired and in the wind. Get the person out of the wind and rain, swap wet clothes for dry ones, and warm them gradually in a sleeping bag or blankets.",
     "fil": "Puwedeng magka-hypothermia kahit sa mainit na bansa kapag basa, pagod at nahahanginan ka. Ilayo ang tao sa hangin at ulan, palitan ng tuyo ang basang damit, at painitin siya nang unti-unti sa sleeping bag o kumot."
