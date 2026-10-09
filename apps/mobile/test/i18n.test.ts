@@ -12,6 +12,9 @@ type Catalog = { en: Record<string, string>; fil: Record<string, string> };
 // Strings that are correctly identical in both languages.
 const SAME_IN_BOTH = new Set([
   'SOS',
+  // The Flare keeps its name, and the emergency number is a number.
+  'Flare',
+  '911',
   'Filipino',
   // Units and hiking loanwords that Filipino hikers use as is.
   '{km} km',
