@@ -1,5 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import type { ReactNode } from 'react';
+import { Linking, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 
 import { useStrings, useTheme } from '../../../settings/preferences';
 import type { Palette } from '../../../theme/tokens';
@@ -47,19 +48,24 @@ function PanelButton({
 /**
  * The controls over the Hike map. Buttons sit on an opaque panel, never directly on the map
  * (docs/plan.md). Shows the location explanation before Android's permission dialog, the
- * re-center button, a note when there is no GPS position yet, and the attribution.
+ * re-center button, a note when there is no GPS position yet, and the attribution. `children`
+ * (the Trail picker, or the Hike panel during a Hike) go underneath, at the bottom.
  */
 export function MapControls({
   permission,
   onAllowLocation,
   onRecenter,
   notice,
+  children,
+  onLayout,
 }: {
   permission: LocationPermission;
   onAllowLocation: () => void;
   onRecenter: () => void;
   /** A short message about the last re-center, e.g. that there is no GPS position yet. */
   notice: string | null;
+  children?: ReactNode;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }) {
   const { colors } = useTheme();
   const s = useStrings(strings);
@@ -68,7 +74,7 @@ export function MapControls({
     permission === 'ask' ? s.locationAsk : permission === 'blocked' ? s.locationBlocked : notice;
 
   return (
-    <View style={styles.bottom} pointerEvents="box-none">
+    <View style={styles.bottom} pointerEvents="box-none" onLayout={onLayout}>
       {message ? (
         <View
           accessibilityLiveRegion="polite"
@@ -100,6 +106,7 @@ export function MapControls({
           </Pressable>
         </View>
       </View>
+      {children}
     </View>
   );
 }

@@ -1,7 +1,10 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    // Pure modules import each other with the .ts extension so plain Node can run them in
+    // tests (Node does not guess extensions); Metro resolves the same paths.
+    "allowImportingTsExtensions": true
   },
   "exclude": ["node_modules", "android", "ios", "test"]
 }

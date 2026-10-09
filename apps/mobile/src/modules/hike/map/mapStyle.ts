@@ -9,6 +9,7 @@
 import { layers, namedFlavor, type Flavor } from '@protomaps/basemaps';
 import type {
   CircleLayerSpecification,
+  FilterSpecification,
   LayerSpecification,
   LineLayerSpecification,
   StyleSpecification,
@@ -234,4 +235,49 @@ export function gpsLayers(
       },
     },
   ];
+}
+
+// The Waypoint pins are 30 × 38 with the tip on the point, so the pin's head sits about
+// 19 px above it; the ring is drawn around the head.
+const PIN_CENTER_OFFSET_PX = -19;
+
+/**
+ * The orange ring around the next Waypoint's pin during a Hike (docs/plan.md, "Waypoints"):
+ * a dark outline ring and the orange ring on top, so it reads by lightness in sun glare.
+ * Goes under the pins, inside the waypoints source; show it with nextWaypointFilter.
+ */
+export function nextWaypointRingLayers(
+  colors: Palette,
+): [Overlay<CircleLayerSpecification>, Overlay<CircleLayerSpecification>] {
+  const shared = {
+    'circle-opacity': 0,
+    'circle-radius': 22,
+    'circle-translate': [0, PIN_CENTER_OFFSET_PX] as [number, number],
+    'circle-translate-anchor': 'viewport' as const,
+  };
+  return [
+    {
+      id: 'next-waypoint-ring-outline',
+      type: 'circle',
+      paint: { ...shared, 'circle-stroke-color': colors.trailOutline, 'circle-stroke-width': 8 },
+    },
+    {
+      id: 'next-waypoint-ring',
+      type: 'circle',
+      paint: { ...shared, 'circle-stroke-color': colors.trail, 'circle-stroke-width': 4.5 },
+    },
+  ];
+}
+
+/** Only the next Waypoint (or nothing when there is none). */
+export function nextWaypointFilter(waypointId: string | null): FilterSpecification {
+  return ['==', ['get', 'waypointId'], waypointId ?? ''];
+}
+
+/**
+ * During a Hike, only the active Trail and its Waypoints; before one, everything. Always a
+ * filter (never undefined), so going back to "everything" replaces the previous filter.
+ */
+export function activeTrailFilter(trailId: string | null): FilterSpecification {
+  return trailId ? ['==', ['get', 'trailId'], trailId] : ['has', 'trailId'];
 }
