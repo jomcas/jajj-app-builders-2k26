@@ -20,5 +20,5 @@
   "watchFor": { "en": ["Nothing: this is a sample."], "fil": ["Wala: halimbawa lang ito."] },
   "keywords": { "en": ["sample"], "fil": ["halimbawa"] },
   "sources": [{ "title": "Tahak test fixture", "org": "Tahak", "url": "", "accessed": "2026-10-10" }],
-  "review": { "redCrossChecked": false, "checkedBy": null, "notes": "Test fixture, never shipped in a release build." }
+  "review": { "redCrossChecked": false, "checkedBy": null, "notes": "Test fixture for test/guides.test.ts. Not part of the app." }
 }

@@ -12,7 +12,7 @@ import type { Guide } from '../src/modules/guides/types.ts';
 
 const guidesDir = join(import.meta.dirname, '..', 'src', 'modules', 'guides');
 const readJson = (file: string): unknown => JSON.parse(readFileSync(file, 'utf8'));
-const fixture = readJson(join(guidesDir, 'fixtures', 'sample-ordinary.json')) as Record<string, unknown>;
+const fixture = readJson(join(import.meta.dirname, 'fixtures', 'guide-sample.json')) as Record<string, unknown>;
 
 /** The fixture with some fields replaced. */
 function variant(overrides: Record<string, unknown>): Record<string, unknown> {
