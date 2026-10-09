@@ -16,6 +16,7 @@ import {
   type Waypoint,
   type WaypointType,
 } from '../destination-pack';
+import { ForecastCard } from '../forecast';
 import { fill, formatBytes, formatDate, formatKm } from './format';
 import { waypointGroups } from './rows';
 import strings from './strings';
@@ -232,6 +233,8 @@ export function DestinationScreen({ destination, onBack }: { destination: Destin
       {pack === undefined ? null : (
         <DownloadPanel destination={destination} pack={pack} onDownloaded={setPack} s={s} colors={colors} />
       )}
+
+      {pack ? <ForecastCard destinationId={destination.id} /> : null}
 
       {pack ? <PackContents pack={pack} s={s} colors={colors} /> : null}
     </ScrollView>
