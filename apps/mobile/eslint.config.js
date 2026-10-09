@@ -12,11 +12,6 @@ module.exports = defineConfig([
     ignores: ['android/*', 'ios/*', 'dist/*', '.expo/*'],
   },
   {
-    // The registry has no exports until the first Feature Module is added.
-    files: ['src/modules/index.ts'],
-    rules: { 'import/namespace': 'off' },
-  },
-  {
     // No hard-coded UI text: every visible string comes from a catalog (src/i18n/types.ts).
     files: ['src/**/*.tsx'],
     rules: {

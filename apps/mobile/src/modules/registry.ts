@@ -4,5 +4,4 @@
 //   export { default as <id> } from './<id>';
 // Nothing in src/shell/ changes.
 
-export {};
 export { default as placeholder } from './placeholder';
