@@ -86,6 +86,22 @@ test('an emergency question about a photo opens the Emergency Guide and never ru
   }
 });
 
+test('order: emergency, then a module tool, then the photo gate; neither runs the model', async () => {
+  const tool = {
+    id: 'test.distance',
+    description: { en: 'Distance', fil: 'Layo' },
+    parameters: [],
+    match: (q: string) => (/how far/i.test(q) ? {} : null),
+    run: async () => ({ text: '1.2 km to Camp 2' }),
+  };
+  const calls = newCalls();
+  const toolReply = await answerPhotoQuestion('how far is this campsite?', PHOTO, 'en', { ...deps([hit(0.9)], 'x', calls), tools: [tool] });
+  assert.equal(toolReply.kind, 'tool');
+  const emergency = await answerPhotoQuestion('how far is help? nakagat ako ng ahas na ito', PHOTO, 'en', { ...deps([hit(0.9)], 'x', calls), tools: [tool] });
+  assert.equal(emergency.kind, 'emergency');
+  assert.equal(calls.generate, 0);
+});
+
 test('photo gate: short questions about the photo are in scope even below the threshold', () => {
   for (const q of ['what is this?', 'anong halaman ito?', 'Pwede bang kainin yan?', 'is it safe to touch?', 'Ano to?', '']) {
     assert.equal(refersToPhoto(q), true, q);

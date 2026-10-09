@@ -29,7 +29,7 @@ export function setEmergencyRoute(route: PipelineDeps['emergencyRoute']) {
 // The registry imports this module, so the tools are collected on first use rather than at
 // import time (a static import of the registry here would be a require cycle).
 let tools: readonly AssistantTool[] | null = null;
-function registeredTools(): readonly AssistantTool[] {
+export function registeredTools(): readonly AssistantTool[] {
   if (!tools) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy, see above
     const { featureModules } = require('../index') as typeof import('../index');

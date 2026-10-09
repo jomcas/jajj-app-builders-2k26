@@ -75,7 +75,7 @@ export async function runVisionBench(options: VisionBenchOptions): Promise<void>
         question: options.question,
         ui: options.ui,
         ...visionSettings(),
-        verdict: reply.kind === 'emergency' ? `emergency-${reply.stage}:${reply.guideId ?? 'distress'}` : reply.kind === 'off-topic' ? `off-topic-${reply.reason}` : `answer-${reply.scope}`,
+        verdict: reply.kind === 'emergency' ? `emergency-${reply.stage}:${reply.guideId ?? 'distress'}` : reply.kind === 'tool' ? `tool:${reply.toolId}` : reply.kind === 'off-topic' ? `off-topic-${reply.reason}` : `answer-${reply.scope}`,
         llm_ran: !!gen,
         ahead_ms: aheadMs,
         first_word_ms: gen ? reply.timing.firstWordMs : null,

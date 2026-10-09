@@ -1,11 +1,12 @@
 // The Assistant's pipeline for a photo question (Vision, #18). The same order as a text
 // question (pipeline.ts; ADR 0003, ADR 0005), with two changes for the photo:
 //
-//   answerPhoto(question, photo) = emergencyRoute? → photo gate → retrieve → generate → guard
+//   answerPhoto(question, photo) = emergencyRoute? → tool? → photo gate → retrieve → generate → guard
 //
 // 1. emergencyRoute: the question TEXT goes through #15's router first. "Nakagat ako ng ahas na
 //    ito" or "dumudugo ito, ano gagawin" opens the Emergency Guide card, and the model (and the
 //    vision file) never run. The photo is not looked at.
+// 1b. tool (#19): a question a module's tool matches runs that tool, as for text; no model runs.
 // 2. photo gate (ADR 0005): the text is searched and gated as usual. Text that passes gets the
 //    best passage. Text that fails is still answered when it is a short question about the
 //    photo itself ("what is this?", "anong halaman ito?"): a photo taken on a hike is treated as
@@ -23,12 +24,14 @@
 // Pure: the search, the model and the router are passed in, so tests run in Node.
 
 import type { Language } from '../../i18n/types';
+import type { AssistantTool } from '../types';
 import { capLength, isNoAnswer, MAX_ANSWER_CHARS, trimUnfinished, usedPassages } from './citations.ts';
 import type { Chunk } from './corpus';
 import { gateDecision, type GateDecision } from './gate.ts';
 import { stripMarkdown } from './markdown.ts';
 import { buildPhotoMessages, MAX_PHOTO_PASSAGES, type PhotoMessage } from './photoPrompt.ts';
-import { selectPassages, type EmergencyReply, type GenerateResult, type Hit } from './pipeline.ts';
+import { selectPassages, type EmergencyReply, type GenerateResult, type Hit, type ToolReply } from './pipeline.ts';
+import { matchTool } from './tools.ts';
 
 /** Most words a question may have and still count as "about the photo" when the gate fails. */
 export const PHOTO_QUESTION_MAX_WORDS = 12;
@@ -120,10 +123,14 @@ export type PhotoAnswerReply = {
   generation: GenerateResult;
 };
 
-export type PhotoReply = PhotoEmergencyReply | PhotoOffTopicReply | PhotoAnswerReply;
+export type PhotoToolReply = ToolReply & { photo: true; generation?: undefined; raw?: undefined };
+
+export type PhotoReply = PhotoEmergencyReply | PhotoToolReply | PhotoOffTopicReply | PhotoAnswerReply;
 
 export type PhotoPipelineDeps = {
   emergencyRoute: (question: string, language: Language) => Promise<EmergencyReply | null>;
+  /** The registered modules' tools (#19), matched after the emergency route. */
+  tools?: readonly AssistantTool[];
   /** The router on the model's own words: a Guide match, or null. Synchronous, ~1 ms. */
   guard: (text: string, language: Language) => EmergencyReply | null;
   search: (question: string) => Promise<Hit[]>;
@@ -144,6 +151,12 @@ export async function answerPhotoQuestion(
 ): Promise<PhotoReply> {
   const emergency = await deps.emergencyRoute(question, language);
   if (emergency) return { ...emergency, photo: true, stage: 'question' };
+
+  const call = matchTool(deps.tools ?? [], question);
+  if (call) {
+    const result = await call.tool.run(call.args, { language });
+    return { kind: 'tool', photo: true, toolId: call.tool.id, args: call.args, result };
+  }
 
   const hits = await deps.search(question);
   const gate = gateDecision(hits, deps.threshold);

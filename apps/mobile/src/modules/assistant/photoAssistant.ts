@@ -13,7 +13,7 @@
 import diagnostics from '../../../modules/tahak-diagnostics';
 import type { Language } from '../../i18n/types';
 import { routeEmergency, toAssistantReply } from '../emergency';
-import { enqueue } from './assistant';
+import { enqueue, registeredTools } from './assistant';
 import { memorySampler } from './benchLog';
 import { complete, type LoadedModel } from './llm';
 import { answerPhotoQuestion, type PhotoReply } from './photoPipeline';
@@ -122,6 +122,7 @@ async function runPhoto(
       language,
       {
         emergencyRoute: async (q, l) => toAssistantReply(routeEmergency(q, l)),
+        tools: registeredTools(),
         // Only a Guide match stops an answer; the distress card is for the hiker's own words.
         guard: (text, l) => {
           const route = routeEmergency(text, l);
@@ -153,11 +154,13 @@ async function runPhoto(
       verdict:
         reply.kind === 'emergency'
           ? `emergency-${reply.stage}`
-          : reply.kind === 'off-topic'
+          : reply.kind === 'tool'
+            ? `tool:${reply.toolId}`
+            : reply.kind === 'off-topic'
             ? `off-topic-${reply.reason}`
             : `answer-${reply.scope}`,
       guide: reply.kind === 'emergency' ? (reply.guideId ?? null) : null,
-      best: reply.kind === 'emergency' ? null : Math.round(reply.gate.best * 1000) / 1000,
+      best: reply.kind === 'emergency' || reply.kind === 'tool' ? null : Math.round(reply.gate.best * 1000) / 1000,
       llm_ran: !!generation,
       read_ahead: wasReadAhead,
       photo_cached: photoCached,
