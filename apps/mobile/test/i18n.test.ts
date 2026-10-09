@@ -10,7 +10,16 @@ import { pathToFileURL } from 'node:url';
 type Catalog = { en: Record<string, string>; fil: Record<string, string> };
 
 // Strings that are correctly identical in both languages.
-const SAME_IN_BOTH = new Set(['SOS', 'Filipino']);
+const SAME_IN_BOTH = new Set([
+  'SOS',
+  'Filipino',
+  // Units and hiking loanwords that Filipino hikers use as is.
+  '{km} km',
+  '{elevation} m',
+  '{region} · {elevation} m',
+  'Jump-off',
+  'Campsite',
+]);
 
 const srcDir = join(import.meta.dirname, '..', 'src');
 
