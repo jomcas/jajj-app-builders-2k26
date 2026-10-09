@@ -1,6 +1,7 @@
 import type { FeatureModule } from '../types';
 import { listenForHikeLinks } from './hikeStore';
 import { HikeScreen } from './HikeScreen';
+import { distanceTool } from './tools';
 
 // The Hike tab: the downloaded Destination's offline map (issue #6), and the Hike itself
 // (issue #7): a Trail picker and Start Hike, then follow mode, the next Waypoint with distance
@@ -73,4 +74,6 @@ export default {
   Screen: HikeScreen,
   hikeModes: ['solo', 'group'],
   offlineNeeds: ['destination-pack'],
+  // The Assistant's "How far to the next campsite?" (issue #19): tools/distance.ts.
+  tools: [distanceTool],
 } satisfies FeatureModule;

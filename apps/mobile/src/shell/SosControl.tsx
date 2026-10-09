@@ -1,5 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 import shellStrings from '../i18n/shell.strings';
@@ -23,6 +24,10 @@ export function SosControl() {
   const s = useStrings(shellStrings);
   const active = useSosActive();
   const [open, setOpen] = useState(false);
+  // Each tab has its own header, so only the focused tab's control answers a request to open
+  // the screen without a tap (the Assistant's Flare tool, issue #19).
+  const focused = useIsFocused();
+  useEffect(() => (focused ? sosAction?.onOpenRequest?.(() => setOpen(true)) : undefined), [focused]);
 
   const fill = active ? colors.danger : colors.surface;
   const border = active ? colors.danger : colors.line;

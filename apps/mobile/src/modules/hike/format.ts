@@ -29,3 +29,13 @@ export function splitDuration(seconds: number): { hours: number; minutes: number
 export function pad2(n: number): string {
   return String(n).padStart(2, '0');
 }
+
+/** The ETA as the Hike panel and the Assistant's distance tool word it: "about 25 min". */
+export function etaText(
+  s: { etaUnderMinute: string; etaMinutes: string; etaHours: string },
+  seconds: number,
+): string {
+  const { hours, minutes } = splitDuration(seconds);
+  if (hours === 0) return minutes === 0 ? s.etaUnderMinute : fill(s.etaMinutes, { minutes });
+  return fill(s.etaHours, { hours, minutes: pad2(minutes) });
+}

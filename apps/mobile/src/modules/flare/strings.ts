@@ -24,6 +24,11 @@ const en = {
   emergencyNumber: '911',
   emergencyNote: 'Call once you have signal.',
   callHint: 'Opens the phone app with 911 ready to call.',
+  // The Assistant's Flare tool (issue #19), shown in the Ask tab.
+  toolDescription: 'Opens the Flare screen, ready to fire. It never fires the Flare: that takes a 1.5 s hold.',
+  toolTitle: 'Flare',
+  toolOpened: 'I opened the Flare. To signal, press and hold the red button for 1.5 seconds: the flashlight blinks SOS, the screen flashes and a loud whistle sounds. Nothing fires until you hold it.',
+  toolNotOpened: 'Tap SOS at the top right to open the Flare. To signal, press and hold the red button for 1.5 seconds.',
 };
 
 const fil: Record<keyof typeof en, string> = {
@@ -50,6 +55,10 @@ const fil: Record<keyof typeof en, string> = {
   emergencyNumber: '911',
   emergencyNote: 'Tumawag kapag may signal na.',
   callHint: 'Bubuksan ang phone app na handa nang tawagan ang 911.',
+  toolDescription: 'Binubuksan ang screen ng Flare, handa nang paganahin. Hindi nito pinapagana ang Flare: kailangan ng 1.5 segundong pagpindot.',
+  toolTitle: 'Flare',
+  toolOpened: 'Binuksan ko ang Flare. Para mag-signal, pindutin nang matagal ang pulang button nang 1.5 segundo: kikislap ng SOS ang flashlight, kikislap ang screen at tutunog ang malakas na pito. Walang mangyayari hangga’t hindi mo ito pinipindot nang matagal.',
+  toolNotOpened: 'I-tap ang SOS sa kanang itaas para buksan ang Flare. Para mag-signal, pindutin nang matagal ang pulang button nang 1.5 segundo.',
 };
 
 export default { en, fil };

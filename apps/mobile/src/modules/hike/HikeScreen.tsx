@@ -33,6 +33,7 @@ import { DeviationBanner } from './ui/DeviationBanner';
 import { EndSuggestion } from './ui/EndSuggestion';
 import { HikePanel } from './ui/HikePanel';
 import { SimulationBar } from './ui/SimulationBar';
+import { publishLiveHike } from './tools/liveHike';
 import { TrailPickerCard } from './ui/TrailPickerCard';
 import { useLatestPack } from './useLatestPack';
 
@@ -115,6 +116,16 @@ function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, positi
   }, []);
 
   const current = state && state.hikeId === hikeId ? state : null;
+
+  // The Assistant's distance tool reads the same view as the panel (tools/liveHike.ts).
+  useEffect(() => {
+    publishLiveHike(
+      current && entry
+        ? { hikeId: current.hikeId, view: current.view, tracker: current.tracker, placed: entry.placed }
+        : null,
+    );
+  }, [current, entry]);
+  useEffect(() => () => publishLiveHike(null), []);
   const detector = current?.detector;
   const deviation: DeviationView | null =
     current && detector && isDeviation(detector)
