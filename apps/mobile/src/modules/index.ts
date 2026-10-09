@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/namespace -- the registry is legitimately empty before any module exists.
 import * as registry from './registry';
 import type { FeatureModule, TabId } from './types';
 
