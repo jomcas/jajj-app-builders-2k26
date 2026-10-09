@@ -50,6 +50,7 @@ export function EmergencyGuideCard({ guideId, onOpened }: { guideId: string; onO
 
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel={s.openGuide}
         accessibilityHint={s.openGuideHint}
         onPress={open}
         style={({ pressed }) => [styles.primary, { backgroundColor: colors.primary, opacity: pressed ? 0.8 : 1 }]}
@@ -61,6 +62,7 @@ export function EmergencyGuideCard({ guideId, onOpened }: { guideId: string; onO
       {help.call911 ? (
         <Pressable
           accessibilityRole="button"
+          accessibilityLabel={s.call911}
           accessibilityHint={s.call911Hint}
           onPress={() => void Linking.openURL('tel:911').catch(() => undefined)}
           style={({ pressed }) => [styles.secondary, { backgroundColor: colors.tint, opacity: pressed ? 0.8 : 1 }]}

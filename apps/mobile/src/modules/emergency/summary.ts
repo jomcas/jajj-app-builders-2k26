@@ -3,8 +3,11 @@
 // ADR 0003: the card quotes the Guide's own reviewed summary, verbatim, and nothing else. No
 // model output ever appears in it, so it cannot carry first-aid steps that are not in the Guide.
 
-/** About two lines of body text on the card on a Flip 6 (Barlow 16, ~45 characters a line). */
-export const TWO_LINES = 90;
+/**
+ * About two lines of body text on the card: measured on the Flip 6 (Barlow 16), a line holds
+ * about 38–40 characters. The card also caps the text at two rendered lines.
+ */
+export const TWO_LINES = 76;
 
 /**
  * At most two lines of a Guide summary, taken verbatim. Whole sentences are kept while they
