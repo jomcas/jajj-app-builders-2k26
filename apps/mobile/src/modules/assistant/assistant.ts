@@ -5,6 +5,7 @@
 //
 // #15 plugs the emergency check in with setEmergencyRoute(); it runs before the gate.
 
+import diagnostics from '../../../modules/tahak-diagnostics';
 import type { Language } from '../../i18n/types';
 import { complete, loadModel } from './llm';
 import { answerQuestion, type PipelineDeps, type Reply } from './pipeline';
@@ -58,7 +59,8 @@ async function runAnswer(
   question: string,
   { language, onDisplay, index = appIndex, threshold = index.spec.threshold, ignorePacks: skipPacks = ignorePacks }: AnswerOptions,
 ): Promise<Reply> {
-  return answerQuestion(
+  const started = Date.now();
+  const reply = await answerQuestion(
     question,
     language,
     {
@@ -70,4 +72,33 @@ async function runAnswer(
     },
     onDisplay,
   );
+  logReply(question, language, reply, Date.now() - started);
+  return reply;
+}
+
+/** One line per answer under TAHAK_ASSISTANT: whether the model ran, the gate and the sources. */
+function logReply(question: string, language: Language, reply: Reply, ms: number) {
+  const generation = reply.kind === 'emergency' ? undefined : reply.generation;
+  try {
+    diagnostics.log(
+      'TAHAK_ASSISTANT',
+      JSON.stringify({
+        type: 'answer',
+        question,
+        ui: language,
+        verdict: reply.kind === 'off-topic' ? `off-topic-${reply.reason}` : reply.kind,
+        best: reply.kind === 'emergency' ? null : Math.round(reply.gate.best * 1000) / 1000,
+        threshold: reply.kind === 'emergency' ? null : reply.gate.threshold,
+        llm_ran: !!generation,
+        ttft_ms: generation?.ttftMs ?? null,
+        gen_tps: generation ? Math.round(generation.generationTps * 10) / 10 : null,
+        prompt_tokens: generation?.promptTokens ?? null,
+        cached_tokens: generation?.cachedTokens ?? null,
+        sources: reply.kind === 'answer' ? reply.sources.map((s) => s.id) : [],
+        ms,
+      }),
+    );
+  } catch {
+    // Logging must never break an answer.
+  }
 }

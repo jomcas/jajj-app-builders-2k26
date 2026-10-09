@@ -14,6 +14,23 @@ export type ChipStrings = {
   topicHazards: string;
 };
 
+export type ChipGroup = { label: string; chunks: Chunk[] };
+
+/**
+ * Chips as shown: sources whose labels would read the same (two Batulao water passages)
+ * share one chip, whose sheet shows both passages.
+ */
+export function chipGroups(sources: readonly Chunk[], s: ChipStrings): ChipGroup[] {
+  const groups: ChipGroup[] = [];
+  for (const chunk of chipSources(sources)) {
+    const label = chipLabel(chunk, s);
+    const existing = groups.find((g) => g.label === label);
+    if (existing) existing.chunks.push(chunk);
+    else groups.push({ label, chunks: [chunk] });
+  }
+  return groups;
+}
+
 /** One chip per Guide, per pack passage pair and per help topic, in first-cited order. */
 export function chipSources(sources: readonly Chunk[]): Chunk[] {
   const seen = new Set<string>();

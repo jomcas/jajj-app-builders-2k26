@@ -21,9 +21,9 @@ import { textStyles } from '../../theme/typography';
 import { answer, testFlags } from './assistant';
 import type { Chunk } from './corpus';
 import { errorMessage, fill } from './format';
-import { engineStore } from './llm';
+import { engineStore, loadModel } from './llm';
 import type { Reply } from './pipeline';
-import { chipLabel, chipSources, inLanguage } from './sources';
+import { chipGroups, chipLabel, inLanguage } from './sources';
 import strings from './strings';
 import { appIndex } from './vectorIndex';
 
@@ -49,10 +49,16 @@ export function AskScreen() {
   const [question, setQuestion] = useState('');
   const [busy, setBusy] = useState(false);
   const [cameraNote, setCameraNote] = useState(false);
-  const [sheet, setSheet] = useState<Chunk | null>(null);
+  const [sheet, setSheet] = useState<Chunk[] | null>(null);
   const [topOffset, setTopOffset] = useState(0);
   const containerRef = useRef<View>(null);
   const listRef = useRef<FlatList<Message>>(null);
+
+  // Load the chat model when the Ask tab first opens, so the first question doesn't also wait
+  // for the ~6 s load. A failure shows up on the first question instead.
+  useEffect(() => {
+    void loadModel('cpu').catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     if (!cameraNote) return;
@@ -73,6 +79,8 @@ export function AskScreen() {
     try {
       const reply = await answer(q, { language, onDisplay: (shown) => update(answerId, { text: shown }) });
       update(answerId, { reply, text: reply.kind === 'answer' ? reply.text : '' });
+      // The source chips arrive with the final reply; bring them into view.
+      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 150);
     } catch (error) {
       update(answerId, { error: errorMessage(error) });
     } finally {
@@ -80,9 +88,10 @@ export function AskScreen() {
     }
   }
 
-  function openSource(chunk: Chunk) {
-    if (chunk.target.type === 'guide') openGuide(chunk.target.guideId);
-    else setSheet(chunk);
+  function openSource(chunks: Chunk[]) {
+    const first = chunks[0];
+    if (first.target.type === 'guide') openGuide(first.target.guideId);
+    else setSheet(chunks);
   }
 
   const status =
@@ -174,7 +183,7 @@ export function AskScreen() {
         </View>
       </KeyboardAvoidingView>
 
-      <SourceSheet chunk={sheet} onClose={() => setSheet(null)} s={s} colors={colors} />
+      <SourceSheet chunks={sheet} onClose={() => setSheet(null)} s={s} colors={colors} />
     </View>
   );
 }
@@ -201,7 +210,7 @@ function AssistantBubble({
   message: Extract<Message, { role: 'assistant' }>;
   s: Strings;
   colors: Palette;
-  onSource: (chunk: Chunk) => void;
+  onSource: (chunks: Chunk[]) => void;
 }) {
   const { language } = usePreferences();
   const { reply, error, text } = message;
@@ -216,7 +225,7 @@ function AssistantBubble({
   else if (text) body = <Text selectable style={[textStyles.body, { color: colors.ink }]}>{text}</Text>;
   else body = <Text style={[textStyles.body, { color: colors.muted }]}>{s.answering}</Text>;
 
-  const chips = reply?.kind === 'answer' ? chipSources(reply.sources).map((c) => inLanguage(c, language, corpus)) : [];
+  const chips = reply?.kind === 'answer' ? chipGroups(reply.sources.map((c) => inLanguage(c, language, corpus)), s) : [];
 
   return (
     <View accessibilityLabel={s.assistant} style={box}>
@@ -225,18 +234,19 @@ function AssistantBubble({
         <View style={styles.sources}>
           <Text style={[textStyles.label, { color: colors.muted }]}>{s.sources}</Text>
           <View style={styles.chips}>
-            {chips.map((chunk) => (
-              <Pressable
-                key={chunk.id}
-                accessibilityRole="button"
-                onPress={() => onSource(chunk)}
-                style={[styles.chip, { backgroundColor: chunk.target.type === 'passage' ? colors.peach : colors.tint }]}
-              >
-                <Text style={[textStyles.labelStrong, { color: chunk.target.type === 'passage' ? colors.onPeach : colors.onTint }]}>
-                  {chipLabel(chunk, s)}
-                </Text>
-              </Pressable>
-            ))}
+            {chips.map(({ label, chunks }) => {
+              const pack = chunks[0].target.type === 'passage';
+              return (
+                <Pressable
+                  key={chunks[0].id}
+                  accessibilityRole="button"
+                  onPress={() => onSource(chunks)}
+                  style={[styles.chip, { backgroundColor: pack ? colors.peach : colors.tint }]}
+                >
+                  <Text style={[textStyles.labelStrong, { color: pack ? colors.onPeach : colors.onTint }]}>{label}</Text>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
       ) : null}
@@ -244,22 +254,26 @@ function AssistantBubble({
   );
 }
 
-/** A pack passage or app-help passage, shown in full with where it came from. */
-function SourceSheet({ chunk, onClose, s, colors }: { chunk: Chunk | null; onClose: () => void; s: Strings; colors: Palette }) {
+/** Pack passages or an app-help passage, shown in full with where they came from. */
+function SourceSheet({ chunks, onClose, s, colors }: { chunks: Chunk[] | null; onClose: () => void; s: Strings; colors: Palette }) {
   const insets = useSafeAreaInsets();
   return (
-    <Modal visible={!!chunk} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible={!!chunks} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable accessibilityRole="button" accessibilityLabel={s.close} style={[styles.scrim, { backgroundColor: colors.scrim }]} onPress={onClose} />
-      {chunk ? (
+      {chunks ? (
         <View style={[styles.sheet, { backgroundColor: colors.surface, paddingBottom: 16 + insets.bottom }]}>
           <ScrollView contentContainerStyle={styles.sheetContent}>
-            <Text style={[textStyles.heading, { color: colors.ink }]}>{chipLabel(chunk, s)}</Text>
-            <Text selectable style={[textStyles.body, { color: colors.ink }]}>{chunk.text}</Text>
-            {chunk.target.type === 'help' ? (
-              <Text style={[textStyles.label, { color: colors.muted }]}>{s.helpNote}</Text>
-            ) : (
-              <Text style={[textStyles.label, { color: colors.muted }]}>{fill(s.sourceLine, { source: chunk.source })}</Text>
-            )}
+            <Text style={[textStyles.heading, { color: colors.ink }]}>{chipLabel(chunks[0], s)}</Text>
+            {chunks.map((chunk) => (
+              <View key={chunk.id} style={styles.sheetContent}>
+                <Text selectable style={[textStyles.body, { color: colors.ink }]}>{chunk.text}</Text>
+                {chunk.target.type === 'help' ? (
+                  <Text style={[textStyles.label, { color: colors.muted }]}>{s.helpNote}</Text>
+                ) : (
+                  <Text style={[textStyles.label, { color: colors.muted }]}>{fill(s.sourceLine, { source: chunk.source })}</Text>
+                )}
+              </View>
+            ))}
           </ScrollView>
           <Pressable accessibilityRole="button" onPress={onClose} style={[styles.closeButton, { backgroundColor: colors.primary }]}>
             <Text style={[textStyles.bodyStrong, { color: colors.onPrimary }]}>{s.close}</Text>
