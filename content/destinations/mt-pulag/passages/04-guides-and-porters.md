@@ -5,16 +5,17 @@ title_en: Guides and porters on Mt. Pulag
 title_fil: Guide at porter sa Mt. Pulag
 questions:
   - Do I need a guide for Mt. Pulag?
-  - Required ba ang guide sa Ambangeg? May porter ba?
-sources: [P3, P4, P13, P21]
+  - Magkano ang guide sa Ambangeg? May porter ba?
+sources: [P26, P21]
 related_guides: []
 verify: true
-verify_note: "Guide rates are from a low-trust 2026 blog and older 2015-2019 reports; no official rate card found."
+verify_note: "Rates from the Benguet Provincial Tourism page (2026); a 2026 blog reports a lower guide fee. Confirm at the ranger station."
+as_of: 2026-09
 last_checked: 2026-10-10
 ---
 
 ## English
-A local guide is required on every Mt. Pulag Trail. On the Ambangeg Trail, guides are hired at the ranger station after registering at the Visitor Center; a 2026 blog reports about ₱1,200 per group of up to five. In 2015 one guide could take at most 10 hikers on Ambangeg. On the Akiki Trail, guides are hired at the Akiki ranger station; the long Ambaguio route had a much higher guide fee in 2019. Porters have been available on Ambangeg and Akiki, but no current porter rates were found. Rates change, so confirm them with the park office or at the ranger station.
+A local guide is required on every Mt. Pulag Trail. For the Ambangeg Trail, you hire one at the ranger station after the orientation. Benguet Province's tourism page (2026) lists the guide association's rate for the Babalak (Ambangeg) Trail as ₱1,500 for 1 to 5 hikers plus ₱300 per extra person, and porters at ₱1,200 for 12 kg plus ₱100 per extra kilo. A 2026 travel guide reported paying ₱1,200 per group of up to five. Confirm the rates at the ranger station.
 
 ## Filipino
-Kailangan ng local guide sa lahat ng Trail ng Mt. Pulag. Sa Ambangeg Trail, sa ranger station kumukuha ng guide pagkatapos mag-register sa Visitor Center; ayon sa isang 2026 blog, mga ₱1,200 ito bawat grupo na hanggang lima. Noong 2015, hanggang 10 hiker lang ang kaya ng isang guide sa Ambangeg. Sa Akiki Trail, sa Akiki ranger station kumukuha ng guide; mas mahal ang guide fee sa mahabang Ambaguio route noong 2019. May mga porter sa Ambangeg at Akiki, pero walang nakitang kasalukuyang rates para sa porter. Nagbabago ang rates, kaya i-confirm sa park office o sa ranger station.
+Kailangan ng local guide sa lahat ng Trail ng Mt. Pulag. Sa Ambangeg Trail, sa ranger station kumukuha ng guide pagkatapos ng orientation. Ayon sa tourism page ng Benguet Province (2026), ₱1,500 ang guide sa Babalak (Ambangeg) Trail para sa 1 hanggang 5 hiker, dagdag na ₱300 bawat sobrang tao, at ₱1,200 ang porter para sa 12 kg, dagdag na ₱100 bawat sobrang kilo. Ayon sa isang 2026 travel guide, ₱1,200 ang ibinayad nila bawat grupo na hanggang lima. I-confirm ang rates sa ranger station.
