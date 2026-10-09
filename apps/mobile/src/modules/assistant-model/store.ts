@@ -89,7 +89,7 @@ async function switchSource(source: ModelSource, fresh: boolean) {
   if (fresh && manifest.id === 'test') {
     current.downloader.dispose();
     removeTestFolder(fs, manifest);
-    log('test folder deleted');
+    diagnostics.log(MODEL_LOG_TAG, '[test] test folder deleted');
   }
   switchTo(manifest);
 }

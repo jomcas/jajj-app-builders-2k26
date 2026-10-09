@@ -7,6 +7,18 @@ import type { ModelManifest } from './manifest';
 const fileUri = (path: string) => `file://${path}`;
 
 /**
+ * Creates a missing file or folder through its parent. Outside the app's internal folders,
+ * expo-file-system grants WRITE only on paths that already exist and are writable, so a new
+ * path must be made from its (existing) parent folder.
+ */
+function createChild(path: string, kind: 'file' | 'folder') {
+  const parent = new Directory(fileUri(path.slice(0, path.lastIndexOf('/'))));
+  const name = Paths.basename(path);
+  if (kind === 'folder') parent.createDirectory(name);
+  else parent.createFile(name, null);
+}
+
+/**
  * The downloader's filesystem on the phone, with expo-file-system, under the app's external
  * files directory (/sdcard/Android/data/com.tahak.app/files), where llama.rn reads the model.
  */
@@ -24,7 +36,7 @@ export function createExpoModelFs(): ModelFs {
     },
 
     makeFolder(path) {
-      new Directory(fileUri(path)).create({ intermediates: true, idempotent: true });
+      if (!new Directory(fileUri(path)).exists) createChild(path, 'folder');
     },
 
     rename(fromPath, toPath) {
@@ -40,6 +52,7 @@ export function createExpoModelFs(): ModelFs {
 
     download(url, path, fromByte, onProgress) {
       const destination = new File(fileUri(path));
+      if (!destination.exists) createChild(path, 'file');
       const options = { onProgress: ({ bytesWritten }: { bytesWritten: number }) => onProgress(bytesWritten) };
       // On Android the resume data is the byte offset: the native task sends
       // "Range: bytes=<offset>-" and appends to the file from there.
