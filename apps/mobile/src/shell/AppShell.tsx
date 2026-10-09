@@ -34,7 +34,7 @@ export function AppShell() {
         card: colors.surface,
         text: colors.ink,
         border: colors.line,
-        notification: colors.trail,
+        notification: colors.primary,
       },
     };
   }, [mode, colors]);
