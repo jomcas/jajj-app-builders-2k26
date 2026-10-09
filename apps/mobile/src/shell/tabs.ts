@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import type { MaterialCommunityIcons } from '@expo/vector-icons';
+import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import type shellStrings from '../i18n/shell.strings';
 import type { TabId } from '../modules';
