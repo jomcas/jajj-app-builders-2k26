@@ -20,15 +20,20 @@ export type Backend = 'cpu' | 'gpu';
 export const N_CTX = 4096;
 /** Big and middle cores of the Snapdragon 8 Gen 3 (1 + 5); the two small cores stay idle. */
 export const DEFAULT_THREADS = 6;
-/** All of Qwen3.5-4B's layers, when offloading to the GPU. */
+/**
+ * All of Qwen3.5-4B's layers, when offloading to the GPU. In the Wave 0 spike the GPU
+ * (OpenCL, Adreno 750) path got the app SIGKILLed at 6.2-6.9 GB PSS while loading, with
+ * mmap on or off and with the vision file on the CPU; only the CPU path is usable for now.
+ */
 const GPU_LAYERS = 99;
 /** Caps the tokens one photo can take, so a full-size camera photo still fits in N_CTX. */
-const IMAGE_MAX_TOKENS = 1024;
+export const IMAGE_MAX_TOKENS = 1024;
 
 export type LoadedModel = {
   context: LlamaContext;
   backend: Backend;
   threads: number;
+  imageMaxTokens: number;
   nGpuLayers: number;
   nCtx: number;
   modelLoadMs: number;
@@ -105,20 +110,29 @@ let pending: Promise<LoadedModel> | null = null;
  */
 export function loadModel(
   backend: Backend,
-  { threads = DEFAULT_THREADS, reload = false }: { threads?: number; reload?: boolean } = {},
+  {
+    threads = DEFAULT_THREADS,
+    imageMaxTokens = IMAGE_MAX_TOKENS,
+    reload = false,
+  }: { threads?: number; imageMaxTokens?: number; reload?: boolean } = {},
 ): Promise<LoadedModel> {
   const current = state.status === 'ready' ? state.model : null;
-  if (!reload && current?.backend === backend && current.threads === threads) {
+  if (
+    !reload &&
+    current?.backend === backend &&
+    current.threads === threads &&
+    current.imageMaxTokens === imageMaxTokens
+  ) {
     return Promise.resolve(current);
   }
   if (pending) return pending;
-  pending = doLoad(backend, threads).finally(() => {
+  pending = doLoad(backend, threads, imageMaxTokens).finally(() => {
     pending = null;
   });
   return pending;
 }
 
-async function doLoad(backend: Backend, threads: number): Promise<LoadedModel> {
+async function doLoad(backend: Backend, threads: number, imageMaxTokens: number): Promise<LoadedModel> {
   try {
     await forwardNativeLog();
     // Only one model fits in memory: free the previous context first.
@@ -139,7 +153,9 @@ async function doLoad(backend: Backend, threads: number): Promise<LoadedModel> {
         n_gpu_layers: nGpuLayers,
         devices,
         n_parallel: 1,
-        use_mmap: true,
+        // No mmap: on the CPU llama.cpp repacks the weights for i8mm into its own buffer, and
+        // with mmap the original file pages stayed resident too (weights held twice).
+        use_mmap: false,
         use_mlock: false,
         // Multimodal prompts need fixed token positions.
         ctx_shift: false,
@@ -153,7 +169,7 @@ async function doLoad(backend: Backend, threads: number): Promise<LoadedModel> {
     const visionReady = await context.initMultimodal({
       path: paths.mmproj,
       use_gpu: backend === 'gpu',
-      image_max_tokens: IMAGE_MAX_TOKENS,
+      image_max_tokens: imageMaxTokens,
     });
     const mmprojLoadMs = Date.now() - mmprojStart;
     if (!visionReady) throw new Error('The vision file (mmproj) did not load.');
@@ -162,6 +178,7 @@ async function doLoad(backend: Backend, threads: number): Promise<LoadedModel> {
       context,
       backend,
       threads,
+      imageMaxTokens,
       nGpuLayers,
       nCtx: N_CTX,
       modelLoadMs,

@@ -113,7 +113,7 @@ function logAnswer(run: string, backend: Backend, task: string, text: string) {
 
 let running = false;
 
-export async function runBench({ backends, threads }: BenchOptions): Promise<void> {
+export async function runBench({ backends, threads, imageMaxTokens }: BenchOptions): Promise<void> {
   if (running) return;
   running = true;
   const run = Date.now().toString(36);
@@ -139,7 +139,7 @@ export async function runBench({ backends, threads }: BenchOptions): Promise<voi
       const memory = memorySampler();
       try {
         next();
-        const model = await loadModel(backend, { threads, reload: true });
+        const model = await loadModel(backend, { threads, imageMaxTokens, reload: true });
         const loadPeak = memory.endPhase();
 
         next();
@@ -165,6 +165,7 @@ export async function runBench({ backends, threads }: BenchOptions): Promise<voi
           android_lib: model.androidLib,
           n_ctx: model.nCtx,
           threads: model.threads,
+          image_max_tokens: model.imageMaxTokens,
           model_load_ms: model.modelLoadMs,
           mmproj_load_ms: model.mmprojLoadMs,
           load_peak_pss_kb: loadPeak,

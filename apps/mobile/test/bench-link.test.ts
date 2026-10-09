@@ -5,17 +5,23 @@ import { test } from 'node:test';
 import { parseBenchUrl } from '../src/modules/assistant-spike/benchLink.ts';
 
 test('a bare bench link runs on the CPU with the default thread count', () => {
-  assert.deepEqual(parseBenchUrl('tahak://spike/bench', 6), { backends: ['cpu'], threads: 6 });
+  assert.deepEqual(parseBenchUrl('tahak://spike/bench', 6), {
+    backends: ['cpu'],
+    threads: 6,
+    imageMaxTokens: undefined,
+  });
 });
 
 test('backend and threads come from the query', () => {
   assert.deepEqual(parseBenchUrl('tahak://spike/bench?backend=gpu&threads=4', 6), {
     backends: ['gpu'],
     threads: 4,
+    imageMaxTokens: undefined,
   });
   assert.deepEqual(parseBenchUrl('tahak://spike/bench?threads=8&backend=both', 6), {
     backends: ['cpu', 'gpu'],
     threads: 8,
+    imageMaxTokens: undefined,
   });
 });
 
@@ -28,4 +34,10 @@ test('other links are not bench links', () => {
   assert.equal(parseBenchUrl(null, 6), null);
   assert.equal(parseBenchUrl('tahak://spike/benchmark', 6), null);
   assert.equal(parseBenchUrl('exp+tahak://expo-development-client/?url=x', 6), null);
+});
+
+test('image_tokens caps the photo tokens; absent or bad means the engine default', () => {
+  assert.equal(parseBenchUrl('tahak://spike/bench?image_tokens=256', 6)?.imageMaxTokens, 256);
+  assert.equal(parseBenchUrl('tahak://spike/bench', 6)?.imageMaxTokens, undefined);
+  assert.equal(parseBenchUrl('tahak://spike/bench?image_tokens=-1', 6)?.imageMaxTokens, undefined);
 });
