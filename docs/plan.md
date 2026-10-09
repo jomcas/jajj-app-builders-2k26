@@ -8,6 +8,7 @@ Vocabulary follows [CONTEXT.md](../CONTEXT.md). Decisions with lasting weight li
 - Android only. Demo device: Samsung Galaxy Z Flip 6 (12 GB RAM, Snapdragon 8 Gen 3). A second Android phone is needed for Group Hike.
 - Everything works offline on the trail ([ADR 0002](adr/0002-offline-only-core.md)).
 - Languages: English and Filipino in the UI and content. Other dialects get best-effort answers from the Assistant only.
+- Assistant answer language follows the UI language: English UI gives English answers (the default), Filipino UI gives Taglish answers. Hikers can ask in English, Filipino or Taglish either way. Decided at the Wave 0 go/no-go because the 4B model answers better in English.
 - Watch support means only that Deviation alerts mirror to a paired watch as phone notifications.
 
 ## Core loop (must work in airplane mode)
@@ -15,7 +16,7 @@ Vocabulary follows [CONTEXT.md](../CONTEXT.md). Decisions with lasting weight li
 1. Download the Mt. Batulao Destination Pack.
 2. See the offline map with the Trail, Waypoints and your GPS position.
 3. Start a Hike. Being more than 40 m off the Trail for more than 30 s triggers a Deviation alert (vibration, sound, notification).
-4. Ask the Assistant in English, Filipino or Taglish. It answers from the pack and the Guide Library through RAG.
+4. Ask the Assistant in English, Filipino or Taglish. It answers from the pack and the Guide Library through RAG, in English by default or in Taglish when the UI is in Filipino.
 5. Emergency questions open the matching Guide ([ADR 0003](adr/0003-emergencies-route-to-guides.md)).
 6. Fire the Flare: SOS on the flashlight, screen strobe and a whistle tone.
 
@@ -24,7 +25,7 @@ Vocabulary follows [CONTEXT.md](../CONTEXT.md). Decisions with lasting weight li
 | Concern | Choice |
 |---|---|
 | App | Expo dev build (not Expo Go), TypeScript, Feature Modules ([ADR 0001](adr/0001-feature-modules-and-assistant-tools.md)) |
-| LLM | `llama.rn` running Qwen3.5-4B GGUF with its vision file. Spend at most 15 min trying Bonsai 27B during the spike. The model is downloaded on first launch. |
+| LLM | `llama.rn` 0.13.0-rc.7 running Qwen3.5-4B Q4_K_M (`unsloth/Qwen3.5-4B-GGUF`) with its F16 vision file, **on the CPU** (6 threads, no mmap, n_ctx 4096). The OpenCL GPU path is out: it was killed for memory every time. Bonsai 27B was dropped without a try (Mac disk space). The model is downloaded on first launch and written by the app itself. See the Wave 0 checkpoint. |
 | RAG | Small embedding model run through `llama.rn`. Passages are converted when a pack downloads and searched by brute force; no vector database. |
 | Maps | MapLibre RN rendering a local PMTiles file per Destination, cut from Protomaps before the event |
 | Weather | Open-Meteo 7-day Forecast for each downloaded Destination and the current location, refreshed whenever online and shown with its age |
@@ -47,6 +48,25 @@ Every wave ends with a checkpoint that can be demoed in airplane mode.
 | 5 Freeze | 17–20 | No new features · full airplane-mode run-through · bug fixes · release APK · demo script | Ready to demo |
 
 Hard rules: if Wave 0 fails, fix the model before anything else. No new features after hour 17.
+
+### Wave 0 checkpoint: model go/no-go
+
+**Decision (2026-10-10): go with Qwen3.5-4B on the CPU.** Answers follow the UI language: English by default, Taglish when the UI is in Filipino (see Constraints). Measured on the Flip 6 in airplane mode ([#2](https://github.com/jomcas/jajj-app-builders-2k26/issues/2)):
+
+| Qwen3.5-4B Q4_K_M, CPU, 6 threads | Result |
+|---|---|
+| Load | model 5.7 s, vision file 0.7 s |
+| Taglish question (245 prompt tokens) | first token 5.0 s, then 11.2 tok/s; prompt 49 tok/s |
+| Bundled photo, 574×768 (683 prompt tokens) | first token 92 s, then 6.6 tok/s; 53 s when capped at 256 image tokens |
+| Camera photo, full size (972 image tokens, warm phone) | first token 219 s, then 3.9 tok/s |
+| Peak memory | 4.7 GB PSS with mmap off (6.3 GB with mmap on) |
+| GPU (OpenCL, Adreno 750) | killed for memory at 6.2–6.5 GB PSS in all three tries |
+| Bonsai 27B | not tried: dropped by the human for disk space |
+
+Known limits carried forward:
+- Photos are too slow as they stand. Before Vision ([#18](https://github.com/jomcas/jajj-app-builders-2k26/issues/18)), downscale photos or cap image tokens, and try a Q8_0 vision file.
+- Speed drops from about 11 to about 7 tok/s once the phone is warm.
+- Taglish answers were stiff, formal Filipino with some wrong phrasing. A style prompt with examples is needed for the Filipino-UI mode.
 
 ### Wave reports
 
