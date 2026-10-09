@@ -1,7 +1,8 @@
 // The chat model: one llama.rn context running Qwen3.5-4B on the CPU (Wave 0 decision:
-// 6 threads, no mmap, n_ctx 4096). Moved here from the Wave 0 spike. The vision file (mmproj)
-// loads only when asked for (the Wave 0 benchmark); the chat leaves it out until Vision (#18),
-// which saves memory for the embedding model running beside it.
+// 6 threads, no mmap, n_ctx 4096). Moved here from the Wave 0 spike. The chat loads it without
+// the vision file (mmproj); Vision (#18) attaches the vision file to the loaded model only for
+// a photo question and detaches it when idle (attachVision/detachVision, vision.ts), which
+// keeps memory down while the map and the embedding model are loaded too.
 import {
   addNativeLogListener,
   getBackendDevicesInfo,
@@ -11,7 +12,7 @@ import {
 } from 'llama.rn';
 
 import diagnostics from '../../../modules/tahak-diagnostics';
-import { assistantModelFiles } from './modelFiles';
+import { assistantModelFiles, modelFilePath } from './modelFiles';
 import type { GenerateResult } from './pipeline';
 import { N_PREDICT, type ChatMessage } from './prompt';
 
@@ -29,12 +30,18 @@ const GPU_LAYERS = 99;
 /** Caps the tokens one photo can take, so a full-size camera photo still fits in N_CTX. */
 export const IMAGE_MAX_TOKENS = 1024;
 
+/** Which vision file to attach (a file name in the model folder; default: the manifest's). */
+export type VisionOptions = { imageMaxTokens: number; mmproj?: string };
+
 export type LoadedModel = {
   context: LlamaContext;
   backend: Backend;
   threads: number;
+  /** True while a vision file is attached (at load, or later with attachVision). */
   vision: boolean;
   imageMaxTokens: number;
+  /** Path of the attached vision file, when vision is true. */
+  mmprojPath?: string;
   nGpuLayers: number;
   nCtx: number;
   modelLoadMs: number;
@@ -169,6 +176,7 @@ async function doLoad(backend: Backend, threads: number, imageMaxTokens: number,
       threads,
       vision,
       imageMaxTokens,
+      mmprojPath: vision ? paths.mmproj : undefined,
       nGpuLayers,
       nCtx: N_CTX,
       modelLoadMs,
@@ -184,6 +192,34 @@ async function doLoad(backend: Backend, threads: number, imageMaxTokens: number,
     setState({ status: 'error', error: error instanceof Error ? error.message : String(error) });
     throw error;
   }
+}
+
+/**
+ * Attaches a vision file to the already loaded chat model (no reload of the 2.7 GB model).
+ * Replaces a vision file attached with other settings. Must not run during a completion.
+ */
+export async function attachVision(model: LoadedModel, { imageMaxTokens, mmproj }: VisionOptions): Promise<number> {
+  const path = mmproj ? modelFilePath(mmproj) : assistantModelFiles().mmproj;
+  if (model.vision && model.mmprojPath === path && model.imageMaxTokens === imageMaxTokens) return 0;
+  if (model.vision) await detachVision(model);
+  const start = Date.now();
+  const ready = await model.context.initMultimodal({ path, use_gpu: model.backend === 'gpu', image_max_tokens: imageMaxTokens });
+  if (!ready) throw new Error('The vision file (mmproj) did not load.');
+  model.vision = true;
+  model.imageMaxTokens = imageMaxTokens;
+  model.mmprojPath = path;
+  model.mmprojLoadMs = Date.now() - start;
+  setState({ status: 'ready', model });
+  return model.mmprojLoadMs;
+}
+
+/** Frees the vision file's memory, keeping the chat model loaded. Must not run during a completion. */
+export async function detachVision(model: LoadedModel): Promise<void> {
+  if (!model.vision) return;
+  await model.context.releaseMultimodal();
+  model.vision = false;
+  model.mmprojPath = undefined;
+  setState({ status: 'ready', model });
 }
 
 /** Drops the empty <think></think> block Qwen3.5 can still emit with thinking off. */

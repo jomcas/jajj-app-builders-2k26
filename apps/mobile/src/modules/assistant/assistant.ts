@@ -13,6 +13,7 @@ import { routeEmergency, toAssistantReply } from '../emergency';
 import { complete, loadModel } from './llm';
 import { answerQuestion, type PipelineDeps, type Reply } from './pipeline';
 import { appIndex, type VectorIndex } from './vectorIndex';
+import { notePhotoCached } from './vision';
 
 let emergencyRoute: PipelineDeps['emergencyRoute'] = async (question, language) =>
   toAssistantReply(routeEmergency(question, language));
@@ -62,10 +63,15 @@ export type AnswerOptions = {
 // One question at a time: llama.rn contexts are not re-entrant.
 let queue: Promise<unknown> = Promise.resolve();
 
-export function answer(question: string, options: AnswerOptions): Promise<Reply> {
-  const run = queue.then(() => runAnswer(question, options));
+/** Runs task after everything already queued on the chat model (answers, photo reads). */
+export function enqueue<T>(task: () => Promise<T>): Promise<T> {
+  const run = queue.then(task);
   queue = run.catch(() => undefined);
   return run;
+}
+
+export function answer(question: string, options: AnswerOptions): Promise<Reply> {
+  return enqueue(() => runAnswer(question, options));
 }
 
 async function runAnswer(
@@ -73,6 +79,7 @@ async function runAnswer(
   { language, onDisplay, index = appIndex, threshold = index.spec.threshold, ignorePacks: skipPacks = ignorePacks }: AnswerOptions,
 ): Promise<Reply> {
   const started = Date.now();
+  notePhotoCached(null); // a text question replaces a photo read ahead in the model's cache
   const reply = await answerQuestion(
     question,
     language,
