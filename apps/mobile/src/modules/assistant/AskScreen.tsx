@@ -15,9 +15,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePreferences, useStrings, useTheme } from '../../settings/preferences';
-import { openGuide } from '../guides';
 import type { Palette } from '../../theme/tokens';
 import { textStyles } from '../../theme/typography';
+import { DistressCard, EmergencyGuideCard } from '../emergency';
+import { openGuide } from '../guides';
 import { answer, testFlags } from './assistant';
 import type { Chunk } from './corpus';
 import { errorMessage, fill } from './format';
@@ -217,11 +218,19 @@ function AssistantBubble({
   const corpus = appIndex.chunks();
   const box = [styles.bubble, styles.assistantBubble, { backgroundColor: colors.surface, borderColor: colors.line }];
 
+  // ADR 0003: an emergency gets the Guide's own card (or the distress card), never model text.
+  // The card is its own surface, so it is not wrapped in a bubble.
+  if (!error && reply?.kind === 'emergency') {
+    return (
+      <View accessibilityLabel={s.assistant} style={styles.cardReply}>
+        {reply.guideId ? <EmergencyGuideCard guideId={reply.guideId} /> : <DistressCard />}
+      </View>
+    );
+  }
+
   let body: React.ReactNode;
   if (error) body = <Text style={[textStyles.body, { color: colors.ink }]}>{fill(s.answerError, { error })}</Text>;
   else if (reply?.kind === 'off-topic') body = <Text style={[textStyles.body, { color: colors.ink }]}>{s.offTopic}</Text>;
-  else if (reply?.kind === 'emergency')
-    body = <Chip label={s.emergencyGuide} onPress={() => openGuide(reply.guideId)} colors={colors} />;
   else if (text) body = <Text selectable style={[textStyles.body, { color: colors.ink }]}>{text}</Text>;
   else body = <Text style={[textStyles.body, { color: colors.muted }]}>{s.answering}</Text>;
 
@@ -294,6 +303,7 @@ const styles = StyleSheet.create({
   bubble: { borderRadius: 14, padding: 12, gap: 10, maxWidth: '92%' },
   userBubble: { alignSelf: 'flex-end' },
   assistantBubble: { alignSelf: 'flex-start', borderWidth: 1 },
+  cardReply: { alignSelf: 'stretch' },
   sources: { gap: 6 },
   status: { paddingHorizontal: 16, paddingBottom: 4 },
   inputBar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, padding: 8, borderTopWidth: 1 },

@@ -21,6 +21,7 @@ import type { Guide, LocalizedGuide } from './types';
 //   getLocalizedGuide(id, language) → LocalizedGuide | undefined
 //   listGuides() → Guide[]                     sorted by group, then order, then id
 //   useGuides() → { guides, sections }         in the UI language, for screens (a React hook)
+//   <GuideIcon id kind size?>                  a Guide's icon tile (red on blush for emergencies)
 //   types: Guide, LocalizedGuide, GuideKind, GuideCategory, GuideSection
 //
 // Deep link: tahak://guides/<id> opens a Guide, tahak://guides the list.
@@ -31,6 +32,7 @@ import type { Guide, LocalizedGuide } from './types';
 // Listen from import time, not from the screen: tabs mount lazily, and a link may come first.
 listenForGuideLinks();
 
+export { GuideIcon } from './GuideIcon';
 export { openGuide } from './store';
 export type { Guide, GuideCategory, GuideKind, GuideSection, LocalizedGuide } from './types';
 export type { LocalizedLibrary } from './library';

@@ -7,6 +7,7 @@
 export { default as assistant } from './assistant';
 export { default as assistantModel } from './assistant-model';
 export { default as destinationPack } from './destination-pack';
+export { default as emergency } from './emergency';
 export { default as explore } from './explore';
 export { default as firstLaunch } from './first-launch';
 export { default as flare } from './flare';
