@@ -1,0 +1,116 @@
+/* Tokens from apps/mobile/src/theme/tokens.ts (day palette). Olive = brand and actions, trail
+   orange = the Trail, amber = caution and form errors. Red means danger only (ADR 0004), and
+   the portal has no danger to show, so it uses no red at all. */
+:root {
+  --page: #f7f4ec;
+  --surface: #fffdf8;
+  --line: #ddd7c8;
+  --ink: #1b1f1a;
+  --muted: #434a41;
+  --primary: #353f2a;
+  --on-primary: #f7f4ec;
+  --tint: #dce4c8;
+  --on-tint: #353f2a;
+  --peach: #f9d3b4;
+  --on-peach: #6a2c0c;
+  --sky: #cfe3f7;
+  --on-sky: #0e3f7a;
+  --butter: #fbe7a1;
+  --on-butter: #5c4300;
+  --trail: #d9661f;
+  --trail-outline: #3b1f0e;
+  --heading: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --body: 'Barlow', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body { background: var(--page); color: var(--ink); font: 16px/1.4 var(--body); }
+h1, h2, h3 { font-family: var(--heading); font-weight: 600; margin: 0 0 12px; }
+h1 { font-size: 28px; line-height: 32px; }
+h2 { font-size: 22px; line-height: 26px; }
+h3 { font-size: 18px; line-height: 22px; }
+p { margin: 0 0 12px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+
+button {
+  font: 600 15px var(--body);
+  border-radius: 10px;
+  padding: 8px 14px;
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+  cursor: pointer;
+}
+button.secondary { background: var(--surface); color: var(--primary); }
+button.quiet { background: transparent; border-color: transparent; color: var(--primary); padding: 4px 8px; }
+button:disabled { opacity: 0.5; cursor: default; }
+
+input, select, textarea {
+  font: 15px var(--body);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  width: 100%;
+}
+textarea { min-height: 120px; resize: vertical; }
+input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.field > span { font: 500 13px var(--body); color: var(--muted); }
+.field.invalid input, .field.invalid select, .field.invalid textarea { border-color: #b98900; }
+.field-error { font-size: 13px; color: var(--on-butter); background: var(--butter); border-radius: 6px; padding: 2px 8px; align-self: flex-start; }
+.row { display: flex; gap: 12px; }
+.row > * { flex: 1; }
+.actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+
+.notice { border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
+.notice.info { background: var(--sky); color: var(--on-sky); }
+.notice.ok { background: var(--tint); color: var(--on-tint); }
+.notice.caution { background: var(--butter); color: var(--on-butter); }
+
+/* Layout */
+.topbar { display: flex; align-items: center; gap: 16px; padding: 10px 20px; background: var(--primary); color: var(--on-primary); }
+.topbar h1 { margin: 0; font-size: 24px; }
+.topbar .who { margin-left: auto; font-size: 14px; opacity: 0.9; }
+.topbar button { background: transparent; border-color: var(--on-primary); color: var(--on-primary); }
+.layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100% - 52px); }
+.sidebar { border-right: 1px solid var(--line); padding: 16px; background: var(--surface); }
+.sidebar ul { list-style: none; padding: 0; margin: 0 0 12px; }
+.sidebar li button { width: 100%; text-align: left; background: transparent; color: var(--ink); border-color: transparent; font-weight: 500; }
+.sidebar li button.selected { background: var(--tint); color: var(--on-tint); }
+.main { padding: 20px 24px; max-width: 1100px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.tabs button { background: transparent; color: var(--muted); border: none; border-bottom: 3px solid transparent; border-radius: 0; }
+.tabs button.active { color: var(--primary); border-bottom-color: var(--trail); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.split { display: grid; grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr); gap: 16px; align-items: start; }
+
+.center { display: grid; place-items: center; height: 100%; padding: 24px; }
+.center .card { width: min(420px, 100%); }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font: 500 13px var(--body); color: var(--muted); border-bottom: 1px solid var(--line); padding: 6px; }
+td { border-bottom: 1px solid var(--line); padding: 6px; vertical-align: middle; }
+tr.selected td { background: var(--tint); }
+
+.map { width: 100%; height: 420px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.map.clickable .maplibregl-canvas { cursor: crosshair; }
+.point {
+  min-width: 26px; height: 26px; border-radius: 13px; padding: 0 6px;
+  display: grid; place-items: center;
+  font: 700 13px var(--body); border: 2px solid var(--surface); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+.point.jump_off { background: var(--primary); color: var(--on-primary); }
+.point.campsite { background: var(--peach); color: var(--on-peach); }
+.point.water { background: var(--sky); color: var(--on-sky); }
+.point.summit { background: var(--butter); color: var(--on-butter); }
+.point.destination { background: var(--trail); color: #fff; }
+.point.selected { outline: 3px solid var(--trail); }
+.chip { display: inline-block; border-radius: 999px; padding: 1px 10px; font-size: 13px; font-weight: 500; }
+.chip.added { background: var(--tint); color: var(--on-tint); }
+.chip.changed { background: var(--sky); color: var(--on-sky); }
+.chip.removed { background: var(--butter); color: var(--on-butter); }

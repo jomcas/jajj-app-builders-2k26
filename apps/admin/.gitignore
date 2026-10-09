@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env.local
+.env*.local
+# Team emails, passwords and other local-only files. Never commit them: the repo is public.
+local/
