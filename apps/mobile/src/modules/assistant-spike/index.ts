@@ -1,3 +1,4 @@
+import { withModelGate } from '../assistant-model';
 import type { FeatureModule } from '../types';
 import { listenForBenchLinks } from './bench';
 import { SpikeScreen } from './SpikeScreen';
@@ -13,7 +14,8 @@ listenForBenchLinks();
 export default {
   id: 'assistant-spike',
   tab: 'ask',
-  Screen: SpikeScreen,
+  // Download progress until the model is on the phone, then the spike (issue #13).
+  Screen: withModelGate(SpikeScreen),
   hikeModes: ['solo', 'group'],
   offlineNeeds: ['model'],
 } satisfies FeatureModule;
