@@ -16,7 +16,7 @@ import { routeEmergency, toAssistantReply } from '../emergency';
 import { enqueue, registeredTools } from './assistant';
 import { memorySampler } from './benchLog';
 import { complete, type LoadedModel } from './llm';
-import { answerPhotoQuestion, type PhotoReply } from './photoPipeline';
+import { answerPhotoQuestion, routeBeforeModel, type PhotoReply } from './photoPipeline';
 import { buildPhotoMessages } from './photoPrompt';
 import { appIndex, type VectorIndex } from './vectorIndex';
 import { isPhotoCached, modelWithVision, notePhotoCached, scheduleIdleRelease, visionSettings } from './vision';
@@ -94,9 +94,19 @@ export type PhotoAnswerOptions = {
 };
 
 /** Answers a question about a photo. An empty question asks what the photo shows. */
-export function answerPhoto(question: string, uri: string, options: PhotoAnswerOptions): Promise<PhotoReply & { timing: PhotoTiming }> {
-  return enqueue(() => runPhoto(question, uri, options));
+export async function answerPhoto(question: string, uri: string, options: PhotoAnswerOptions): Promise<PhotoReply & { timing: PhotoTiming }> {
+  // ADR 0003: an emergency (or a tool) needs no model, so it never waits in the queue behind a
+  // photo being read ahead; it is answered at once.
+  if (await routeBeforeModel(question, options.language, earlyDeps)) return runPhoto(question, uri, options, false);
+  return enqueue(() => runPhoto(question, uri, options, true));
 }
+
+const earlyDeps = {
+  emergencyRoute: async (q: string, l: Language) => toAssistantReply(routeEmergency(q, l)),
+  get tools() {
+    return registeredTools();
+  },
+};
 
 export type PhotoTiming = {
   /** From Send to the first word of the answer (the photo read included, if it wasn't ahead). */
@@ -109,6 +119,8 @@ async function runPhoto(
   question: string,
   uri: string,
   { language, onDisplay, index = appIndex, size }: PhotoAnswerOptions,
+  /** False for an emergency or tool answered outside the queue: leave the model's state alone. */
+  queued: boolean,
 ): Promise<PhotoReply & { timing: PhotoTiming }> {
   const started = Date.now();
   const wasReadAhead = isPhotoCached(uri, language);
@@ -121,8 +133,7 @@ async function runPhoto(
       uri,
       language,
       {
-        emergencyRoute: async (q, l) => toAssistantReply(routeEmergency(q, l)),
-        tools: registeredTools(),
+        ...earlyDeps,
         // Only a Guide match stops an answer; the distress card is for the hiker's own words.
         guard: (text, l) => {
           const route = routeEmergency(text, l);
@@ -179,7 +190,9 @@ async function runPhoto(
     return { ...reply, timing };
   } finally {
     memory.stop();
-    setActivity({ phase: 'idle' });
-    scheduleIdleRelease(releaseOnQueue);
+    if (queued) {
+      setActivity({ phase: 'idle' });
+      scheduleIdleRelease(releaseOnQueue);
+    }
   }
 }

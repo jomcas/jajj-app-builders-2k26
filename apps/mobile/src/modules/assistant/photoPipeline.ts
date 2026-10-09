@@ -142,13 +142,15 @@ export type PhotoPipelineDeps = {
   stop?: () => void;
 };
 
-export async function answerPhotoQuestion(
+/**
+ * Stages 1 and 1b, which never need the model: an emergency or a tool. The app runs this before
+ * queueing a photo question, so an emergency never waits behind a photo being read.
+ */
+export async function routeBeforeModel(
   question: string,
-  photoUri: string,
   language: Language,
-  deps: PhotoPipelineDeps,
-  onDisplay?: (text: string) => void,
-): Promise<PhotoReply> {
+  deps: Pick<PhotoPipelineDeps, 'emergencyRoute' | 'tools'>,
+): Promise<PhotoEmergencyReply | PhotoToolReply | null> {
   const emergency = await deps.emergencyRoute(question, language);
   if (emergency) return { ...emergency, photo: true, stage: 'question' };
 
@@ -157,6 +159,18 @@ export async function answerPhotoQuestion(
     const result = await call.tool.run(call.args, { language });
     return { kind: 'tool', photo: true, toolId: call.tool.id, args: call.args, result };
   }
+  return null;
+}
+
+export async function answerPhotoQuestion(
+  question: string,
+  photoUri: string,
+  language: Language,
+  deps: PhotoPipelineDeps,
+  onDisplay?: (text: string) => void,
+): Promise<PhotoReply> {
+  const early = await routeBeforeModel(question, language, deps);
+  if (early) return early;
 
   const hits = await deps.search(question);
   const gate = gateDecision(hits, deps.threshold);

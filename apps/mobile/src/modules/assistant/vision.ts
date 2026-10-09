@@ -11,8 +11,11 @@ import { MMPROJ_FILE } from './modelFiles';
 
 /** Tokens one photo may take. See the table in the #18 PR for how it was chosen. */
 export const IMAGE_TOKENS = 256;
-/** Detach the vision file after this long without a photo question. */
-export const VISION_IDLE_MS = 2 * 60_000;
+/**
+ * Detach the vision file after this long without a photo question. Long enough for a hiker to
+ * type a question about a photo read ahead: detaching also drops the photo from the cache.
+ */
+export const VISION_IDLE_MS = 5 * 60_000;
 
 let settings: VisionOptions = { imageMaxTokens: IMAGE_TOKENS, mmproj: MMPROJ_FILE };
 
@@ -64,7 +67,10 @@ export function scheduleIdleRelease(run: (task: () => Promise<void>) => Promise<
     idleTimer = null;
     void run(async () => {
       const state = engineStore.getSnapshot();
-      if (state.status === 'ready' && state.model.vision) await detachVision(state.model);
+      if (state.status === 'ready' && state.model.vision) {
+        await detachVision(state.model);
+        notePhotoCached(null); // releasing the vision file also drops the photo's cached state
+      }
     }).catch(() => undefined);
   }, ms);
 }

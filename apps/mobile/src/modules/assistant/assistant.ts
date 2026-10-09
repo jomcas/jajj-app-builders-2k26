@@ -85,7 +85,10 @@ export function enqueue<T>(task: () => Promise<T>): Promise<T> {
   return run;
 }
 
-export function answer(question: string, options: AnswerOptions): Promise<Reply> {
+export async function answer(question: string, options: AnswerOptions): Promise<Reply> {
+  // ADR 0003: an emergency needs no model, so it never waits behind a running answer or a
+  // photo being read ahead (#18); it is answered at once.
+  if (await emergencyRoute?.(question, options.language)) return runAnswer(question, options);
   return enqueue(() => runAnswer(question, options));
 }
 
@@ -94,7 +97,6 @@ async function runAnswer(
   { language, onDisplay, index = appIndex, threshold = index.spec.threshold, ignorePacks: skipPacks = ignorePacks }: AnswerOptions,
 ): Promise<Reply> {
   const started = Date.now();
-  notePhotoCached(null); // a text question replaces a photo read ahead in the model's cache
   const reply = await answerQuestion(
     question,
     language,
@@ -105,7 +107,10 @@ async function runAnswer(
       corpus: () => index.chunks({ ignorePacks: skipPacks }),
       threshold,
       passageLanguage: (ui) => (passageLanguageOverride === 'ui' ? ui : 'en'),
-      generate: async (messages, onText) => complete(await loadModel('cpu'), messages, onText),
+      generate: async (messages, onText) => {
+        notePhotoCached(null); // the text prompt replaces a photo read ahead in the model's cache
+        return complete(await loadModel('cpu'), messages, onText);
+      },
     },
     onDisplay,
   );
