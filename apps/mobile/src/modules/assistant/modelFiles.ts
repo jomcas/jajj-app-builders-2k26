@@ -8,8 +8,8 @@ import { getModelFiles } from '../assistant-model';
 
 /** The chat model: Qwen3.5-4B, Q4_K_M (unsloth/Qwen3.5-4B-GGUF). */
 export const LLM_FILE = 'Qwen3.5-4B-Q4_K_M.gguf';
-/** Its vision file, used only by the Wave 0 benchmark until Vision (#18). */
-export const MMPROJ_FILE = 'Qwen3.5-4B-mmproj-F16.gguf';
+/** Its vision file (mmproj), Q8_0: attached for photo questions (Vision, #18; vision.ts). */
+export const MMPROJ_FILE = 'Qwen3.5-4B-mmproj-Q8_0.gguf';
 
 export type ModelFiles = { llm: string; mmproj: string };
 

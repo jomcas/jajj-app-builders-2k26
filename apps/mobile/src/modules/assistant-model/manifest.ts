@@ -23,8 +23,8 @@ export type ModelManifest = {
 };
 
 /**
- * The Assistant model (Wave 0 decision): Qwen3.5-4B Q4_K_M plus its F16 vision file, from
- * unsloth/Qwen3.5-4B-GGUF, and the embedding model for the Assistant's search (#14).
+ * The Assistant model (Wave 0 decision): Qwen3.5-4B Q4_K_M from unsloth/Qwen3.5-4B-GGUF, its
+ * vision file in Q8_0 (Vision, #18), and the embedding model for the Assistant's search (#14).
  */
 export const MODEL_MANIFEST: ModelManifest = {
   id: 'real',
@@ -37,10 +37,13 @@ export const MODEL_MANIFEST: ModelManifest = {
       sha256: '00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4',
     },
     {
-      name: 'Qwen3.5-4B-mmproj-F16.gguf',
-      url: 'https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/mmproj-F16.gguf',
-      bytes: 672_423_616,
-      sha256: 'cd88edcf8d031894960bb0c9c5b9b7e1fea6ebee02b9f7ce925a00d12891f864',
+      // The vision file, Q8_0 (#18): a photo is read ~30% faster than with unsloth's F16
+      // (672 MB) and it takes half the memory. unsloth publishes no Q8_0, so this one comes
+      // from prithivMLmods/Qwen3.5-4B-f32-GGUF (converted from Qwen/Qwen3.5-4B).
+      name: 'Qwen3.5-4B-mmproj-Q8_0.gguf',
+      url: 'https://huggingface.co/prithivMLmods/Qwen3.5-4B-f32-GGUF/resolve/main/Qwen3.5-4B.mmproj-q8_0.gguf',
+      bytes: 366_894_656,
+      sha256: '40a4f07d7bbdbb43011d6cf35ef751e4b1829ff47ee8aa4964c6296f571725ad',
     },
     {
       // The Assistant's embedding model (#14): turns passages and questions into vectors for

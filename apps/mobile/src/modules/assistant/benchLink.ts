@@ -10,6 +10,11 @@
 //       The chat's test switch for "no Destination Pack downloaded".
 //   tahak://spike/bench?backend=cpu|gpu|both&threads=<n>&image_tokens=<n>
 //       The Wave 0 model benchmark (spikeBench.ts), kept working.
+//   tahak://assistant/vision-bench?photo=<file>&q=<question>&ui=en|fil&tokens=<n>&mmproj=<file>&ahead=1&runs=<n>
+//       Vision (#18): answers a photo question through the real photo pipeline. photo is a file
+//       in the app's cache folder vision-bench/ (copied there with run-as) or "bundled" (the
+//       Wave 0 photo); tokens caps the photo's tokens; mmproj picks another vision file in the
+//       model folder; ahead=1 reads the photo ahead first, as the chat does while the hiker types.
 
 import type { Language } from '../../i18n/types';
 import type { Backend } from './llm';
@@ -91,4 +96,31 @@ export function sweepThresholds(
     out.push({ threshold, refused, passed });
   }
   return out;
+}
+
+export type VisionBenchOptions = {
+  photo: string;
+  question: string;
+  ui: Language;
+  imageMaxTokens?: number;
+  mmproj?: string;
+  ahead: boolean;
+  runs: number;
+};
+
+export function parseVisionBenchUrl(url: string | null): VisionBenchOptions | null {
+  if (!matches(url, 'assistant/vision-bench')) return null;
+  const count = (name: string) => {
+    const value = Number(param(url, name));
+    return Number.isInteger(value) && value > 0 ? value : undefined;
+  };
+  return {
+    photo: param(url, 'photo') || 'bundled',
+    question: param(url, 'q') ?? 'What is this?',
+    ui: param(url, 'ui') === 'fil' ? 'fil' : 'en',
+    imageMaxTokens: count('tokens'),
+    mmproj: param(url, 'mmproj') || undefined,
+    ahead: param(url, 'ahead') === '1',
+    runs: Math.min(count('runs') ?? 1, 5),
+  };
 }

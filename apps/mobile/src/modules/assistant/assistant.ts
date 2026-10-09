@@ -16,6 +16,7 @@ import type { AssistantTool } from '../types';
 import { answerQuestion, type PipelineDeps, type Reply } from './pipeline';
 import { collectTools } from './tools';
 import { appIndex, type VectorIndex } from './vectorIndex';
+import { notePhotoCached } from './vision';
 
 let emergencyRoute: PipelineDeps['emergencyRoute'] = async (question, language) =>
   toAssistantReply(routeEmergency(question, language));
@@ -28,7 +29,7 @@ export function setEmergencyRoute(route: PipelineDeps['emergencyRoute']) {
 // The registry imports this module, so the tools are collected on first use rather than at
 // import time (a static import of the registry here would be a require cycle).
 let tools: readonly AssistantTool[] | null = null;
-function registeredTools(): readonly AssistantTool[] {
+export function registeredTools(): readonly AssistantTool[] {
   if (!tools) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy, see above
     const { featureModules } = require('../index') as typeof import('../index');
@@ -77,10 +78,18 @@ export type AnswerOptions = {
 // One question at a time: llama.rn contexts are not re-entrant.
 let queue: Promise<unknown> = Promise.resolve();
 
-export function answer(question: string, options: AnswerOptions): Promise<Reply> {
-  const run = queue.then(() => runAnswer(question, options));
+/** Runs task after everything already queued on the chat model (answers, photo reads). */
+export function enqueue<T>(task: () => Promise<T>): Promise<T> {
+  const run = queue.then(task);
   queue = run.catch(() => undefined);
   return run;
+}
+
+export async function answer(question: string, options: AnswerOptions): Promise<Reply> {
+  // ADR 0003: an emergency needs no model, so it never waits behind a running answer or a
+  // photo being read ahead (#18); it is answered at once.
+  if (await emergencyRoute?.(question, options.language)) return runAnswer(question, options);
+  return enqueue(() => runAnswer(question, options));
 }
 
 async function runAnswer(
@@ -98,7 +107,10 @@ async function runAnswer(
       corpus: () => index.chunks({ ignorePacks: skipPacks }),
       threshold,
       passageLanguage: (ui) => (passageLanguageOverride === 'ui' ? ui : 'en'),
-      generate: async (messages, onText) => complete(await loadModel('cpu'), messages, onText),
+      generate: async (messages, onText) => {
+        notePhotoCached(null); // the text prompt replaces a photo read ahead in the model's cache
+        return complete(await loadModel('cpu'), messages, onText);
+      },
     },
     onDisplay,
   );

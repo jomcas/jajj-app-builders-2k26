@@ -4,6 +4,9 @@
 //   answer(question, { language, onDisplay })   the pipeline, for the chat and the bench:
 //       emergencyRoute? → relevanceGate → retrieve → generate (see pipeline.ts)
 //   setEmergencyRoute(route)                     stage 1, for emergency routing (#15)
+//   answerPhoto / readPhotoAhead (photoAssistant.ts)   Vision (#18): a photo question, with
+//       the photo read ahead while the hiker types; the same emergency route and tools first,
+//       then a photo gate, and a guard on the model's words (photoPipeline.ts, ADR 0006)
 //
 // Passages are embedded when a pack is downloaded or updated, and once for the Guides and
 // the app help (vectorIndex.ts). adb hooks (bench.ts, benchLink.ts): the test-set bench

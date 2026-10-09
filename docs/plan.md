@@ -25,7 +25,7 @@ Vocabulary follows [CONTEXT.md](../CONTEXT.md). Decisions with lasting weight li
 | Concern | Choice |
 |---|---|
 | App | Expo dev build (not Expo Go), TypeScript, Feature Modules ([ADR 0001](adr/0001-feature-modules-and-assistant-tools.md)) |
-| LLM | `llama.rn` 0.13.0-rc.7 running Qwen3.5-4B Q4_K_M (`unsloth/Qwen3.5-4B-GGUF`) with its F16 vision file, **on the CPU** (6 threads, no mmap, n_ctx 4096). The OpenCL GPU path is out: it was killed for memory every time. Bonsai 27B was dropped without a try (Mac disk space). The model is downloaded on first launch and written by the app itself. See the Wave 0 checkpoint. |
+| LLM | `llama.rn` 0.13.0-rc.7 running Qwen3.5-4B Q4_K_M (`unsloth/Qwen3.5-4B-GGUF`) with its Q8_0 vision file, attached only for photo questions ([ADR 0006](adr/0006-photo-questions.md)), **on the CPU** (6 threads, no mmap, n_ctx 4096). The OpenCL GPU path is out: it was killed for memory every time. Bonsai 27B was dropped without a try (Mac disk space). The model is downloaded on first launch and written by the app itself. See the Wave 0 checkpoint. |
 | RAG | Small embedding model run through `llama.rn`. Passages are converted when a pack downloads and searched by brute force; no vector database. |
 | Maps | MapLibre RN rendering a local PMTiles file per Destination, cut from Protomaps before the event |
 | Weather | Open-Meteo 7-day Forecast for each downloaded Destination and the current location, refreshed whenever online and shown with its age |

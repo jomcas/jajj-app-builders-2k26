@@ -14,6 +14,7 @@ import {
   parseAssistantBenchUrl,
   parseSpikeBenchUrl,
   parseTestUrl,
+  parseVisionBenchUrl,
   sweepThresholds,
   type AssistantBenchOptions,
 } from './benchLink';
@@ -25,6 +26,7 @@ import type { Reply } from './pipeline';
 import { runSpikeBench } from './spikeBench';
 import { TEST_SET } from './testSet';
 import { appIndex, createVectorIndex, type VectorIndex } from './vectorIndex';
+import { runVisionBench } from './visionBench';
 
 export const BENCH_TAG = 'TAHAK_ASSISTANT_BENCH';
 
@@ -151,7 +153,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
 type BenchGlobals = { tahakAssistantLinks?: { remove(): void }; tahakAssistantInitialUrlSeen?: boolean };
 const benchGlobals = globalThis as BenchGlobals;
 
-/** Handles the Assistant's adb links: the test-set bench, the test switch and the Wave 0 bench. */
+/** Handles the Assistant's adb links: the test-set bench, the test switch, the Vision bench and the Wave 0 bench. */
 export function listenForAssistantLinks() {
   const handle = (url: string | null) => {
     const bench = parseAssistantBenchUrl(url);
@@ -162,6 +164,8 @@ export function listenForAssistantLinks() {
       log({ type: 'test-flag', ignore_packs: test.ignorePacks });
       return;
     }
+    const vision = parseVisionBenchUrl(url);
+    if (vision) return void runVisionBench(vision);
     const spike = parseSpikeBenchUrl(url, DEFAULT_THREADS);
     if (spike) void runSpikeBench(spike);
   };
