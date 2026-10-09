@@ -44,7 +44,8 @@ const en = {
   // The simulated walk, while it runs.
   simulationRunning: 'Simulated walk · {speed}×',
   simulationNote: 'Not your real position.',
-  simulationSpeed: 'Speed: {speed}×',
+  // The button shows the speed it switches to, not the current one (the title says that).
+  simulationSpeed: 'Switch to {speed}×',
   simulationSpeedHint: 'Change how fast the simulated walk goes',
   goOffTrail: 'Go off the Trail',
   scriptedOffTrail: 'Scripted: {metres} m off the Trail',
@@ -93,7 +94,7 @@ const fil: Record<keyof typeof en, string> = {
   endSuggestion: 'Malapit ka na ulit sa jump-off. Tapusin na ang Hike?',
   simulationRunning: 'Kunwaring lakad · {speed}×',
   simulationNote: 'Hindi ito ang totoong kinaroroonan mo.',
-  simulationSpeed: 'Bilis: {speed}×',
+  simulationSpeed: 'Gawing {speed}×',
   simulationSpeedHint: 'Palitan ang bilis ng kunwaring lakad',
   goOffTrail: 'Lumihis sa Trail',
   scriptedOffTrail: 'Naka-script: {metres} m palayo sa Trail',
