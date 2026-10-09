@@ -1,19 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import shellStrings from '../i18n/shell.strings';
 import { modulesByTab, type TabId } from '../modules';
 import { useStrings, useTheme } from '../settings/preferences';
-import { textStyles } from '../theme/typography';
+import { EmptyState } from './EmptyState';
 
 function EmptyTab() {
-  const { colors } = useTheme();
   const s = useStrings(shellStrings);
-  return (
-    <View style={styles.empty}>
-      <Text style={[textStyles.heading, { color: colors.ink }]}>{s.emptyTitle}</Text>
-      <Text style={[textStyles.body, styles.emptyBody, { color: colors.muted }]}>{s.emptyBody}</Text>
-    </View>
-  );
+  return <EmptyState title={s.emptyTitle} body={s.emptyBody} />;
 }
 
 /** Shows the screen of the Feature Module registered for this tab, or an empty state. */
@@ -39,15 +33,5 @@ export const tabScreens: Record<TabId, () => React.JSX.Element> = {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-  },
-  empty: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 32,
-  },
-  emptyBody: {
-    marginTop: 8,
-    textAlign: 'center',
   },
 });
