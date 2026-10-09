@@ -17,6 +17,7 @@ const SAME_IN_BOTH = new Set([
   '{km} km',
   '{elevation} m',
   '{region} · {elevation} m',
+  '{distance} · {eta}',
   'Jump-off',
   'Campsite',
   // The map's licence notice (Hike map) stays as written.

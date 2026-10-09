@@ -1,6 +1,9 @@
 import * as Location from 'expo-location';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState } from 'react-native';
+
+import { hikeStore } from '../hikeStore';
+import type { SimulatedWalk } from '../simulate/player';
 
 export type HikerPosition = {
   latitude: number;
@@ -35,14 +38,29 @@ function servicesEnabled(): Promise<boolean> {
   return Location.hasServicesEnabledAsync().catch(() => true);
 }
 
+const noSubscription = () => () => {};
+const noSnapshot = () => null;
+
+/** The simulated walk's position while one runs, else null. */
+function useSimulatedPosition(): { walk: SimulatedWalk | null; position: HikerPosition | null } {
+  const walk = useSyncExternalStore(hikeStore.subscribe, () => hikeStore.getSnapshot().hike?.simulation ?? null);
+  const snapshot = useSyncExternalStore(walk ? walk.subscribe : noSubscription, walk ? walk.getSnapshot : noSnapshot);
+  return { walk, position: snapshot?.position ?? null };
+}
+
 /**
- * The hiker's position from the phone's GPS, which works without signal (ADR 0002).
- * Watches only while location permission is granted; `requestPermission` shows Android's
- * dialog and is called from the app's own explanation, never on its own.
+ * The hiker's position. Two interchangeable sources: the phone's GPS, which works without
+ * signal (ADR 0002), or, while a simulated walk Hike runs, the simulated walk. Callers cannot
+ * tell them apart except through `source`.
+ *
+ * The GPS is watched only while `gps` is true (the Hike tab is in use or a Hike is running),
+ * location permission is granted, and no simulated walk runs. `requestPermission` shows
+ * Android's dialog and is called from the app's own explanation, never on its own.
  */
-export function useHikerPosition(): {
+export function useHikerPosition({ gps = true }: { gps?: boolean } = {}): {
   permission: LocationPermission;
   position: HikerPosition | null;
+  source: 'gps' | 'simulated';
   requestPermission: () => Promise<void>;
   /**
    * Starts watching again and says whether location is on for the whole phone. Android stops
@@ -74,8 +92,11 @@ export function useHikerPosition(): {
     };
   }, []);
 
+  const simulated = useSimulatedPosition();
+  const watchGps = gps && permission === 'granted' && !simulated.walk;
+
   useEffect(() => {
-    if (permission !== 'granted') return;
+    if (!watchGps) return;
     let alive = true;
 
     Location.getLastKnownPositionAsync({ maxAge: LAST_KNOWN_MAX_AGE_MS })
@@ -101,7 +122,7 @@ export function useHikerPosition(): {
       subscription.current?.remove();
       subscription.current = null;
     };
-  }, [permission, attempt]);
+  }, [watchGps, attempt]);
 
   const requestPermission = useCallback(async () => {
     try {
@@ -117,5 +138,8 @@ export function useHikerPosition(): {
     return { servicesEnabled: enabled };
   }, []);
 
-  return { permission, position, requestPermission, retry };
+  if (simulated.walk) {
+    return { permission, position: simulated.position, source: 'simulated', requestPermission, retry };
+  }
+  return { permission, position, source: 'gps', requestPermission, retry };
 }

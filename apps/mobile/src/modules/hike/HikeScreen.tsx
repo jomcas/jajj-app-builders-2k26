@@ -1,24 +1,120 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { useKeepAwake } from 'expo-keep-awake';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 
 import { EmptyState } from '../../shell/EmptyState';
 import { useStrings, useTheme } from '../../settings/preferences';
 import { textStyles } from '../../theme/typography';
-import type { DestinationPack } from '../destination-pack';
-import { useHikerPosition } from './location/useHikerPosition';
+import type { DestinationPack, Trail } from '../destination-pack';
+import { clearPendingSimulation, endHike, hikeStore, startHike, type RunningHike } from './hikeStore';
+import { useHikerPosition, type HikerPosition } from './location/useHikerPosition';
 import { HikeMap, type HikeMapHandle } from './map/HikeMap';
 import { MapControls } from './map/MapControls';
 import strings from './strings';
+import { prepareTrail, type PreparedTrail } from './trail/geometry';
+import {
+  dismissEndSuggestion,
+  placeWaypoints,
+  startTracker,
+  trackPosition,
+  type HikeTracker,
+  type HikeView,
+  type PlacedWaypoint,
+} from './trail/progress';
+import { EndSuggestion } from './ui/EndSuggestion';
+import { HikePanel } from './ui/HikePanel';
+import { SimulationBar } from './ui/SimulationBar';
+import { TrailPickerCard } from './ui/TrailPickerCard';
 import { useLatestPack } from './useLatestPack';
 
 const NOTICE_MS = 5000;
 
-/** The map of one Destination with the hiker's position and the map controls. */
+/** A Trail with its line prepared for lookups and its Waypoints placed along it. */
+type TrailEntry = { trail: Trail; line: PreparedTrail; placed: PlacedWaypoint[] };
+
+function trailEntries(pack: DestinationPack): Map<string, TrailEntry> {
+  const entries = new Map<string, TrailEntry>();
+  for (const trail of pack.trails) {
+    const line = prepareTrail(trail.geometry?.coordinates ?? []);
+    if (!line) continue;
+    const waypoints = pack.waypoints.filter((waypoint) => waypoint.trailId === trail.id);
+    entries.set(trail.id, { trail, line, placed: placeWaypoints(line, waypoints, trail.distanceM) });
+  }
+  return entries;
+}
+
+/** Keeps the screen on while mounted (during a Hike). */
+function KeepScreenOn() {
+  useKeepAwake('tahak-hike');
+  return null;
+}
+
+/** The running Hike's progress: one tracker per Hike, fed every new position. */
+function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, position: HikerPosition | null) {
+  type Tracked = { hikeId: number; position: HikerPosition; tracker: HikeTracker; view: HikeView };
+  const [state, setState] = useState<Tracked | null>(null);
+
+  // Updated while rendering when a new position or Hike arrives (React's pattern for state
+  // derived from changing props), so the panel never shows a stale position for a frame.
+  if (
+    hikeId !== null &&
+    entry &&
+    position &&
+    (state === null || state.hikeId !== hikeId || state.position !== position)
+  ) {
+    const tracker = state && state.hikeId === hikeId ? state.tracker : startTracker();
+    const result = trackPosition(tracker, entry.line, entry.placed, position);
+    if (result) setState({ hikeId, position, ...result });
+  }
+
+  const dismiss = useCallback(() => {
+    setState((previous) =>
+      previous && {
+        ...previous,
+        tracker: dismissEndSuggestion(previous.tracker),
+        view: { ...previous.view, suggestEnd: false },
+      },
+    );
+  }, []);
+
+  return { view: state && state.hikeId === hikeId ? state.view : null, dismiss };
+}
+
+/** The map of one Destination with the hiker's position, and the Hike on top of it. */
 function DestinationMap({ pack }: { pack: DestinationPack }) {
   const s = useStrings(strings);
-  const { permission, position, requestPermission, retry } = useHikerPosition();
+  const focused = useIsFocused();
+  const { hike: anyHike, pendingSimulation } = useSyncExternalStore(hikeStore.subscribe, hikeStore.getSnapshot);
+  const entries = useMemo(() => trailEntries(pack), [pack]);
+  const hike: RunningHike | null =
+    anyHike && anyHike.destinationId === pack.destination.id && entries.has(anyHike.trailId) ? anyHike : null;
+  const entry = hike ? (entries.get(hike.trailId) ?? null) : null;
+
+  // The GPS runs while the Hike tab is in use or a Hike is running, never otherwise.
+  const { permission, position, source, requestPermission, retry } = useHikerPosition({
+    gps: focused || hike !== null,
+  });
+  const { view, dismiss } = useHikeTracking(hike?.id ?? null, entry, position);
+
   const map = useRef<HikeMapHandle>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [pickedTrailId, setSelectedTrailId] = useState<string | null>(null);
+  const [simulate, setSimulate] = useState(false);
+  // The Hike whose map the hiker moved by hand; following resumes on re-center. Every Hike
+  // starts in follow mode.
+  const [unfollowedHikeId, setUnfollowedHikeId] = useState<number | null>(null);
+  const [measured, setInset] = useState({ top: 0, bottom: 0 });
+
+  // The default pick is the first Trail, in the order the pack lists them; a picked Trail that
+  // disappeared in a pack update falls back to it too.
+  const pickable = useMemo(() => pack.trails.filter((trail) => entries.has(trail.id)), [pack.trails, entries]);
+  const selectedTrailId = pickable.some((trail) => trail.id === pickedTrailId)
+    ? pickedTrailId
+    : (pickable[0]?.id ?? null);
+  const follow = hike !== null && unfollowedHikeId !== hike.id;
+  const topInset = hike?.simulation ? measured.top : 0;
+  const inset = useMemo(() => ({ top: topInset, bottom: measured.bottom }), [topInset, measured.bottom]);
 
   useEffect(() => {
     if (!notice) return;
@@ -26,7 +122,37 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
     return () => clearTimeout(timer);
   }, [notice]);
 
+  const start = useCallback(
+    (trailId: string | null, options: { simulated: boolean; speed?: number; startFraction?: number }) => {
+      const chosen = trailId ? entries.get(trailId) : undefined;
+      if (!chosen) return;
+      startHike({
+        destinationId: pack.destination.id,
+        trailId: chosen.trail.id,
+        trail: chosen.line,
+        ...options,
+      });
+    },
+    [entries, pack.destination.id],
+  );
+
+  // tahak://hike/simulate: start the simulated walk on the requested (or first) Trail.
+  useEffect(() => {
+    if (!pendingSimulation) return;
+    const trailId = pendingSimulation.trailId ?? pickable[0]?.id ?? null;
+    if (trailId && entries.has(trailId)) {
+      start(trailId, {
+        simulated: true,
+        speed: pendingSimulation.speed,
+        startFraction: pendingSimulation.startFraction,
+      });
+    } else {
+      clearPendingSimulation();
+    }
+  }, [pendingSimulation, entries, pickable, start]);
+
   const recenter = useCallback(async () => {
+    setUnfollowedHikeId(null);
     if (position) {
       map.current?.centerOn(position);
       return;
@@ -37,23 +163,73 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
     setNotice(servicesEnabled ? s.noFix : s.servicesOff);
   }, [permission, position, retry, s.noFix, s.servicesOff]);
 
+  const confirmEnd = useCallback(() => {
+    Alert.alert(s.endConfirmTitle, s.endConfirmBody, [
+      { text: s.keepHiking, style: 'cancel' },
+      { text: s.endHike, onPress: endHike },
+    ]);
+  }, [s.endConfirmBody, s.endConfirmTitle, s.endHike, s.keepHiking]);
+
+  const onBottomLayout = useCallback((event: LayoutChangeEvent) => {
+    const bottom = Math.round(event.nativeEvent.layout.height) + 12;
+    setInset((current) => (current.bottom === bottom ? current : { ...current, bottom }));
+  }, []);
+  const onTopLayout = useCallback((event: LayoutChangeEvent) => {
+    const top = Math.round(event.nativeEvent.layout.height) + 12;
+    setInset((current) => (current.top === top ? current : { ...current, top }));
+  }, []);
+
   return (
     <View style={styles.fill}>
-      <HikeMap ref={map} pack={pack} position={position} />
+      <HikeMap
+        ref={map}
+        pack={pack}
+        position={position}
+        activeTrailId={hike?.trailId ?? null}
+        nextWaypointId={view?.next?.waypoint.id ?? null}
+        follow={follow}
+        onUserMove={() => setUnfollowedHikeId(hike?.id ?? null)}
+        inset={inset}
+      />
+      {hike ? <KeepScreenOn /> : null}
+      {hike?.simulation ? (
+        <View style={styles.top} onLayout={onTopLayout}>
+          <SimulationBar walk={hike.simulation} />
+        </View>
+      ) : null}
       <MapControls
-        permission={permission}
+        // A simulated walk needs no location permission.
+        permission={source === 'simulated' ? 'granted' : permission}
         onAllowLocation={requestPermission}
         onRecenter={recenter}
         // The note goes away as soon as a position arrives.
         notice={position ? null : notice}
-      />
+        onLayout={onBottomLayout}
+      >
+        {hike && entry ? (
+          <>
+            {view?.suggestEnd ? <EndSuggestion onEnd={endHike} onDismiss={dismiss} /> : null}
+            <HikePanel trailName={entry.trail.name} view={view} onEnd={confirmEnd} />
+          </>
+        ) : (
+          <TrailPickerCard
+            trails={pickable}
+            selectedId={selectedTrailId}
+            onSelect={setSelectedTrailId}
+            simulate={simulate}
+            onSimulateChange={setSimulate}
+            onStart={() => start(selectedTrailId, { simulated: simulate })}
+          />
+        )}
+      </MapControls>
     </View>
   );
 }
 
 /**
- * The Hike tab (issue #6): the most recently downloaded Destination's map, full screen, or a
- * pointer to Explore when no pack is on the phone. #7 and #8 add the Hike itself on top.
+ * The Hike tab: the most recently downloaded Destination's map, full screen, with the Trail
+ * picker before a Hike and the Hike panel during one (issues #6 and #7), or a pointer to
+ * Explore when no pack is on the phone.
  */
 export function HikeScreen() {
   const s = useStrings(strings);
@@ -82,5 +258,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
+  },
+  top: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    right: 12,
   },
 });
