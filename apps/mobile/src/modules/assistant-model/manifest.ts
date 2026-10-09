@@ -24,7 +24,7 @@ export type ModelManifest = {
 
 /**
  * The Assistant model (Wave 0 decision): Qwen3.5-4B Q4_K_M plus its F16 vision file, from
- * unsloth/Qwen3.5-4B-GGUF. More files (the embedding model, #14) are added to this list.
+ * unsloth/Qwen3.5-4B-GGUF, and the embedding model for the Assistant's search (#14).
  */
 export const MODEL_MANIFEST: ModelManifest = {
   id: 'real',
@@ -41,6 +41,14 @@ export const MODEL_MANIFEST: ModelManifest = {
       url: 'https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/resolve/main/mmproj-F16.gguf',
       bytes: 672_423_616,
       sha256: 'cd88edcf8d031894960bb0c9c5b9b7e1fea6ebee02b9f7ce925a00d12891f864',
+    },
+    {
+      // The Assistant's embedding model (#14): turns passages and questions into vectors for
+      // search and the relevance gate. Multilingual (English, Filipino, Taglish), 768 dims.
+      name: 'embeddinggemma-300M-Q8_0.gguf',
+      url: 'https://huggingface.co/ggml-org/embeddinggemma-300M-GGUF/resolve/main/embeddinggemma-300M-Q8_0.gguf',
+      bytes: 333_590_944,
+      sha256: 'b5ce9d77a3fc4b3b39ccb5643c36777911cc4eb46a66962eadfa3f5f60490d63',
     },
   ],
 };

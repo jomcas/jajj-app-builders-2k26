@@ -294,16 +294,17 @@ describe('inspectFiles', () => {
 // --- Manifests and links ---------------------------------------------------------------------
 
 describe('manifests', () => {
-  test('the real model is the Wave 0 pair in assistant-models, 3.4 GB in all', () => {
+  test('the real model is the Wave 0 pair plus the embedding model in assistant-models', () => {
     assert.equal(MODEL_MANIFEST.folder, 'assistant-models');
     assert.deepEqual(
       MODEL_MANIFEST.files.map((file) => [file.name, file.bytes]),
       [
         ['Qwen3.5-4B-Q4_K_M.gguf', 2_740_937_888],
         ['Qwen3.5-4B-mmproj-F16.gguf', 672_423_616],
+        ['embeddinggemma-300M-Q8_0.gguf', 333_590_944],
       ],
     );
-    assert.equal(formatBytes(manifestBytes(MODEL_MANIFEST)), '3.4 GB');
+    assert.equal(formatBytes(manifestBytes(MODEL_MANIFEST)), '3.7 GB');
   });
 
   test('the test download lives in its own folder and is 50-200 MB', () => {
