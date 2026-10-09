@@ -41,8 +41,8 @@ export type DeviationState =
   | { status: 'on-trail'; lastMs: number | null }
   /** Beyond 40 m since sinceMs, not yet for long enough. */
   | { status: 'off'; sinceMs: number; lastMs: number }
-  /** In Deviation since startedMs (beyond 40 m since sinceMs). */
-  | { status: 'deviation'; sinceMs: number; startedMs: number; lastMs: number };
+  /** In Deviation since startedMs (beyond 40 m since sinceMs), startedOffM off the Trail then. */
+  | { status: 'deviation'; sinceMs: number; startedMs: number; startedOffM: number; lastMs: number };
 
 /** started: a Deviation began with this position. cleared: it ended with this position. */
 export type DeviationEvent = 'started' | 'cleared' | null;
@@ -79,7 +79,10 @@ export function stepDeviation(
   const continues = state.status === 'off' && at - state.lastMs <= DEVIATION.maxGapS * 1000;
   const sinceMs = continues ? state.sinceMs : at;
   if (at - sinceMs > DEVIATION.startAfterS * 1000) {
-    return { state: { status: 'deviation', sinceMs, startedMs: at, lastMs: at }, event: 'started' };
+    return {
+      state: { status: 'deviation', sinceMs, startedMs: at, startedOffM: fix.offTrailM, lastMs: at },
+      event: 'started',
+    };
   }
   return { state: { status: 'off', sinceMs, lastMs: at }, event: null };
 }

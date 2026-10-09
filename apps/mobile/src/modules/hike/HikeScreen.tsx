@@ -7,12 +7,19 @@ import { EmptyState } from '../../shell/EmptyState';
 import { useStrings, useTheme } from '../../settings/preferences';
 import { textStyles } from '../../theme/typography';
 import type { DestinationPack, Trail } from '../destination-pack';
+import {
+  isDeviation,
+  startDeviationDetector,
+  stepDeviation,
+  type DeviationState,
+} from './deviation/detector';
+import { useDeviationAlerts } from './deviation/useDeviationAlerts';
 import { clearPendingSimulation, endHike, hikeStore, startHike, type RunningHike } from './hikeStore';
 import { useHikerPosition, type HikerPosition } from './location/useHikerPosition';
 import { HikeMap, type HikeMapHandle } from './map/HikeMap';
 import { MapControls } from './map/MapControls';
 import strings from './strings';
-import { prepareTrail, type PreparedTrail } from './trail/geometry';
+import { locateOnTrail, prepareTrail, type PreparedTrail, type TrailLocation } from './trail/geometry';
 import {
   dismissEndSuggestion,
   placeWaypoints,
@@ -22,6 +29,7 @@ import {
   type HikeView,
   type PlacedWaypoint,
 } from './trail/progress';
+import { DeviationBanner } from './ui/DeviationBanner';
 import { EndSuggestion } from './ui/EndSuggestion';
 import { HikePanel } from './ui/HikePanel';
 import { SimulationBar } from './ui/SimulationBar';
@@ -50,9 +58,27 @@ function KeepScreenOn() {
   return null;
 }
 
-/** The running Hike's progress: one tracker per Hike, fed every new position. */
+/** A Deviation in progress, as the Hike screen shows it. */
+type DeviationView = {
+  startedMs: number;
+  startedOffM: number;
+  /** Where the hiker is now relative to the nearest point of the whole Trail. */
+  toTrail: TrailLocation;
+};
+
+/**
+ * The running Hike's progress and Deviation: one tracker and one Deviation detector per Hike,
+ * fed every new position.
+ */
 function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, position: HikerPosition | null) {
-  type Tracked = { hikeId: number; position: HikerPosition; tracker: HikeTracker; view: HikeView };
+  type Tracked = {
+    hikeId: number;
+    position: HikerPosition;
+    tracker: HikeTracker;
+    view: HikeView;
+    detector: DeviationState;
+    toTrail: TrailLocation;
+  };
   const [state, setState] = useState<Tracked | null>(null);
 
   // Updated while rendering when a new position or Hike arrives (React's pattern for state
@@ -63,9 +89,19 @@ function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, positi
     position &&
     (state === null || state.hikeId !== hikeId || state.position !== position)
   ) {
-    const tracker = state && state.hikeId === hikeId ? state.tracker : startTracker();
+    const same = state !== null && state.hikeId === hikeId;
+    const tracker = same ? state.tracker : startTracker();
     const result = trackPosition(tracker, entry.line, entry.placed, position);
-    if (result) setState({ hikeId, position, ...result });
+    // The Deviation is measured to the nearest point of the whole Trail. The progress view's
+    // location prefers the leg the hiker was on, which near a switchback can be further away.
+    const toTrail = locateOnTrail(position, entry.line);
+    if (result && toTrail) {
+      const detector = stepDeviation(same ? state.detector : startDeviationDetector(), {
+        offTrailM: toTrail.offTrailM,
+        timestamp: position.timestamp,
+      }).state;
+      setState({ hikeId, position, ...result, detector, toTrail });
+    }
   }
 
   const dismiss = useCallback(() => {
@@ -78,7 +114,13 @@ function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, positi
     );
   }, []);
 
-  return { view: state && state.hikeId === hikeId ? state.view : null, dismiss };
+  const current = state && state.hikeId === hikeId ? state : null;
+  const detector = current?.detector;
+  const deviation: DeviationView | null =
+    current && detector && isDeviation(detector)
+      ? { startedMs: detector.startedMs, startedOffM: detector.startedOffM, toTrail: current.toTrail }
+      : null;
+  return { view: current?.view ?? null, deviation, dismiss };
 }
 
 /** The map of one Destination with the hiker's position, and the Hike on top of it. */
@@ -95,7 +137,8 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
   const { permission, position, source, requestPermission, retry } = useHikerPosition({
     gps: focused || hike !== null,
   });
-  const { view, dismiss } = useHikeTracking(hike?.id ?? null, entry, position);
+  const { view, deviation, dismiss } = useHikeTracking(hike?.id ?? null, entry, position);
+  useDeviationAlerts(hike?.id ?? null, deviation);
 
   const map = useRef<HikeMapHandle>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -105,6 +148,8 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
   // starts in follow mode.
   const [unfollowedHikeId, setUnfollowedHikeId] = useState<number | null>(null);
   const [measured, setInset] = useState({ top: 0, bottom: 0 });
+  // How far the hiker has turned the map from north-up, for the back-to-trail arrow.
+  const [mapBearingDeg, setMapBearingDeg] = useState(0);
 
   // The default pick is the first Trail, in the order the pack lists them; a picked Trail that
   // disappeared in a pack update falls back to it too.
@@ -113,7 +158,8 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
     ? pickedTrailId
     : (pickable[0]?.id ?? null);
   const follow = hike !== null && unfollowedHikeId !== hike.id;
-  const topInset = hike?.simulation ? measured.top : 0;
+  const showTop = hike !== null && (hike.simulation !== null || deviation !== null);
+  const topInset = showTop ? measured.top : 0;
   const inset = useMemo(() => ({ top: topInset, bottom: measured.bottom }), [topInset, measured.bottom]);
 
   useEffect(() => {
@@ -187,14 +233,24 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
         position={position}
         activeTrailId={hike?.trailId ?? null}
         nextWaypointId={view?.next?.waypoint.id ?? null}
+        // A Deviation dashes the Trail line until the hiker is back (ADR 0004: never red alone).
+        trailDashed={deviation !== null}
         follow={follow}
         onUserMove={() => setUnfollowedHikeId(hike?.id ?? null)}
+        onBearingChange={setMapBearingDeg}
         inset={inset}
       />
       {hike ? <KeepScreenOn /> : null}
-      {hike?.simulation ? (
+      {showTop ? (
         <View style={styles.top} onLayout={onTopLayout}>
-          <SimulationBar walk={hike.simulation} />
+          {hike?.simulation ? <SimulationBar walk={hike.simulation} /> : null}
+          {deviation ? (
+            <DeviationBanner
+              offTrailM={deviation.toTrail.offTrailM}
+              bearingDeg={deviation.toTrail.bearingToNearestDeg}
+              mapBearingDeg={mapBearingDeg}
+            />
+          ) : null}
         </View>
       ) : null}
       <MapControls
@@ -264,5 +320,6 @@ const styles = StyleSheet.create({
     top: 12,
     left: 12,
     right: 12,
+    gap: 8,
   },
 });

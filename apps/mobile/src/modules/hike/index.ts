@@ -22,10 +22,27 @@ import { HikeScreen } from './HikeScreen';
 // Simulated walk, for demos and tests without GPS: the "Simulated walk" switch on the Trail
 // picker, or tahak://hike/simulate?trail=<id>&speed=<n>&at=<0..1>, then
 // tahak://hike/simulate/off-trail for an on-demand excursion 60 m off the Trail for 45 s.
+//
+// Deviation (issue #8): more than 40 m off the active Trail for more than 30 s, by position
+// timestamps; clears at 30 m. The Hike screen shows a red banner with a back-to-trail arrow,
+// dashes the Trail line, vibrates, and posts a notification that plays the alert tone (see
+// deviation/detector.ts and deviation/alerts.ts). The rule is public for Group Hike later:
+//
+//   startDeviationDetector() → state;  stepDeviation(state, { offTrailM, timestamp })
+//       → { state, event: 'started' | 'cleared' | null };  isDeviation(state);  DEVIATION
 
 // Listen from import time, not from the screen: tabs mount lazily, and a link may come first.
 listenForHikeLinks();
 
+export {
+  DEVIATION,
+  isDeviation,
+  startDeviationDetector,
+  stepDeviation,
+  type DeviationEvent,
+  type DeviationFix,
+  type DeviationState,
+} from './deviation/detector';
 export {
   bearingDeg,
   distanceM,
