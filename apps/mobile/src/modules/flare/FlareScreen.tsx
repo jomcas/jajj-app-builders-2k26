@@ -218,7 +218,7 @@ function GuideLinks({ s, openGuide, compact = false }: { s: Strings; openGuide: 
             ]}
           >
             <MaterialCommunityIcons name="medical-bag" size={20} color={colors.dangerIcon} />
-            <Text style={[compact ? textStyles.label : textStyles.bodyStrong, styles.flexShrink, { color: colors.ink }]}>
+            <Text style={[compact ? textStyles.label : textStyles.bodyStrong, compact ? styles.flexShrink : styles.flex, { color: colors.ink }]}>
               {s[guide.key]}
             </Text>
             {compact ? null : <MaterialCommunityIcons name="chevron-right" size={22} color={colors.muted} />}
