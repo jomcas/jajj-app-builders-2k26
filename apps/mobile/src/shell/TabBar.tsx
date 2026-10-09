@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import shellStrings from '../i18n/shell.strings';
 import { useStrings, useTheme } from '../settings/preferences';
-import { fonts } from '../theme/typography';
+import { textStyles } from '../theme/typography';
 import { tabDefinition } from './tabs';
 
 /** Four bottom tabs. The active tab gets an olive-tint pill with a trail-orange icon (plan U2). */
@@ -54,12 +54,11 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             </View>
             <Text
               numberOfLines={1}
-              style={[
-                styles.label,
+              style={
                 focused
-                  ? { color: colors.onTint, fontFamily: fonts.bodySemiBold }
-                  : { color: colors.muted, fontFamily: fonts.bodyMedium },
-              ]}
+                  ? [textStyles.labelStrong, { color: colors.onTint }]
+                  : [textStyles.label, { color: colors.muted }]
+              }
             >
               {label}
             </Text>
@@ -89,9 +88,5 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  label: {
-    fontSize: 13,
-    lineHeight: 17,
   },
 });

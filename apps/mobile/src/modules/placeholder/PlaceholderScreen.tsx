@@ -2,7 +2,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useStrings, useTheme } from '../../settings/preferences';
-import { type } from '../../theme/typography';
+import { textStyles } from '../../theme/typography';
 import strings from './strings';
 
 export function PlaceholderScreen() {
@@ -13,8 +13,8 @@ export function PlaceholderScreen() {
       <View style={[styles.tile, { backgroundColor: colors.tint }]}>
         <MaterialCommunityIcons name="message-outline" size={32} color={colors.onTint} />
       </View>
-      <Text style={[type.heading, styles.title, { color: colors.ink }]}>{s.title}</Text>
-      <Text style={[type.body, styles.body, { color: colors.muted }]}>{s.body}</Text>
+      <Text style={[textStyles.heading, styles.title, { color: colors.ink }]}>{s.title}</Text>
+      <Text style={[textStyles.body, styles.body, { color: colors.muted }]}>{s.body}</Text>
     </View>
   );
 }

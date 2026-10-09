@@ -11,12 +11,16 @@ export const fonts = {
 } as const;
 
 // Barlow Condensed for headings and big numbers, Barlow for body. Sentence case, never all caps.
-export const type = {
+export const textStyles = {
   title: { fontFamily: fonts.heading, fontSize: 28, lineHeight: 32 },
   heading: { fontFamily: fonts.heading, fontSize: 22, lineHeight: 26 },
   body: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
   bodyStrong: { fontFamily: fonts.bodySemiBold, fontSize: 16, lineHeight: 22 },
-  label: { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
+  /** Small labels: tab names, section labels. */
+  label: { fontFamily: fonts.bodyMedium, fontSize: 13, lineHeight: 17 },
+  labelStrong: { fontFamily: fonts.bodySemiBold, fontSize: 13, lineHeight: 17 },
+  /** The SOS control's text. */
+  signal: { fontFamily: fonts.headingBold, fontSize: 18, letterSpacing: 0.6 },
   /** Live numbers (distance, ETA, elevation): condensed with tabular figures. */
   number: { fontFamily: fonts.headingBold, fontSize: 32, fontVariant: ['tabular-nums'] },
 } satisfies Record<string, TextStyle>;

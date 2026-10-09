@@ -3,15 +3,15 @@ import { StyleSheet, Text, View } from 'react-native';
 import shellStrings from '../i18n/shell.strings';
 import { modulesByTab, type TabId } from '../modules';
 import { useStrings, useTheme } from '../settings/preferences';
-import { type } from '../theme/typography';
+import { textStyles } from '../theme/typography';
 
 function EmptyTab() {
   const { colors } = useTheme();
   const s = useStrings(shellStrings);
   return (
     <View style={styles.empty}>
-      <Text style={[type.heading, { color: colors.ink }]}>{s.emptyTitle}</Text>
-      <Text style={[type.body, styles.emptyBody, { color: colors.muted }]}>{s.emptyBody}</Text>
+      <Text style={[textStyles.heading, { color: colors.ink }]}>{s.emptyTitle}</Text>
+      <Text style={[textStyles.body, styles.emptyBody, { color: colors.muted }]}>{s.emptyBody}</Text>
     </View>
   );
 }

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 
 import shellStrings from '../i18n/shell.strings';
 import { useStrings, useTheme } from '../settings/preferences';
-import { fonts } from '../theme/typography';
+import { textStyles } from '../theme/typography';
 
 /**
  * The always-visible SOS control at the top right of the header (docs/plan.md U2, ADR 0004):
@@ -26,7 +26,7 @@ export function SosControl() {
       ]}
     >
       <MaterialCommunityIcons name="alert-octagon-outline" size={20} color={colors.dangerIcon} />
-      <Text style={[styles.label, { color: colors.dangerIcon }]}>{s.sosLabel}</Text>
+      <Text style={[textStyles.signal, styles.label, { color: colors.dangerIcon }]}>{s.sosLabel}</Text>
     </Pressable>
   );
 }
@@ -42,9 +42,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   label: {
-    fontFamily: fonts.headingBold,
-    fontSize: 18,
-    letterSpacing: 0.6,
     includeFontPadding: false,
   },
 });

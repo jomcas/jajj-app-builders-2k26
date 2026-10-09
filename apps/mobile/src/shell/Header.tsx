@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import shellStrings from '../i18n/shell.strings';
 import { useStrings, useTheme } from '../settings/preferences';
-import { type } from '../theme/typography';
+import { textStyles } from '../theme/typography';
 import { SettingsSheet } from './SettingsSheet';
 import { SosControl } from './SosControl';
 import { tabDefinition } from './tabs';
@@ -20,7 +20,7 @@ export function Header({ routeName }: { routeName: string }) {
 
   return (
     <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.page }]}>
-      <Text accessibilityRole="header" numberOfLines={1} style={[type.title, styles.title, { color: colors.ink }]}>
+      <Text accessibilityRole="header" numberOfLines={1} style={[textStyles.title, styles.title, { color: colors.ink }]}>
         {title}
       </Text>
       <Pressable

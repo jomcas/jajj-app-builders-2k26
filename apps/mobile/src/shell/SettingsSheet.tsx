@@ -5,7 +5,7 @@ import shellStrings from '../i18n/shell.strings';
 import type { Language } from '../i18n/types';
 import { usePreferences, useStrings, useTheme } from '../settings/preferences';
 import type { ThemeMode } from '../theme/tokens';
-import { fonts, type } from '../theme/typography';
+import { textStyles } from '../theme/typography';
 
 type Option<T extends string> = { value: T; label: string };
 
@@ -34,7 +34,7 @@ function Segmented<T extends string>({
               isSelected && { backgroundColor: colors.surface, borderColor: colors.line },
             ]}
           >
-            <Text style={[styles.segmentLabel, { color: colors.onTint }]}>{option.label}</Text>
+            <Text style={[textStyles.bodyStrong, { color: colors.onTint }]}>{option.label}</Text>
           </Pressable>
         );
       })}
@@ -63,9 +63,9 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
           { backgroundColor: colors.surface, paddingBottom: 16 + insets.bottom },
         ]}
       >
-        <Text style={[type.title, { color: colors.ink }]}>{s.settingsTitle}</Text>
+        <Text style={[textStyles.title, { color: colors.ink }]}>{s.settingsTitle}</Text>
 
-        <Text style={[styles.sectionLabel, { color: colors.muted }]}>{s.themeHeading}</Text>
+        <Text style={[textStyles.labelStrong, styles.sectionLabel, { color: colors.muted }]}>{s.themeHeading}</Text>
         <Segmented<ThemeMode>
           options={[
             { value: 'day', label: s.themeDay },
@@ -75,7 +75,7 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
           onSelect={setThemeMode}
         />
 
-        <Text style={[styles.sectionLabel, { color: colors.muted }]}>{s.languageHeading}</Text>
+        <Text style={[textStyles.labelStrong, styles.sectionLabel, { color: colors.muted }]}>{s.languageHeading}</Text>
         <Segmented<Language>
           options={[
             { value: 'en', label: s.languageEnglish },
@@ -90,7 +90,7 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
           onPress={onClose}
           style={[styles.closeButton, { backgroundColor: colors.primary }]}
         >
-          <Text style={[type.bodyStrong, { color: colors.onPrimary }]}>{s.close}</Text>
+          <Text style={[textStyles.bodyStrong, { color: colors.onPrimary }]}>{s.close}</Text>
         </Pressable>
       </View>
     </Modal>
@@ -108,8 +108,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   sectionLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 13,
     marginTop: 20,
     marginBottom: 8,
   },
@@ -127,10 +125,6 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     borderWidth: 1,
     borderColor: 'transparent',
-  },
-  segmentLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
   },
   closeButton: {
     marginTop: 24,
