@@ -4,6 +4,7 @@ import shellStrings from '../i18n/shell.strings';
 import { modulesByTab, type TabId } from '../modules';
 import { useStrings, useTheme } from '../settings/preferences';
 import { EmptyState } from './EmptyState';
+import { TABS } from './tabs';
 
 function EmptyTab() {
   const s = useStrings(shellStrings);
@@ -22,13 +23,15 @@ function TabScreen({ tab }: { tab: TabId }) {
   );
 }
 
-// Stable component per tab, so React Navigation never remounts a tab on re-render.
-export const tabScreens: Record<TabId, () => React.JSX.Element> = {
-  explore: () => <TabScreen tab="explore" />,
-  hike: () => <TabScreen tab="hike" />,
-  ask: () => <TabScreen tab="ask" />,
-  guides: () => <TabScreen tab="guides" />,
-};
+function rootFor(tab: TabId) {
+  function TabRoot() {
+    return <TabScreen tab={tab} />;
+  }
+  return TabRoot;
+}
+
+// One stable component per tab, created once, so React Navigation never remounts a tab.
+export const tabRoots = TABS.map((tab) => ({ id: tab.id, Root: rootFor(tab.id) }));
 
 const styles = StyleSheet.create({
   screen: {

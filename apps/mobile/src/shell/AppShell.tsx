@@ -7,10 +7,10 @@ import { useEffect, useMemo } from 'react';
 import { useTheme } from '../settings/preferences';
 import { Header } from './Header';
 import { TabBar } from './TabBar';
-import { tabScreens } from './TabScreen';
-import { TABS } from './tabs';
+import { tabRoots } from './TabScreen';
+import type { TabParamList } from './tabs';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 /**
  * The app shell (ADR 0001): owns the four tabs, the header and the SOS control.
@@ -44,13 +44,13 @@ export function AppShell() {
       <StatusBar style={mode === 'night' ? 'light' : 'dark'} />
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}
-        screenOptions={{
-          header: ({ route }) => <Header routeName={route.name} />,
+        screenOptions={({ route }) => ({
+          header: () => <Header tab={route.name} />,
           animation: 'none',
-        }}
+        })}
       >
-        {TABS.map((tab) => (
-          <Tab.Screen key={tab.id} name={tab.id} component={tabScreens[tab.id]} />
+        {tabRoots.map(({ id, Root }) => (
+          <Tab.Screen key={id} name={id} component={Root} />
         ))}
       </Tab.Navigator>
     </NavigationContainer>

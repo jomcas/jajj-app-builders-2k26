@@ -20,8 +20,11 @@ export const TABS: readonly TabDefinition[] = [
   { id: 'guides', labelKey: 'tabGuides', icon: 'book-open-page-variant-outline' },
 ];
 
-export function tabDefinition(id: string): TabDefinition {
+/** Route params for the tab navigator: one route per tab, named by its TabId. */
+export type TabParamList = Record<TabId, undefined>;
+
+export function tabDefinition(id: TabId): TabDefinition {
   const tab = TABS.find((candidate) => candidate.id === id);
-  if (!tab) throw new Error(`Unknown tab "${id}"`);
+  if (!tab) throw new Error(`TABS is missing the ${id} tab`);
   return tab;
 }

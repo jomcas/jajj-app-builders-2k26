@@ -8,15 +8,16 @@ import { useStrings, useTheme } from '../settings/preferences';
 import { textStyles } from '../theme/typography';
 import { SettingsSheet } from './SettingsSheet';
 import { SosControl } from './SosControl';
+import type { TabId } from '../modules';
 import { tabDefinition } from './tabs';
 
 /** Screen title on the left; settings and the SOS control at the top right on every screen. */
-export function Header({ routeName }: { routeName: string }) {
+export function Header({ tab }: { tab: TabId }) {
   const { colors } = useTheme();
   const s = useStrings(shellStrings);
   const insets = useSafeAreaInsets();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const title = s[tabDefinition(routeName).labelKey];
+  const title = s[tabDefinition(tab).labelKey];
 
   return (
     <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.page }]}>

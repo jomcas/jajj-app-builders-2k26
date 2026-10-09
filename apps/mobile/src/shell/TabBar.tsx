@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import shellStrings from '../i18n/shell.strings';
 import { useStrings, useTheme } from '../settings/preferences';
 import { textStyles } from '../theme/typography';
-import { tabDefinition } from './tabs';
+import { TABS } from './tabs';
 
 /** Four bottom tabs. The active tab gets an olive-tint pill with a trail-orange icon (plan U2). */
 export function TabBar({ state, navigation }: BottomTabBarProps) {
@@ -26,9 +26,10 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
         },
       ]}
     >
-      {state.routes.map((route, index) => {
-        const tab = tabDefinition(route.name);
-        const focused = state.index === index;
+      {TABS.map((tab) => {
+        const route = state.routes.find((candidate) => candidate.name === tab.id);
+        if (!route) return null;
+        const focused = state.routes[state.index]?.key === route.key;
         const label = s[tab.labelKey];
 
         const onPress = () => {
