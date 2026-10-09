@@ -109,7 +109,7 @@ All Wave −1 questions are settled. Next step: build the prototype (U7).
   | GPS dot | `#1A6FD6` | `#5AA9FF` |
   | Danger (banner, Flare) | `#A8201A` with white text | same |
 
-- **SOS control** floats on every screen as a neutral button with a red icon, and turns fully red only while the Flare is active.
+- **SOS control** sits at the top right of the header on every screen (U2) as a neutral button with a red icon, and turns fully red only while the Flare is active.
 - **Emergency Guides** (see [CONTEXT.md](../CONTEXT.md)) sit on the normal white surface with default text; only their icon is red, on a blush tile (`#F6D0CC` day, `#3B2220` night) that mirrors the olive-tint tiles of other Guides. No blush or red fills. Red stays minimal: the Deviation banner, the Flare knob and strobe, the SOS control, and Emergency Guide icons.
 - **"Works offline"** is shown as a small grey cloud-off icon next to the screen title, not a chip.
 - **Waypoints.** Icons carry the type (water drop, tent, flag for the summit, boot for the jump-off). Pins are olive, the next Waypoint gets an orange ring, and water pins are blue.
