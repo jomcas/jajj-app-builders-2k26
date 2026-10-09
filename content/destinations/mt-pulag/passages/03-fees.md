@@ -5,16 +5,17 @@ title_en: Fees on Mt. Pulag
 title_fil: Mga bayarin sa Mt. Pulag
 questions:
   - How much are the fees for Mt. Pulag?
-  - Magkano ang environmental fee sa Pulag?
-sources: [P3, P5, P14, P21]
+  - Magkano ang entrance fee sa Pulag?
+sources: [P26, P21]
 related_guides: []
 verify: true
-verify_note: "No official 2025-2026 fee schedule found. The 2026 amounts are from a low-trust blog; older figures are from 2015-2016."
+verify_note: "Amounts from the Benguet Provincial Tourism page (updated Sep 2026), not a DENR notice. Confirm with the park office."
+as_of: 2026-09
 last_checked: 2026-10-10
 ---
 
 ## English
-The Mt. Pulag park board (PAMB) sets the fees, and the park office collects them; the money goes to the park's protected-area fund. No official current fee list was found. A 2026 travel blog reports an environmental fee of about ₱250 per person on weekdays and ₱350 on weekends and holidays, plus smaller admin and town fees. In 2022 the park office said entrance and user fees are doubled on weekends and holidays. Older figures (₱175 in 2016, ₱225 before that) are out of date. Guide, transport and homestay costs are separate. Bring cash, and ask the park office for the current rates when you book.
+Benguet Province's tourism page, updated in September 2026, lists these per-person fees for Mt. Pulag: the DENR entrance fee of ₱250 on weekdays and ₱350 on weekends and holidays ($15 for foreign guests), a Bokod environmental fee of ₱100, a Kabayan environmental and heritage fee of ₱300, and a ₱60 barangay fee for the Ambangeg (Babalak) Trail. Guides are paid separately. A 2026 travel guide reports the same DENR fee. Bring cash, and confirm the amounts with the park office when you book.
 
 ## Filipino
-Ang park board ng Mt. Pulag (PAMB) ang nagtatakda ng fees, at ang park office ang naniningil; napupunta ang pera sa protected-area fund ng park. Walang nakitang opisyal na listahan ng fees ngayon. Ayon sa isang 2026 travel blog, mga ₱250 bawat tao ang environmental fee tuwing weekday at ₱350 tuwing weekend at holiday, may dagdag pang maliliit na admin at LGU fees. Noong 2022, sinabi ng park office na doble ang entrance at user fees kapag weekend at holiday. Luma na ang mga dating bilang (₱175 noong 2016, ₱225 bago noon). Hiwalay pa ang bayad sa guide, transportasyon at homestay. Magdala ng cash, at itanong sa park office ang kasalukuyang rates kapag nag-book.
+Ayon sa tourism page ng Benguet Province, na-update noong Setyembre 2026, ito ang bayad bawat tao sa Mt. Pulag: DENR entrance fee na ₱250 tuwing weekday at ₱350 tuwing weekend at holiday ($15 sa foreign guests), environmental fee ng Bokod na ₱100, environmental at heritage fee ng Kabayan na ₱300, at ₱60 na barangay fee para sa Ambangeg (Babalak) Trail. Hiwalay ang bayad sa guide. Pareho ang DENR fee sa isang 2026 travel guide. Magdala ng cash, at i-confirm ang halaga sa park office kapag nag-book.

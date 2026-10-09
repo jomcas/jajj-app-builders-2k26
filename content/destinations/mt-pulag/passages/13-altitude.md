@@ -10,11 +10,12 @@ sources: [P11, P15, S9]
 related_guides: [altitude-sickness]
 verify: false
 verify_note: ""
+as_of: 2025-05
 last_checked: 2026-10-10
 ---
 
 ## English
-Mt. Pulag is the one Tahak Destination high enough for altitude to matter. The summit is about 2,922 m, and on the Ambangeg Trail Camp 2 sits at about 2,700 m. The US CDC notes that altitude illness becomes a risk when people sleep at about 2,450 m or higher, so hikers who camp at Camp 2 or the saddle can be affected, especially if they came up quickly from the lowlands. Headache with nausea, dizziness or unusual tiredness can be early signs. If you or a companion feel unwell at altitude, open the Altitude sickness Emergency Guide.
+Mt. Pulag is the one Tahak Destination high enough for altitude to matter. The summit is about 2,922 m and Camp 2 about 2,700 m. The US CDC says people who sleep at about 2,450 m or higher before getting used to the altitude risk altitude illness, so campers at Camp 2 can be affected. Headache with nausea, dizziness, tiredness or poor appetite can be early signs. If you or a companion feel unwell up high, open the Altitude sickness Emergency Guide.
 
 ## Filipino
-Ang Mt. Pulag lang ang Destination sa Tahak na sapat ang taas para maging isyu ang altitude. Mga 2,922 m ang summit, at sa Ambangeg Trail, nasa mga 2,700 m ang Camp 2. Ayon sa US CDC, nagiging panganib ang altitude illness kapag natutulog sa mga 2,450 m o mas mataas, kaya puwedeng tamaan ang mga nagka-camp sa Camp 2 o sa saddle, lalo na kung mabilis silang umakyat mula sa kapatagan. Ang sakit ng ulo na may kasamang pagduduwal, pagkahilo o kakaibang pagod ay puwedeng maagang senyales. Kung masama ang pakiramdam mo o ng kasama mo sa mataas na lugar, buksan ang Emergency Guide na Altitude sickness.
+Ang Mt. Pulag lang ang Destination sa Tahak na sapat ang taas para maging isyu ang altitude. Mga 2,922 m ang summit at mga 2,700 m ang Camp 2. Ayon sa US CDC, puwedeng magka-altitude illness ang natutulog sa mga 2,450 m o mas mataas bago masanay sa taas, kaya puwedeng tamaan ang mga nagka-camp sa Camp 2. Ang sakit ng ulo na may pagduduwal, pagkahilo, pagod o walang ganang kumain ay puwedeng maagang senyales. Kung masama ang pakiramdam ninyo sa taas, buksan ang Emergency Guide na Altitude sickness.
