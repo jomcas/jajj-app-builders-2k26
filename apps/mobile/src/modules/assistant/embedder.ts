@@ -46,6 +46,7 @@ async function doLoad(spec: EmbedModelSpec): Promise<Embedder> {
   const context: LlamaContext = await initLlama({
     model: path,
     embedding: true,
+    ...(spec.pooling ? { pooling_type: spec.pooling } : {}),
     n_ctx: EMBED_CTX,
     n_batch: EMBED_CTX,
     n_ubatch: EMBED_CTX,

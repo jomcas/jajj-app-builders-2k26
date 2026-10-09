@@ -14,6 +14,8 @@ export type EmbedModelSpec = {
   sha256: string;
   query: (question: string) => string;
   passage: (chunk: Chunk) => string;
+  /** Pooling, when the GGUF does not set it itself. */
+  pooling?: 'mean' | 'cls' | 'last';
   /** Relevance gate (ADR 0005): the best cosine score a question needs to reach the model. */
   threshold: number;
 };
@@ -37,6 +39,7 @@ export const MULTILINGUAL_E5_SMALL: EmbedModelSpec = {
   sha256: '0d5a5a0b0ad84faad6357a6145e769b0661f0efbf53acf74598afc34dab454f4',
   query: (question) => `query: ${question.trim()}`,
   passage: (chunk) => `passage: ${chunk.title}. ${chunk.text}`,
+  pooling: 'mean',
   threshold: 0.82,
 };
 
