@@ -1,0 +1,53 @@
+// Expo app config. A .js file rather than app.json so it can carry comments.
+//
+// PAGE_DAY mirrors the day `page` token in src/theme/tokens.ts; test/app-config.test.ts
+// fails if they drift apart.
+const PAGE_DAY = '#F7F4EC';
+
+// userInterfaceStyle is pinned to 'light'. Tahak draws its own day and night themes from an
+// in-app toggle (later: sunrise and sunset), so native surfaces such as the launch screen and
+// system dialogs must not switch on their own with the phone's dark mode and disagree with it.
+// 'light' matches the default day theme; the cost is a light launch screen before a night start.
+module.exports = {
+  expo: {
+    name: 'Tahak',
+    slug: 'tahak',
+    scheme: 'tahak',
+    version: '0.1.0',
+    orientation: 'portrait',
+    icon: './assets/icon.png',
+    userInterfaceStyle: 'light',
+    backgroundColor: PAGE_DAY,
+    ios: {
+      supportsTablet: false,
+    },
+    android: {
+      package: 'com.tahak.app',
+      adaptiveIcon: {
+        backgroundColor: PAGE_DAY,
+        foregroundImage: './assets/android-icon-foreground.png',
+        backgroundImage: './assets/android-icon-background.png',
+        monochromeImage: './assets/android-icon-monochrome.png',
+      },
+      predictiveBackGestureEnabled: false,
+    },
+    plugins: [
+      'expo-dev-client',
+      [
+        'expo-font',
+        {
+          fonts: [
+            './node_modules/@expo-google-fonts/barlow/400Regular/Barlow_400Regular.ttf',
+            './node_modules/@expo-google-fonts/barlow/500Medium/Barlow_500Medium.ttf',
+            './node_modules/@expo-google-fonts/barlow/600SemiBold/Barlow_600SemiBold.ttf',
+            './node_modules/@expo-google-fonts/barlow-condensed/600SemiBold/BarlowCondensed_600SemiBold.ttf',
+            './node_modules/@expo-google-fonts/barlow-condensed/700Bold/BarlowCondensed_700Bold.ttf',
+            './node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf',
+          ],
+        },
+      ],
+      'expo-system-ui',
+      './plugins/withArm64Only',
+    ],
+  },
+};

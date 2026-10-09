@@ -1,0 +1,98 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import shellStrings from '../i18n/shell.strings';
+import { useStrings, useTheme } from '../settings/preferences';
+import { textStyles } from '../theme/typography';
+import { TABS } from './tabs';
+
+/** Four bottom tabs. The active tab gets an olive-tint pill with a trail-orange icon (plan U2). */
+export function TabBar({ state, navigation }: BottomTabBarProps) {
+  const { colors } = useTheme();
+  const s = useStrings(shellStrings);
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View
+      accessibilityRole="tablist"
+      style={[
+        styles.bar,
+        {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.line,
+          paddingBottom: Math.max(insets.bottom, 12),
+        },
+      ]}
+    >
+      {TABS.map((tab) => {
+        const route = state.routes.find((candidate) => candidate.name === tab.id);
+        if (!route) return null;
+        const focused = state.routes[state.index]?.key === route.key;
+        const label = s[tab.labelKey];
+
+        const onPress = () => {
+          const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+          if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
+        };
+
+        return (
+          <Pressable
+            key={route.key}
+            accessibilityRole="tab"
+            accessibilityLabel={label}
+            accessibilityState={{ selected: focused }}
+            onPress={onPress}
+            style={styles.tab}
+          >
+            {/* Remount the pill when focus changes: on Android (Fabric, RN 0.86) a background added
+                to an already-mounted view ignores its borderRadius and draws square corners. */}
+            <View
+              key={focused ? 'active' : 'idle'}
+              style={[styles.pill, focused && { backgroundColor: colors.tint }]}
+            >
+              <MaterialCommunityIcons
+                name={tab.icon}
+                size={24}
+                color={focused ? colors.trail : colors.muted}
+              />
+            </View>
+            <Text
+              numberOfLines={1}
+              style={
+                focused
+                  ? [textStyles.labelStrong, { color: colors.onTint }]
+                  : [textStyles.label, { color: colors.muted }]
+              }
+            >
+              {label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  bar: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    paddingTop: 8,
+    paddingHorizontal: 8,
+  },
+  tab: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 2,
+    minHeight: 48,
+  },
+  pill: {
+    width: 60,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
