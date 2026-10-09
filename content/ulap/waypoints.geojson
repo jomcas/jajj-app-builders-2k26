@@ -1,0 +1,75 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.6491511,
+     16.3235585
+    ]
+   },
+   "properties": {
+    "id": "ulap-eco-trail-jump-off",
+    "trail": "ulap-eco-trail",
+    "type": "jump_off",
+    "name": "Ampucao jump-off",
+    "name_fil": "Jump-off sa Ampucao",
+    "order": 1,
+    "distance_from_start_m": 0,
+    "offset_from_trail_m": 0.0,
+    "source": "osm:node/3707404857",
+    "osm_timestamp": "2024-10-03T21:18:37Z",
+    "note": "Register first at the Ampucao Barangay Hall, about 700 m east, then walk to the start of the trail."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.6473494,
+     16.3066077
+    ]
+   },
+   "properties": {
+    "id": "ulap-eco-trail-campsite-2",
+    "trail": "ulap-eco-trail",
+    "type": "campsite",
+    "name": "Camp Site 1",
+    "name_fil": "Camp Site 1",
+    "order": 2,
+    "distance_from_start_m": 2156,
+    "offset_from_trail_m": 33.9,
+    "source": "osm:node/7101485010",
+    "osm_timestamp": "2020-01-02T14:01:08Z",
+    "note": "Near Ambanaw-Paoay, the first peak. No water here; carry your own."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.6311489,
+     16.2904204
+    ]
+   },
+   "properties": {
+    "id": "ulap-eco-trail-summit",
+    "trail": "ulap-eco-trail",
+    "type": "summit",
+    "name": "Mt. Ulap summit",
+    "name_fil": "Tuktok ng Mt. Ulap",
+    "order": 3,
+    "distance_from_start_m": 5086,
+    "offset_from_trail_m": 11.3,
+    "source": "osm:node/7101485014",
+    "osm_timestamp": "2022-05-05T15:46:09Z",
+    "note": "About 1,846 m. Camp Site 2, with a small store, is just below the summit on the way down to Sta. Fe.",
+    "ele_m": 1843.0
+   }
+  }
+ ]
+}

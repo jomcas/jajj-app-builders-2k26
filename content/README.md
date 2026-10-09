@@ -10,6 +10,14 @@ content/destinations/<destination-slug>/
 
 Destinations: `mt-batulao` (20 passages, the demo Destination), `mt-pulag` (17), `mt-ulap` (16).
 
+Which ones have a full Destination Pack (Trail, Waypoints, map and seed):
+
+| Destination | Pack content | Seed |
+|---|---|---|
+| Mt. Batulao | [`content/batulao/`](batulao/README.md) | `supabase/seed/seed-batulao.sh`. It still seeds the older 14 passage pairs in `content/batulao/passages.json`; moving it to these 20 is part of #14. |
+| Mt. Ulap | [`content/ulap/`](ulap/README.md) | `supabase/seed/seed-ulap.sh`, which reads `mt-ulap/passages/` directly |
+| Mt. Pulag | Passages only. No Trail, map or seed yet (#22). | None |
+
 ## Passage format
 
 YAML frontmatter, then `## English` and `## Filipino` sections with the same facts (60–150 words each).
