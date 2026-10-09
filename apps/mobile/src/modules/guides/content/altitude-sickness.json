@@ -1,0 +1,88 @@
+{
+  "id": "altitude-sickness",
+  "kind": "emergency",
+  "category": "hazard",
+  "order": 13,
+  "title": { "en": "Altitude sickness", "fil": "Altitude sickness (sakit sa taas ng bundok)" },
+  "summary": {
+    "en": "Altitude sickness can start from about 2,400 m, so it is possible on the highest Philippine peaks. A headache with tiredness, dizziness or nausea after climbing high means stop climbing. If it gets worse, go down.",
+    "fil": "Puwedeng magsimula ang altitude sickness mula mga 2,400 metro, kaya posible ito sa pinakamatataas na bundok sa Pilipinas. Kapag sumakit ang ulo kasabay ng pagod, pagkahilo o pagduduwal matapos umakyat nang mataas, huminto sa pag-akyat. Kung lumalala, bumaba."
+  },
+  "callForHelp": {
+    "en": "Call 911 or the Philippine Red Cross hotline 143 if the person is breathless even at rest, has a bad cough, is confused or clumsy, or cannot get down on their own. These can be life-threatening and need a safe descent right away. If there is no signal, send someone for help while others help the person down.",
+    "fil": "Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 kung hinihingal ang tao kahit nakapahinga, malala ang ubo, nalilito o lampa ang kilos, o hindi makababa nang mag-isa. Puwedeng nakamamatay ang mga ito at kailangan ng ligtas na pagbaba agad. Kung walang signal, magpadala ng tao para humingi ng tulong habang tinutulungan ng iba ang tao na bumaba."
+  },
+  "steps": {
+    "en": [
+      "Know the signs: a headache plus tiredness or weakness, dizziness, nausea or vomiting, poor appetite, trouble sleeping, or shortness of breath.",
+      "If someone has these signs, stop climbing.",
+      "Help them down to a lower altitude as quickly and safely as possible. Someone must go with them.",
+      "Have them drink water regularly.",
+      "If they carry their own prescribed altitude medicine, help them take it as the label says.",
+      "Keep them from getting too cold or too hot.",
+      "Let them rest at the lower altitude until the symptoms go away.",
+      "If they are breathless at rest, coughing a lot, confused or clumsy, go down at once and get medical help."
+    ],
+    "fil": [
+      "Alamin ang mga palatandaan: sakit ng ulo kasabay ng pagod o panghihina, pagkahilo, pagduduwal o pagsusuka, walang ganang kumain, hirap matulog, o hingal.",
+      "Kung may ganitong palatandaan ang isang tao, itigil ang pag-akyat.",
+      "Tulungan siyang bumaba sa mas mababang lugar nang mabilis at ligtas hangga't maaari. Dapat may sumama sa kanya.",
+      "Painumin siya ng tubig nang regular.",
+      "Kung may dala siyang sariling resetang gamot para sa altitude, tulungan siyang inumin ito ayon sa nakasulat sa label.",
+      "Huwag hayaang masyado siyang lamigin o mainitan.",
+      "Pagpahingahin siya sa mas mababang lugar hanggang mawala ang mga sintomas.",
+      "Kung hinihingal siya kahit nakapahinga, malala ang ubo, nalilito o lampa ang kilos, bumaba agad at humingi ng tulong medikal."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not keep climbing with symptoms.",
+      "Do not let the person go down alone.",
+      "Do not drink alcohol at altitude.",
+      "Do not go back up after severe symptoms (breathlessness at rest, confusion) until a doctor has checked the person."
+    ],
+    "fil": [
+      "Huwag ituloy ang pag-akyat kung may sintomas.",
+      "Huwag hayaang bumaba nang mag-isa ang tao.",
+      "Huwag uminom ng alak sa mataas na lugar.",
+      "Huwag nang umakyat ulit pagkatapos ng malalang sintomas (hingal kahit nakapahinga, pagkalito) hangga't hindi pa natitingnan ng doktor ang tao."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Trouble breathing even at rest, a cough, or chest tightness.",
+      "Bluish lips, skin or fingers.",
+      "Confusion, unusual behaviour, or loss of balance or coordination.",
+      "Very drowsy, or the person stops responding."
+    ],
+    "fil": [
+      "Hirap huminga kahit nakapahinga, ubo, o paninikip ng dibdib.",
+      "Nangangasul na labi, balat o daliri.",
+      "Pagkalito, kakaibang kilos, o pagkawala ng balanse o koordinasyon.",
+      "Sobrang antukin, o hindi na sumasagot ang tao."
+    ]
+  },
+  "keywords": {
+    "en": ["altitude sickness", "mountain sickness", "AMS", "high altitude", "altitude", "headache at the summit", "thin air", "short of breath up high", "HAPE", "HACE"],
+    "fil": ["altitude sickness", "mountain sickness", "sakit sa taas", "hilo sa taas", "nahihilo sa summit", "sumasakit ang ulo sa taas", "hirap huminga sa taas", "kinakapos ng hininga sa taas", "masakit ang ulo sa tuktok", "sobrang taas"]
+  },
+  "sources": [
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Altitude sickness' (pp. 352-354)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: hotline only. No Philippine Red Cross altitude sickness material could be found online. The PRC source is cited only for hotline 143. All steps follow IFRC 2020 'Altitude sickness': stop ascent and descend safely with support; help take prescribed medication (acetazolamide or dexamethasone) per the label; oxygen only for trained providers (left out); keep from getting cold or overheated; drink regularly; rest at lower altitude until symptoms resolve; EMS if no improvement or the person can't descend; no re-ascent after HAPE or HACE until examined; avoid alcohol. Signs are the Lake Louise criteria quoted by IFRC (AMS: headache plus fatigue, dizziness, GI symptoms, poor sleep, or shortness of breath; HAPE: breathless at rest, cough, chest tightness, cyanosis; HACE: change in responsiveness, behaviour or coordination). The 2,400 m figure is IFRC's ('people may start to experience symptoms around 2400 m'). The claim that the highest PH peaks exceed it (Mt Apo and Mt Pulag are both above 2,900 m) is general knowledge, not from a cited source; reviewer please confirm. Medication names and doses were deliberately left out. Altitude sickness is rare on PH trails, so the reviewer may want a DOH or PH mountaineering source on how often it happens."
+  }
+}
