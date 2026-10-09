@@ -48,19 +48,50 @@ Every wave ends with a checkpoint that can be demoed in airplane mode.
 
 Hard rules: if Wave 0 fails, fix the model before anything else. No new features after hour 17.
 
-## Next session: resume Wave −1 (UI/UX)
+## Wave −1 (UI/UX): decisions
 
-Planning is done. Wave −1 has started, but none of its questions are answered yet. Each line below gives the proposal; the user still has to accept or override it.
+All Wave −1 questions are settled. Next step: build the prototype (U7).
 
-- **U1 App name:** "Gabay" (Filipino for "guide"). Alternatives: Akyat, Bantay.
-- **U2 Navigation:** four bottom tabs (Explore, Hike, Ask, Guides) plus an SOS button that floats on every screen. Modules plug into tabs, which needs a small update to ADR 0001.
-- **U3 Hike screen:** full-screen map that follows the user. Bottom panel shows the next Waypoint (distance and ETA), elapsed time and a Forecast chip. A Deviation shows a red banner with a back-to-trail arrow until the hiker is back on the Trail.
-- **U4 Assistant:** text input plus a camera button, no voice. Every answer shows source chips for the passages it used.
-- **U5 Visual direction:** "field guide" style (topographic textures, forest green and sunrise orange, bold condensed headings). Light theme by default and a dark trail theme during a Hike. Red is used only for danger.
-- **U6 First launch:** one setup screen for language, permissions and the model download. Guides work before the model finishes downloading.
-- **U7 Prototype:** a throwaway clickable HTML prototype in a phone frame, published as a private link.
+- **U1 App name:** Tahak (tentative), Filipino for treading a path. The logo is the all-caps wordmark TAHAK in olive, with a mountain in place of the second A (tentative). In all other text it's written "Tahak".
+- **U2 Navigation:** four bottom tabs (Explore, Hike, Ask, Guides). The active tab gets an olive-tint pill with an orange icon. The SOS control is fixed at the top right of the header on every screen, never floating, so it can't collide with the Ask input or the map's re-center button. Modules plug into tabs ([ADR 0001](adr/0001-feature-modules-and-assistant-tools.md)).
+- **U3 Hike screen:** before a Hike, a full-screen map with a Trail picker card and a large olive "Start Hike" button. During a Hike, the map follows the hiker, and a bottom panel shows the next Waypoint with a peach distance and ETA chip, an orange progress bar, Forecast and water chips, and End Hike. A Deviation shows a brick-red banner at the top with a back-to-trail arrow, and the trail line turns dashed until the hiker is back on the Trail.
+- **U4 Assistant:** text input at the bottom plus a camera button, no voice. Every answer shows source chips for the pack passages and Guides it used; tapping one opens that Guide or Waypoint. Emergency questions lead with a blush Emergency Guide card and an "Open Guide" button, then at most two lines of summary ([ADR 0003](adr/0003-emergencies-route-to-guides.md)).
+- **Typography:** Barlow Condensed for headings and large numbers, Barlow for body. Sentence case, not all caps. Tabular figures for live numbers.
+- **Topographic texture:** faint olive-tint contour lines only on the splash, Destination headers and empty states. Never behind text, never on the Hike screen.
+- **U5 Visual direction:** "field guide" style (topographic textures, bold condensed headings). Color decisions below are **settled**.
 
-Mobbin MCP is wanted for inspiration but is not connected yet. Connect it before the prototype step.
+### Settled: color system
+
+- **One meaning per color.** Olive = brand and actions. Trail orange = the Trail and progress on it (route line, next Waypoint, active tab, progress). Blue = the hiker's own GPS position. Amber = caution (Forecast warnings, form errors). Red = danger only. Everything else is warm neutrals.
+- **Pastel interface, strong signals.** Surfaces, chips, tags and secondary buttons are pastel, each pastel paired with a deep text color of the same hue. Only the trail line, the GPS dot and danger red stay saturated.
+- **Buttons are olive, not orange.** Orange is for the Trail and highlights. On the Hike screen, buttons sit on an opaque panel, never directly on the map.
+- **Starting tokens** (tune on the Flip 6 during the prototype; every text pair is at least 7:1):
+
+  | Role | Day fill / text | Night |
+  |---|---|---|
+  | Page / surface | `#F7F4EC` / `#FFFDF8` | `#000000` / `#141414` (true black, not dark green) |
+  | Ink / muted text | `#1B1F1A` / `#434A41` | `#EDEBE3` / `#A9AFA5` |
+  | Primary button | `#353F2A` with cream text | `#C9D4B0` with dark text |
+  | Olive tint (secondary, tags, selected) | `#DCE4C8` / `#353F2A` | `#2A3122` / `#C9D4B0` |
+  | Peach (Trail info) | `#F9D3B4` / `#6A2C0C` | text `#FFC9A3` |
+  | Sky (water, info) | `#CFE3F7` / `#0E3F7A` | text `#A9CDF5` |
+  | Butter (caution) | `#FBE7A1` / `#5C4300` | text `#F5DC8A` |
+  | Danger icon and SOS text | `#A8201A` on white | `#FF8A80` |
+  | Trail line (with dark outline) | `#D9661F`, outline `#3B1F0E` | `#FF8A3D`, outline `#2A1406` |
+  | GPS dot | `#1A6FD6` | `#5AA9FF` |
+  | Danger (banner, Flare) | `#A8201A` with white text | same |
+
+- **SOS control** floats on every screen as a neutral button with a red icon, and turns fully red only while the Flare is active.
+- **Emergency Guides** (see [CONTEXT.md](../CONTEXT.md)) sit on the normal white surface with default text; only their icon is red, on a blush tile (`#F6D0CC` day, `#3B2220` night) that mirrors the olive-tint tiles of other Guides. No blush or red fills. Red stays minimal: the Deviation banner, the Flare knob and strobe, the SOS control, and Emergency Guide icons.
+- **"Works offline"** is shown as a small grey cloud-off icon next to the screen title, not a chip.
+- **Waypoints.** Icons carry the type (water drop, tent, flag for the summit, boot for the jump-off). Pins are olive, the next Waypoint gets an orange ring, and water pins are blue.
+- **Group Hike members** are olive dots with initials and turn red only when in Deviation.
+- **Theme follows the time of day**, not the Hike: light from sunrise to sunset, dark otherwise (computed offline from GPS and date), with a manual toggle. Replaces "dark during a Hike".
+- **Red means danger only** ([ADR 0004](adr/0004-red-means-danger-only.md)). The Flare fires by slide or long-press, not a tap.
+- **Sun and colorblind rules.** The Trail line has a dark outline so it stands out by lightness. A Deviation turns the line dashed and shows an icon and text, never color alone. Text during a Hike is at least 7:1 contrast.
+- **Map style.** Muted, earth-toned Protomaps light style by day (greens toned down) and the dark style at night, so the Trail and Waypoints are the only strong colors on the map.
+- **U6 First launch:** one setup screen with language (English or Filipino), permissions (location, notifications) and the model download. It shows the download size, says Wi-Fi is recommended, resumes after a dropped connection, and offers "Browse Guides while you wait".
+- **U7 Prototype:** a throwaway clickable HTML prototype in a Galaxy Z Flip 6 frame (22:9), published as a private link and reviewed with Lavish.
 
 ## Guide Library (15)
 

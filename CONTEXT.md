@@ -1,4 +1,4 @@
-# Trail Kit
+# Tahak
 
 An offline-first hiking and camping companion for Filipino mountain trails and campsites. Everything needed on the trail works without signal once a Destination Pack is downloaded.
 
@@ -33,6 +33,10 @@ _Avoid_: Tutorials, manual
 **Guide**:
 A single step-by-step how-to or emergency procedure, such as treating a snakebite or pitching a tent.
 _Avoid_: Tutorial, article
+
+**Emergency Guide**:
+A Guide for a situation that threatens life or limb: snakebite, bleeding wounds, sprains and fractures, hypothermia, heat exhaustion and heatstroke, dehydration, lost on the trail, lightning, flash floods and river crossings, and altitude sickness. Minor medical Guides (stings, leech bites, blisters) and camp skills are ordinary Guides.
+_Avoid_: Emergency guide (lowercase, as a loose description), first-aid guide
 
 ## On the trail
 
