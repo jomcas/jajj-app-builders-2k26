@@ -13,9 +13,11 @@ import {
   subscribe,
   type Destination,
   type DestinationPack,
+  type Waypoint,
   type WaypointType,
 } from '../destination-pack';
 import { fill, formatBytes, formatDate, formatKm } from './format';
+import { waypointGroups } from './rows';
 import strings from './strings';
 import { WorksOfflineIcon } from './WorksOfflineIcon';
 
@@ -111,6 +113,30 @@ function DownloadPanel({
   );
 }
 
+function WaypointRow({ waypoint, s, colors }: { waypoint: Waypoint; s: Strings; colors: Palette }) {
+  const water = waypoint.type === 'water';
+  const km = formatKm(waypoint.distanceM);
+  return (
+    <View style={[styles.row, { backgroundColor: colors.surface, borderColor: colors.line }]}>
+      <View style={[styles.tile, { backgroundColor: water ? colors.sky : colors.tint }]}>
+        <MaterialCommunityIcons name={WAYPOINT_ICONS[waypoint.type]} size={20} color={water ? colors.onSky : colors.onTint} />
+      </View>
+      <View style={styles.grow}>
+        <Text style={[textStyles.bodyStrong, { color: colors.ink }]}>{waypoint.name}</Text>
+        <Text style={[textStyles.label, styles.numbers, { color: colors.muted }]}>
+          {[
+            s[waypoint.type],
+            waypoint.distanceM > 0 ? fill(s.waypointDistance, { km }) : null,
+            waypoint.elevationM === null ? null : fill(s.elevation, { elevation: waypoint.elevationM }),
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 function PackContents({ pack, s, colors }: { pack: DestinationPack; s: Strings; colors: Palette }) {
   const { language } = usePreferences();
   const inLanguage = pack.passages.filter((passage) => passage.language === language);
@@ -133,33 +159,18 @@ function PackContents({ pack, s, colors }: { pack: DestinationPack; s: Strings; 
       </Section>
 
       <Section title={s.waypoints} colors={colors}>
-        {pack.waypoints.map((waypoint) => {
-          const water = waypoint.type === 'water';
-          const km = formatKm(waypoint.distanceM);
-          return (
-            <View key={waypoint.id} style={[styles.row, { backgroundColor: colors.surface, borderColor: colors.line }]}>
-              <View style={[styles.tile, { backgroundColor: water ? colors.sky : colors.tint }]}>
-                <MaterialCommunityIcons
-                  name={WAYPOINT_ICONS[waypoint.type]}
-                  size={20}
-                  color={water ? colors.onSky : colors.onTint}
-                />
-              </View>
-              <View style={styles.grow}>
-                <Text style={[textStyles.bodyStrong, { color: colors.ink }]}>{waypoint.name}</Text>
-                <Text style={[textStyles.label, styles.numbers, { color: colors.muted }]}>
-                  {[
-                    s[waypoint.type],
-                    waypoint.distanceM > 0 ? fill(s.waypointDistance, { km }) : null,
-                    waypoint.elevationM === null ? null : fill(s.elevation, { elevation: waypoint.elevationM }),
-                  ]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </Text>
-              </View>
-            </View>
-          );
-        })}
+        {waypointGroups(pack).map((group) => (
+          <View key={group.trailId} style={styles.group}>
+            {group.trailName ? (
+              <Text accessibilityRole="header" style={[textStyles.labelStrong, { color: colors.muted }]}>
+                {group.trailName}
+              </Text>
+            ) : null}
+            {group.waypoints.map((waypoint) => (
+              <WaypointRow key={waypoint.id} waypoint={waypoint} s={s} colors={colors} />
+            ))}
+          </View>
+        ))}
       </Section>
 
       <Section title={s.reference} colors={colors}>
@@ -282,6 +293,9 @@ const styles = StyleSheet.create({
     borderRadius: 14,
   },
   section: {
+    gap: 8,
+  },
+  group: {
     gap: 8,
   },
   row: {

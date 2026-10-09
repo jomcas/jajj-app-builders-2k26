@@ -2,9 +2,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import type { Destination } from '../src/modules/destination-pack/types.ts';
+import type { Destination, Trail, Waypoint } from '../src/modules/destination-pack/types.ts';
 import { fill, formatBytes, formatDate, formatKm } from '../src/modules/explore/format.ts';
-import { destinationRows } from '../src/modules/explore/rows.ts';
+import { destinationRows, waypointGroups } from '../src/modules/explore/rows.ts';
 
 function destination(id: string, name: string, packVersion = 1): Destination {
   return {
@@ -68,4 +68,43 @@ test('offline: only the downloaded Destinations', () => {
   assert.deepEqual(destinationRows(null, []), []);
   const rows = destinationRows(null, [destination('batulao', 'Mt. Batulao')]);
   assert.deepEqual(rows.map((row) => [row.destination.id, row.downloaded]), [['batulao', true]]);
+});
+
+test('Waypoints are grouped by Trail, in the pack Trail order', () => {
+  const trail = (id: string, name: string): Trail => ({
+    id,
+    destinationId: 'batulao',
+    name,
+    distanceM: 3000,
+    geometry: { type: 'LineString', coordinates: [] },
+  });
+  const waypoint = (id: string, trailId: string, position: number): Waypoint => ({
+    id,
+    trailId,
+    type: position === 1 ? 'jump_off' : 'summit',
+    name: position === 1 ? 'Jump-off' : 'Summit',
+    latitude: 14,
+    longitude: 120,
+    elevationM: null,
+    position,
+    distanceM: 0,
+  });
+  const groups = waypointGroups({
+    trails: [trail('batulao-new-trail', 'New Trail'), trail('batulao-old-trail', 'Old Trail'), trail('empty', 'Empty')],
+    waypoints: [
+      waypoint('n1', 'batulao-new-trail', 1),
+      waypoint('n2', 'batulao-new-trail', 2),
+      waypoint('o1', 'batulao-old-trail', 1),
+      waypoint('o2', 'batulao-old-trail', 2),
+      waypoint('x', 'gone', 1),
+    ],
+  });
+  assert.deepEqual(
+    groups.map((group) => [group.trailName, group.waypoints.map((w) => w.id)]),
+    [
+      ['New Trail', ['n1', 'n2']],
+      ['Old Trail', ['o1', 'o2']],
+      [null, ['x']],
+    ],
+  );
 });
