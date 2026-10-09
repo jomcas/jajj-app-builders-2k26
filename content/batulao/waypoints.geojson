@@ -1,0 +1,209 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "attribution": "© OpenStreetMap contributors",
+  "license": "ODbL-1.0",
+  "osm_data_as_of": "2026-10-09T18:12:15Z",
+  "generator": "content/batulao/scripts/build_geojson.py"
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "id": "batulao-new-trail-01-jump_off",
+   "properties": {
+    "id": "batulao-new-trail-01-jump_off",
+    "trail": "batulao-new-trail",
+    "type": "jump_off",
+    "name": "Batulao jump-off",
+    "name_fil": "Jump-off ng Batulao",
+    "order": 1,
+    "distance_from_start_m": 0,
+    "offset_from_trail_m": 0.0,
+    "source": "osm:node/661099448",
+    "osm_timestamp": "2014-08-26T03:53:14Z",
+    "note": "OSM highway=trailhead \"Batulao Jumpoff\" at the end of Batulao Trail Road. The registration booth (OSM shop=ticket, node 6389746485) is about 120 m before it on the same road.",
+    "ele_m": 599.0
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8205722,
+     14.0554825
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-new-trail-02-campsite",
+   "properties": {
+    "id": "batulao-new-trail-02-campsite",
+    "trail": "batulao-new-trail",
+    "type": "campsite",
+    "name": "Peak 8 campsite",
+    "name_fil": "Kampuhan sa Peak 8",
+    "order": 2,
+    "distance_from_start_m": 2517,
+    "offset_from_trail_m": 2.0,
+    "source": "osm:way/188933996",
+    "osm_timestamp": "2012-11-03T17:01:31Z",
+    "note": "The New Trail's campsite and fee checkpoint. Some trip reports call it \"Camp 8\"; it is not the Old Trail's Camp 8 near the summit."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.802914,
+     14.0456747
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-new-trail-03-summit",
+   "properties": {
+    "id": "batulao-new-trail-03-summit",
+    "trail": "batulao-new-trail",
+    "type": "summit",
+    "name": "Mt. Batulao summit",
+    "name_fil": "Tuktok ng Bundok Batulao",
+    "order": 3,
+    "distance_from_start_m": 3389,
+    "offset_from_trail_m": 5.3,
+    "source": "osm:node/332020556",
+    "osm_timestamp": "2023-09-03T11:06:30Z",
+    "note": "811 m (OSM ele). Camping at the summit is reported as not allowed.",
+    "ele_m": 811.0
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8023782,
+     14.0399434
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-old-trail-01-jump_off",
+   "properties": {
+    "id": "batulao-old-trail-01-jump_off",
+    "trail": "batulao-old-trail",
+    "type": "jump_off",
+    "name": "Batulao jump-off",
+    "name_fil": "Jump-off ng Batulao",
+    "order": 1,
+    "distance_from_start_m": 0,
+    "offset_from_trail_m": 0.0,
+    "source": "osm:node/661099448",
+    "osm_timestamp": "2014-08-26T03:53:14Z",
+    "note": "Shared with the New Trail up to the fork past the kubo stores.",
+    "ele_m": 599.0
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8205722,
+     14.0554825
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-old-trail-02-water",
+   "properties": {
+    "id": "batulao-old-trail-02-water",
+    "trail": "batulao-old-trail",
+    "type": "water",
+    "name": "Spring east of Camp 1",
+    "name_fil": "Bukal sa silangan ng Camp 1",
+    "order": 2,
+    "distance_from_start_m": 3131,
+    "offset_from_trail_m": 12.2,
+    "source": "osm:node/3042655992",
+    "osm_timestamp": "2018-02-10T01:19:01Z",
+    "note": "OSM natural=spring, off the path. Reported seasonal and not reliably safe: treat or filter before drinking.",
+    "ele_m": 561.0
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8079189,
+     14.0439882
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-old-trail-03-water",
+   "properties": {
+    "id": "batulao-old-trail-03-water",
+    "trail": "batulao-old-trail",
+    "type": "water",
+    "name": "Spring at Camp 1",
+    "name_fil": "Bukal sa Camp 1",
+    "order": 3,
+    "distance_from_start_m": 3255,
+    "offset_from_trail_m": 9.3,
+    "source": "osm:node/1995658223",
+    "osm_timestamp": "2018-02-10T01:18:57Z",
+    "note": "OSM natural=spring beside Camp 1. Reported seasonal and not reliably safe: treat or filter before drinking."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8070758,
+     14.043605
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-old-trail-04-campsite",
+   "properties": {
+    "id": "batulao-old-trail-04-campsite",
+    "trail": "batulao-old-trail",
+    "type": "campsite",
+    "name": "Camp 1",
+    "name_fil": "Camp 1 (kampuhan)",
+    "order": 4,
+    "distance_from_start_m": 3264,
+    "offset_from_trail_m": 0.7,
+    "source": "osm:node/662722021",
+    "osm_timestamp": "2014-08-26T03:53:14Z",
+    "note": "The designated campsite at the foot of the Old Trail: the largest tent area, with toilets and a store reported.",
+    "ele_m": 576.0
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8071103,
+     14.0435188
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "batulao-old-trail-05-summit",
+   "properties": {
+    "id": "batulao-old-trail-05-summit",
+    "trail": "batulao-old-trail",
+    "type": "summit",
+    "name": "Mt. Batulao summit",
+    "name_fil": "Tuktok ng Bundok Batulao",
+    "order": 5,
+    "distance_from_start_m": 4177,
+    "offset_from_trail_m": 3.1,
+    "source": "osm:node/332020556",
+    "osm_timestamp": "2023-09-03T11:06:30Z",
+    "note": "811 m (OSM ele). The last section from Camp 9 is steep, with fixed ropes.",
+    "ele_m": 811.0
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8023782,
+     14.0399434
+    ]
+   }
+  }
+ ]
+}
