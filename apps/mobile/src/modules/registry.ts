@@ -4,4 +4,4 @@
 //   export { default as <id> } from './<id>';
 // Nothing in src/shell/ changes.
 
-export { default as placeholder } from './placeholder';
+export { default as assistantSpike } from './assistant-spike';

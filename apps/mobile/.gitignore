@@ -43,3 +43,7 @@ yarn-error.*
 # build output
 *.apk
 *.aab
+
+# Gradle output of local Expo modules (modules/<name>/android)
+/modules/*/android/build/
+/modules/*/android/.cxx/

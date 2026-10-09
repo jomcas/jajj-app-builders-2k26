@@ -47,7 +47,20 @@ module.exports = {
         },
       ],
       'expo-system-ui',
+      [
+        'expo-image-picker',
+        {
+          // The Assistant spike's "Take photo". No photo library access is needed.
+          cameraPermission: 'Tahak uses the camera so you can ask the Assistant about a photo.',
+          photosPermission: false,
+          microphonePermission: false,
+        },
+      ],
+      // On-device model runtime. Adds the optional OpenCL (Adreno GPU) and Hexagon (NPU)
+      // native libraries to the manifest so llama.rn can load them when the phone has them.
+      ['llama.rn', { enableOpenCLAndHexagon: true }],
       './plugins/withArm64Only',
+      './plugins/withLlamaRnVariants',
     ],
   },
 };
