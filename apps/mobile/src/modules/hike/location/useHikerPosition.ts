@@ -31,6 +31,10 @@ function toPermission(response: Location.LocationPermissionResponse): LocationPe
   return response.canAskAgain ? 'ask' : 'blocked';
 }
 
+function servicesEnabled(): Promise<boolean> {
+  return Location.hasServicesEnabledAsync().catch(() => true);
+}
+
 /**
  * The hiker's position from the phone's GPS, which works without signal (ADR 0002).
  * Watches only while location permission is granted; `requestPermission` shows Android's
@@ -40,9 +44,15 @@ export function useHikerPosition(): {
   permission: LocationPermission;
   position: HikerPosition | null;
   requestPermission: () => Promise<void>;
+  /**
+   * Starts watching again and says whether location is on for the whole phone. Android stops
+   * the watch while location is switched off, and does not restart it when it comes back.
+   */
+  retry: () => Promise<{ servicesEnabled: boolean }>;
 } {
   const [permission, setPermission] = useState<LocationPermission>('unknown');
   const [position, setPosition] = useState<HikerPosition | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const subscription = useRef<Location.LocationSubscription | null>(null);
 
   // Checked on mount and again when the app comes back, e.g. after the hiker allowed
@@ -91,7 +101,7 @@ export function useHikerPosition(): {
       subscription.current?.remove();
       subscription.current = null;
     };
-  }, [permission]);
+  }, [permission, attempt]);
 
   const requestPermission = useCallback(async () => {
     try {
@@ -101,5 +111,11 @@ export function useHikerPosition(): {
     }
   }, []);
 
-  return { permission, position, requestPermission };
+  const retry = useCallback(async () => {
+    const enabled = await servicesEnabled();
+    if (enabled) setAttempt((n) => n + 1);
+    return { servicesEnabled: enabled };
+  }, []);
+
+  return { permission, position, requestPermission, retry };
 }

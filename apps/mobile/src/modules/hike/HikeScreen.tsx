@@ -16,7 +16,7 @@ const NOTICE_MS = 5000;
 /** The map of one Destination with the hiker's position and the map controls. */
 function DestinationMap({ pack }: { pack: DestinationPack }) {
   const s = useStrings(strings);
-  const { permission, position, requestPermission } = useHikerPosition();
+  const { permission, position, requestPermission, retry } = useHikerPosition();
   const map = useRef<HikeMapHandle>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -26,11 +26,16 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
     return () => clearTimeout(timer);
   }, [notice]);
 
-  const recenter = useCallback(() => {
-    if (position) map.current?.centerOn(position);
-    else if (permission === 'granted') setNotice(s.noFix);
+  const recenter = useCallback(async () => {
+    if (position) {
+      map.current?.centerOn(position);
+      return;
+    }
     // Without permission the panel already explains how to allow location.
-  }, [permission, position, s.noFix]);
+    if (permission !== 'granted') return;
+    const { servicesEnabled } = await retry();
+    setNotice(servicesEnabled ? s.noFix : s.servicesOff);
+  }, [permission, position, retry, s.noFix, s.servicesOff]);
 
   return (
     <View style={styles.fill}>
