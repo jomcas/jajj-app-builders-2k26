@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react';
 
 import { useTheme } from '../settings/preferences';
 import { Header } from './Header';
+import { LaunchGates } from './LaunchGates';
 import { applyPendingTab, navigationRef } from './navigation';
 import { TabBar } from './TabBar';
 import { tabRoots } from './TabScreen';
@@ -43,17 +44,22 @@ export function AppShell() {
   return (
     <NavigationContainer ref={navigationRef} onReady={applyPendingTab} theme={navigationTheme}>
       <StatusBar style={mode === 'night' ? 'light' : 'dark'} />
-      <Tab.Navigator
-        tabBar={(props) => <TabBar {...props} />}
-        screenOptions={({ route }) => ({
-          header: () => <Header tab={route.name} />,
-          animation: 'none',
-        })}
-      >
-        {tabRoots.map(({ id, Root }) => (
-          <Tab.Screen key={id} name={id} component={Root} />
-        ))}
-      </Tab.Navigator>
+      <LaunchGates>
+        {(initialTab) => (
+          <Tab.Navigator
+            initialRouteName={initialTab}
+            tabBar={(props) => <TabBar {...props} />}
+            screenOptions={({ route }) => ({
+              header: () => <Header tab={route.name} />,
+              animation: 'none',
+            })}
+          >
+            {tabRoots.map(({ id, Root }) => (
+              <Tab.Screen key={id} name={id} component={Root} />
+            ))}
+          </Tab.Navigator>
+        )}
+      </LaunchGates>
     </NavigationContainer>
   );
 }

@@ -1,0 +1,27 @@
+# Mt. Batulao Destination Pack: sources
+
+**Filipino text drafted by AI; needs review by a native speaker before shipping.**
+
+All passages are paraphrased in our own words. No sentences are copied from any source. Source IDs match [docs/research/rag-sources.md](../../../docs/research/rag-sources.md). Last checked 2026-10-10.
+
+| ID | Title | Publisher | URL | License / attribution line |
+|---|---|---|---|---|
+| B1 | Mount Batulao | Wikipedia contributors | https://en.wikipedia.org/wiki/Mount_Batulao | CC BY-SA 4.0. Facts only, paraphrased; no Wikipedia text reused. Courtesy credit: "Facts from Wikipedia, 'Mount Batulao' (CC BY-SA 4.0)." |
+| B2 | OpenStreetMap: Mt. Batulao summit (node 332020556), route relation 3350629 "Mt. Batulao New to Old Trail", camps, peaks, jump-off, parking, hospitals and police (via Overpass API, data as of 2026-10-09) | OpenStreetMap contributors | https://www.openstreetmap.org/relation/3350629 ; https://www.openstreetmap.org/node/332020556 | **"© OpenStreetMap contributors, ODbL"**, with a link to https://www.openstreetmap.org/copyright on the map and in the About screen. Any published modified database must also be ODbL. |
+| B3 | Mt. Batulao (811+) | Pinoy Mountaineer (Gideon Lasco) | https://www.pinoymountaineer.com/?p=1342 | All rights reserved. Facts only, paraphrased. Credit: "Source: Pinoy Mountaineer." |
+| B4 | Batulao, Nasugbu, Batangas | Transit Pinas (Rex Lim Lim) | https://transitpinas.com/batulao-nasugbu-batangas/ | All rights reserved. Facts only, paraphrased. Credit: "Source: Transit Pinas." |
+| B5 | Mt. Batulao dayhike guide for beginners | A Wanderful Sole (Keza Enriquez) | https://awanderfulsole.com/mt-batulao-dayhike-guide-beginners/ | Terms unknown (site Terms of Use). Facts only, paraphrased. Credit: "Source: A Wanderful Sole." |
+| B6 | Mt. Batulao: MASL, difficulty, hike, height, location | LakbayPinas (Aiden Kenzy) | https://lakbaypinas.com/mt-batulao-masl-difficulty-hike-height-location/ | © 2026 LakbayPinas. Low-trust source; facts only, paraphrased and flagged for verification. Credit: "Source: LakbayPinas." |
+| B7 | Mt. Batulao traverse, Nasugbu, Batangas | Hike To Mountains (Jervis Ergino) | https://hiketomountains.com/mt-batulao-traverse-nasugbu-batangas/ | © 2026 Hike To Mountains. Facts only, paraphrased. Credit: "Source: Hike To Mountains." |
+| B8 | Mt. Batulao waypoints | WaypointsDotPH (narrative by Fernando Delos-Reyes) | https://waypoints.ph/detail_gen_wpt_btulao.html | All rights reserved; site forbids public reproduction. Facts only, paraphrased. Credit: "Source: WaypointsDotPH." |
+| B9 | Mount Batulao | Mountain-Forecast | https://www.mountain-forecast.com/peaks/Mount-Batulao | All rights reserved. Used only for the 813 m figure. Credit: "Source: Mountain-Forecast." |
+| B10 | Pinoy Mountaineer opinion piece on Batulao collection points | Pinoy Mountaineer | https://www.pinoymountaineer.com/?p=9239 | All rights reserved. Facts only, paraphrased. Credit: "Source: Pinoy Mountaineer." |
+| B11 | Pinoy Mountaineer report on Nasugbu Tourism statement on guides (Nov 2015) | Pinoy Mountaineer | https://www.pinoymountaineer.com/?p=7798 | All rights reserved. Facts only, paraphrased. Credit: "Source: Pinoy Mountaineer." |
+| B12 | Pinoy Mountaineer report on the 2013 Batulao brushfire | Pinoy Mountaineer | https://www.pinoymountaineer.com/?p=282 | All rights reserved. Facts only, paraphrased. Credit: "Source: Pinoy Mountaineer." |
+| B13 | Hiker dies from Batulao mountain fall | Philippine Daily Inquirer | https://newsinfo.inquirer.net/154351/hiker-dies-from-batulao-mountain-fall | All rights reserved. Facts only, paraphrased. Credit: "Source: Philippine Daily Inquirer." |
+| B14 | Republic Act No. 7234 (Apacible Memorial Hospital, Nasugbu), LawPhil copy | Republic of the Philippines (hosted by LawPhil) | https://lawphil.net/statutes/repacts/ra1992/ra_7234_1992.html | Government work, no copyright (RA 8293 s.176). Credit: "Republic Act No. 7234." |
+| S-PAGASA-climate | Climate of the Philippines | PAGASA (DOST) | https://www.pagasa.dost.gov.ph/information/climate-philippines | Government work; paraphrased. Credit: "Source: PAGASA." |
+| S13 | Weather legend (thunderstorm and rainfall warnings) | PAGASA (DOST) | https://pagasa.dost.gov.ph/learnings/legend | Government work; paraphrased. Credit: "Source: PAGASA." |
+| S15 | Heat index (bands shown as an image); Inquirer report on heat index levels | PAGASA (DOST); Philippine Daily Inquirer | https://www.pagasa.dost.gov.ph/weather/heat-index ; https://newsinfo.inquirer.net/2040858/heat-index-hits-danger-levels-in-5-luzon-areas | PAGASA: government work. Inquirer: all rights reserved. Band values paraphrased and flagged for verification. Credit: "Source: PAGASA." |
+| S21 | Leave No Trace Seven Principles (community brand guide) | Leave No Trace | https://lnt.org/wp-content/uploads/2026/01/LeaveNoTrace_Community_brandguide_1.26.26.pdf | Copyrighted. Passage 19 paraphrases the ideas only, does not reproduce the principle text and does not use the LNT name as a heading; it links to www.LNT.org. If the principles are ever shown verbatim, they must be unaltered, called "principles", and followed directly by "© Leave No Trace: www.LNT.org". |
+| S23 | Executive Order No. 56, s. 2018 (911 Nationwide Emergency Hotline), LawPhil copy | Office of the President (hosted by LawPhil) | https://lawphil.net/executive/execord/eo2018/eo_56_2018.html | Government work, no copyright (RA 8293 s.175, s.176). Credit: "Executive Order No. 56, s. 2018." |
