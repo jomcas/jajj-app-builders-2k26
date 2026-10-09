@@ -24,6 +24,9 @@ const SAME_IN_BOTH = new Set([
   '{max}° / {min}°',
   'Jump-off',
   'Campsite',
+  // Glossary terms used as is (CONTEXT.md).
+  'Destination',
+  'Group Hike',
   // The map's licence notice (Hike map) stays as written.
   '© OpenStreetMap contributors · © Protomaps',
 ]);
