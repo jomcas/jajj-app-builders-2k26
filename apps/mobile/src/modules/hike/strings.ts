@@ -72,6 +72,16 @@ const en = {
     'If you’re more than 40 m off the Trail for over 30 seconds, Tahak sounds an alarm and shows a notification, which a paired watch also gets. Android asks next.',
   allowNotifications: 'Allow',
   notNow: 'Not now',
+  // The Assistant's distance tool (issue #19), shown in the Ask tab.
+  toolDescription:
+    'During a Hike: the distance along the Trail and the ETA to the next Waypoint, or to the next one of a type (campsite, water, summit, jump-off).',
+  toolTitle: 'From your Hike',
+  toolNoHike: 'Start a Hike first on the Hike tab (a simulated walk works too). Then I can tell you how far the next Waypoint is.',
+  toolNoPosition: 'Your Hike is on, but there is no position yet. Stay where you can see the sky, then ask again.',
+  toolAhead: '{name} ({type}) is {distance} ahead along the Trail, {eta} away.',
+  toolBehind: '{name} ({type}) is behind you: {distance} back along the Trail, {eta} away.',
+  toolNoneAhead: 'There are no more Waypoints ahead on this leg of the Trail.',
+  toolNoneOfType: 'There is no {type} Waypoint on this Trail.',
   // Required wherever the map appears (OpenStreetMap and Protomaps licences).
   attribution: '© OpenStreetMap contributors · © Protomaps',
 };
@@ -142,6 +152,15 @@ const fil: Record<keyof typeof en, string> = {
     'Kapag lampas 40 m ka sa labas ng Trail nang higit 30 segundo, tutunog ang alarma ng Tahak at magpapakita ito ng notification, na matatanggap din ng naka-pair na relo. Susunod na magtatanong ang Android.',
   allowNotifications: 'Payagan',
   notNow: 'Hindi muna',
+  toolDescription:
+    'Habang naka-Hike: ang layo sa Trail at ETA papunta sa susunod na Waypoint, o sa susunod na isang uri nito (campsite, tubig, tuktok, jump-off).',
+  toolTitle: 'Mula sa Hike mo',
+  toolNoHike: 'Magsimula muna ng Hike sa Hike tab (puwede rin ang kunwaring lakad). Saka ko masasabi kung gaano kalayo ang susunod na Waypoint.',
+  toolNoPosition: 'Naka-Hike ka na, pero wala pang posisyon. Pumunta kung saan kita ang langit, saka magtanong ulit.',
+  toolAhead: '{distance} pa sa Trail ang {name} ({type}), {eta} pa.',
+  toolBehind: 'Nasa likod mo na ang {name} ({type}): {distance} pabalik sa Trail, {eta}.',
+  toolNoneAhead: 'Wala nang Waypoint sa unahan sa bahaging ito ng Trail.',
+  toolNoneOfType: 'Walang {type} na Waypoint sa Trail na ito.',
   // The attribution is a licence notice and stays as written.
   attribution: '© OpenStreetMap contributors · © Protomaps',
 };

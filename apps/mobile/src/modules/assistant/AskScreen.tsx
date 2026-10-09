@@ -34,8 +34,9 @@ type Message =
   | { id: string; role: 'user'; text: string }
   | { id: string; role: 'assistant'; text: string; reply?: Reply; error?: string };
 
-let nextId = 0;
-const newId = () => String(++nextId);
+// Random, not a module-level counter: Fast Refresh re-runs this file and would restart a
+// counter, giving two messages the same key.
+const newId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
 /** The Ask tab (U4): a chat with the on-device Assistant, answering from the search corpus. */
 export function AskScreen() {
@@ -224,6 +225,16 @@ function AssistantBubble({
     return (
       <View accessibilityLabel={s.assistant} style={styles.cardReply}>
         {reply.guideId ? <EmergencyGuideCard guideId={reply.guideId} /> : <DistressCard />}
+      </View>
+    );
+  }
+
+  // A module's tool answered (ADR 0001): its own fixed text, never the model's.
+  if (!error && reply?.kind === 'tool') {
+    return (
+      <View accessibilityLabel={s.assistant} style={box}>
+        {reply.result.title ? <Text style={[textStyles.labelStrong, { color: colors.muted }]}>{reply.result.title}</Text> : null}
+        <Text selectable style={[textStyles.body, { color: colors.ink }]}>{reply.result.text}</Text>
       </View>
     );
   }

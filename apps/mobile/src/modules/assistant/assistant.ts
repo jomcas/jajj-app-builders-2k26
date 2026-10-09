@@ -1,17 +1,20 @@
 // The Assistant as the app runs it: the pure pipeline (pipeline.ts) wired to the phone's
 // vector index and chat model. The chat screen and the adb bench both call answer().
 //
-//   answer(question) = emergencyRoute? → relevanceGate → retrieve → generate
+//   answer(question) = emergencyRoute? → tool? → relevanceGate → retrieve → generate
 //
 // Stage 1 is #15's emergency routing (routeEmergency): an emergency opens its Guide, bare
 // distress gets the distress card, and neither the gate nor the model runs (ADR 0003).
-// setEmergencyRoute() replaces it, for tests.
+// setEmergencyRoute() replaces it, for tests. Then the Feature Modules' tools (#19, ADR 0001),
+// collected from the registry (tools.ts).
 
 import diagnostics from '../../../modules/tahak-diagnostics';
 import type { Language } from '../../i18n/types';
 import { routeEmergency, toAssistantReply } from '../emergency';
 import { complete, loadModel } from './llm';
+import type { AssistantTool } from '../types';
 import { answerQuestion, type PipelineDeps, type Reply } from './pipeline';
+import { collectTools } from './tools';
 import { appIndex, type VectorIndex } from './vectorIndex';
 
 let emergencyRoute: PipelineDeps['emergencyRoute'] = async (question, language) =>
@@ -20,6 +23,18 @@ let emergencyRoute: PipelineDeps['emergencyRoute'] = async (question, language) 
 /** Stage 1 of the pipeline (ADR 0003), set by the emergency-routing ticket (#15). */
 export function setEmergencyRoute(route: PipelineDeps['emergencyRoute']) {
   emergencyRoute = route;
+}
+
+// The registry imports this module, so the tools are collected on first use rather than at
+// import time (a static import of the registry here would be a require cycle).
+let tools: readonly AssistantTool[] | null = null;
+function registeredTools(): readonly AssistantTool[] {
+  if (!tools) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- lazy, see above
+    const { featureModules } = require('../index') as typeof import('../index');
+    tools = collectTools(featureModules);
+  }
+  return tools;
 }
 
 // A test switch for "no Destination Pack downloaded" without deleting the pack:
@@ -78,6 +93,7 @@ async function runAnswer(
     language,
     {
       emergencyRoute,
+      tools: registeredTools(),
       search: (q) => index.search(q, { ignorePacks: skipPacks }),
       corpus: () => index.chunks({ ignorePacks: skipPacks }),
       threshold,
@@ -92,7 +108,8 @@ async function runAnswer(
 
 /** One line per answer under TAHAK_ASSISTANT: whether the model ran, the gate and the sources. */
 function logReply(question: string, language: Language, reply: Reply, ms: number) {
-  const generation = reply.kind === 'emergency' ? undefined : reply.generation;
+  const generation = reply.kind === 'emergency' || reply.kind === 'tool' ? undefined : reply.generation;
+  const gate = reply.kind === 'emergency' || reply.kind === 'tool' ? null : reply.gate;
   try {
     diagnostics.log(
       'TAHAK_ASSISTANT',
@@ -102,8 +119,9 @@ function logReply(question: string, language: Language, reply: Reply, ms: number
         ui: language,
         verdict: reply.kind === 'off-topic' ? `off-topic-${reply.reason}` : reply.kind === 'emergency' && reply.distress ? 'distress' : reply.kind,
         guide: reply.kind === 'emergency' ? (reply.guideId ?? null) : null,
-        best: reply.kind === 'emergency' ? null : Math.round(reply.gate.best * 1000) / 1000,
-        threshold: reply.kind === 'emergency' ? null : reply.gate.threshold,
+        tool: reply.kind === 'tool' ? { id: reply.toolId, args: reply.args, data: reply.result.data ?? null } : null,
+        best: gate ? Math.round(gate.best * 1000) / 1000 : null,
+        threshold: gate ? gate.threshold : null,
         llm_ran: !!generation,
         ttft_ms: generation?.ttftMs ?? null,
         gen_tps: generation ? Math.round(generation.generationTps * 10) / 10 : null,
