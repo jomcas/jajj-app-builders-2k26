@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { useStrings, useTheme } from '../../../settings/preferences';
 import { textStyles } from '../../../theme/typography';
+import { ForecastChip } from '../../forecast';
 import { fill, formatDistance, pad2, splitDuration } from '../format';
 import strings from '../strings';
 import type { HikeView } from '../trail/progress';
@@ -18,14 +19,16 @@ function etaText(s: Strings, seconds: number): string {
 
 /**
  * During a Hike: the next Waypoint (type icon and name), a peach chip with the distance along
- * the Trail and the ETA, the orange progress bar, and End Hike (docs/plan.md, U3). The space
- * under the progress bar is where Wave 3's Forecast and water chips go.
+ * the Trail and the ETA, the orange progress bar, the Destination's Forecast chip (from the
+ * forecast module), and End Hike (docs/plan.md, U3). The water chip can join the Forecast's row.
  */
 export function HikePanel({
+  destinationId,
   trailName,
   view,
   onEnd,
 }: {
+  destinationId: string;
   trailName: string;
   /** null until the first position arrives. */
   view: HikeView | null;
@@ -95,6 +98,8 @@ export function HikePanel({
           </View>
         </View>
       ) : null}
+
+      <ForecastChip destinationId={destinationId} />
 
       <PanelButton label={s.endHike} icon="flag-checkered" onPress={onEnd} />
     </Panel>

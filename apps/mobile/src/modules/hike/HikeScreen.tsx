@@ -267,7 +267,7 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
         {hike && entry ? (
           <>
             {view?.suggestEnd ? <EndSuggestion onEnd={endHike} onDismiss={dismiss} /> : null}
-            <HikePanel trailName={entry.trail.name} view={view} onEnd={confirmEnd} />
+            <HikePanel destinationId={pack.destination.id} trailName={entry.trail.name} view={view} onEnd={confirmEnd} />
           </>
         ) : (
           <TrailPickerCard
