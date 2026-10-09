@@ -120,7 +120,9 @@ function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, positi
     current && detector && isDeviation(detector)
       ? { startedMs: detector.startedMs, startedOffM: detector.startedOffM, toTrail: current.toTrail }
       : null;
-  return { view: current?.view ?? null, deviation, dismiss };
+  // The simulation bar shows the same distance the Deviation is measured on.
+  const offTrailM = current?.toTrail.offTrailM ?? null;
+  return { view: current?.view ?? null, deviation, offTrailM, dismiss };
 }
 
 /** The map of one Destination with the hiker's position, and the Hike on top of it. */
@@ -137,7 +139,7 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
   const { permission, position, source, requestPermission, retry } = useHikerPosition({
     gps: focused || hike !== null,
   });
-  const { view, deviation, dismiss } = useHikeTracking(hike?.id ?? null, entry, position);
+  const { view, deviation, offTrailM, dismiss } = useHikeTracking(hike?.id ?? null, entry, position);
   useDeviationAlerts(hike?.id ?? null, deviation);
 
   const map = useRef<HikeMapHandle>(null);
@@ -243,7 +245,7 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
       {hike ? <KeepScreenOn /> : null}
       {showTop ? (
         <View style={styles.top} onLayout={onTopLayout}>
-          {hike?.simulation ? <SimulationBar walk={hike.simulation} /> : null}
+          {hike?.simulation ? <SimulationBar walk={hike.simulation} offTrailM={offTrailM} /> : null}
           {deviation ? (
             <DeviationBanner
               offTrailM={deviation.toTrail.offTrailM}
