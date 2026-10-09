@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     gap: 4,
     height: 40,
     paddingHorizontal: 14,
-    borderRadius: 999,
+    borderRadius: 20,
     borderWidth: 1.5,
   },
   label: {

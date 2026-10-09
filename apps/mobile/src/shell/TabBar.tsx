@@ -46,7 +46,12 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             onPress={onPress}
             style={styles.tab}
           >
-            <View style={[styles.pill, focused && { backgroundColor: colors.tint }]}>
+            {/* Remount the pill when focus changes: on Android (Fabric, RN 0.86) a background added
+                to an already-mounted view ignores its borderRadius and draws square corners. */}
+            <View
+              key={focused ? 'active' : 'idle'}
+              style={[styles.pill, focused && { backgroundColor: colors.tint }]}
+            >
               <MaterialCommunityIcons
                 name={tab.icon}
                 size={24}
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
   pill: {
     width: 60,
     height: 32,
-    borderRadius: 999,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
