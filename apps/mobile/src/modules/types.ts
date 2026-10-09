@@ -5,6 +5,9 @@ export type TabId = 'explore' | 'hike' | 'ask' | 'guides';
 
 export type HikeMode = 'solo' | 'group';
 
+/** Props of a launch gate: it calls onDone once the hiker may continue, optionally naming the tab to open. */
+export type LaunchGateProps = { onDone: (next?: { tab: TabId }) => void };
+
 /** Where a module's screen goes. A module either fills one tab or has no screen at all. */
 type TabSlot =
   | {
@@ -31,4 +34,9 @@ export type FeatureModule = TabSlot & {
   hikeModes: readonly HikeMode[];
   /** What must already be on the phone for it to work offline (ADR 0002). */
   offlineNeeds: readonly ('model' | 'destination-pack' | 'guide-library' | 'forecast')[];
+  /**
+   * Optional full screen the shell shows before the tabs at launch, such as first-launch
+   * setup. It decides itself whether it is needed and calls onDone (at once, if not).
+   */
+  launchGate?: ComponentType<LaunchGateProps>;
 };

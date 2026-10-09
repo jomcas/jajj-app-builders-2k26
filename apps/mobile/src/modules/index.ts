@@ -3,7 +3,7 @@ import * as registry from './registry';
 import type { FeatureModule } from './types';
 
 export type { TabModule } from './indexByTab';
-export type { FeatureModule, HikeMode, TabId } from './types';
+export type { FeatureModule, HikeMode, LaunchGateProps, TabId } from './types';
 
 /** Every registered Feature Module, including those without a tab. */
 export const featureModules: readonly FeatureModule[] = Object.values(registry);
