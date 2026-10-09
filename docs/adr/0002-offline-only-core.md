@@ -1,0 +1,3 @@
+# Everything on the trail works with zero connectivity
+
+The tournament rule and the product need are the same: once a hiker has the Assistant model, the Guide Library, and a Destination Pack on the phone, every core feature works in airplane mode. That covers the map, Hike, Deviation, Assistant, Guides, Flare, and the last saved Forecast. The network is used only for **prerequisites**: the first-launch model download, Destination Pack downloads, Forecast refreshes, and the Admin Portal. No core feature may call a server at use time, not even as an optional enhancement. There is no online leaderboard or other "Hall of Fame".
