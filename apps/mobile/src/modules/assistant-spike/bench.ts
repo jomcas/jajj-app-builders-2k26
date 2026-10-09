@@ -7,6 +7,7 @@
 // describes the bundled photo, and logs the results to logcat under the tag TAHAK_BENCH:
 // one JSON "result" line per backend, then "answer" lines with the full answer text.
 import { Asset } from 'expo-asset';
+import { getBackendDevicesInfo } from 'llama.rn';
 import { Linking } from 'react-native';
 
 import diagnostics from '../../../modules/tahak-diagnostics';
@@ -121,7 +122,15 @@ export async function runBench({ backends, threads }: BenchOptions): Promise<voi
   const next = () => setState({ status: 'running', step: ++step, steps });
 
   try {
-    log({ type: 'start', run, backends, threads, airplane_mode: diagnostics.airplaneMode() });
+    const devices = await getBackendDevicesInfo();
+    log({
+      type: 'start',
+      run,
+      backends,
+      threads,
+      airplane_mode: diagnostics.airplaneMode(),
+      backend_devices: devices.map((d) => `${d.deviceName} (${d.backend}, ${d.type})`),
+    });
     const asset = Asset.fromModule(BENCH_PHOTO);
     await asset.downloadAsync();
     const photo = asset.localUri ?? asset.uri;
@@ -183,12 +192,21 @@ export async function runBench({ backends, threads }: BenchOptions): Promise<voi
   }
 }
 
+// Kept on globalThis so a Fast Refresh, which re-runs this file, replaces the listener
+// instead of adding another one (each extra listener would start another benchmark).
+type BenchGlobals = { tahakBenchLinks?: { remove(): void }; tahakBenchInitialUrlSeen?: boolean };
+const benchGlobals = globalThis as BenchGlobals;
+
 /** Starts the benchmark when the app is opened, or already open, with a bench link. */
 export function listenForBenchLinks() {
   const handle = (url: string | null) => {
     const options = parseBenchUrl(url, DEFAULT_THREADS);
     if (options) void runBench(options);
   };
-  void Linking.getInitialURL().then(handle);
-  Linking.addEventListener('url', ({ url }) => handle(url));
+  if (!benchGlobals.tahakBenchInitialUrlSeen) {
+    benchGlobals.tahakBenchInitialUrlSeen = true;
+    void Linking.getInitialURL().then(handle);
+  }
+  benchGlobals.tahakBenchLinks?.remove();
+  benchGlobals.tahakBenchLinks = Linking.addEventListener('url', ({ url }) => handle(url));
 }

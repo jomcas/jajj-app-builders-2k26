@@ -1,6 +1,13 @@
 // One llama.rn context for the spike: load Qwen3.5-4B plus its vision file (mmproj) on the
 // CPU or the GPU, then answer one question at a time, optionally about one photo.
-import { initLlama, releaseAllLlama, type LlamaContext } from 'llama.rn';
+import {
+  addNativeLogListener,
+  getBackendDevicesInfo,
+  initLlama,
+  releaseAllLlama,
+  toggleNativeLog,
+  type LlamaContext,
+} from 'llama.rn';
 
 import diagnostics from '../../../modules/tahak-diagnostics';
 import { SYSTEM_MESSAGE } from './prompts';
@@ -55,11 +62,39 @@ export const engineStore = {
   getSnapshot: () => state,
 };
 
-/** The model files sit in the app's external files directory, under models/. */
+/**
+ * Folder under the app's external files directory that holds the model files. The folder
+ * and files must be owned by the app: the app reads its external files directory through a
+ * bind mount with plain Unix permissions, so files pushed there with `adb push` (owned by
+ * the shell user, in a shell-owned folder) fail to open with "Permission denied". Copying
+ * them with `adb shell run-as com.tahak.app cp …` makes app-owned copies.
+ */
+export const MODEL_DIR = 'assistant-models';
+
 export function modelPaths(): { model: string; mmproj: string } {
   const dir = diagnostics.externalFilesDir();
   if (!dir) throw new Error('The external files directory is not available.');
-  return { model: `${dir}/models/${MODEL_FILE}`, mmproj: `${dir}/models/${MMPROJ_FILE}` };
+  return { model: `${dir}/${MODEL_DIR}/${MODEL_FILE}`, mmproj: `${dir}/${MODEL_DIR}/${MMPROJ_FILE}` };
+}
+
+/** llama.cpp's own log (model loading, backends, errors) goes to logcat under this tag. */
+export const LLAMA_LOG_TAG = 'TAHAK_LLAMA';
+// On globalThis so a Fast Refresh, which re-runs this file, does not add a second listener.
+type EngineGlobals = { tahakLlamaLog?: { remove(): void } };
+const engineGlobals = globalThis as EngineGlobals;
+
+async function forwardNativeLog() {
+  if (engineGlobals.tahakLlamaLog) return;
+  engineGlobals.tahakLlamaLog = addNativeLogListener((level, text) => {
+    const line = text.trimEnd();
+    if (line) diagnostics.log(LLAMA_LOG_TAG, `${level}: ${line}`);
+  });
+  await toggleNativeLog(true);
+}
+
+async function cpuDeviceName(): Promise<string> {
+  const info = await getBackendDevicesInfo();
+  return info.find((d) => d.type.toLowerCase() === 'cpu')?.deviceName ?? 'CPU';
 }
 
 let pending: Promise<LoadedModel> | null = null;
@@ -85,11 +120,15 @@ export function loadModel(
 
 async function doLoad(backend: Backend, threads: number): Promise<LoadedModel> {
   try {
+    await forwardNativeLog();
     // Only one model fits in memory: free the previous context first.
     await releaseAllLlama();
     setState({ status: 'loading', backend, percent: 0, phase: 'model' });
     const paths = modelPaths();
     const nGpuLayers = backend === 'gpu' ? GPU_LAYERS : 0;
+    // With no device list llama.rn picks the Adreno GPU (OpenCL) even when no layers are
+    // offloaded, so a CPU run names the CPU device explicitly.
+    const devices = backend === 'cpu' ? [await cpuDeviceName()] : undefined;
 
     const modelStart = Date.now();
     const context = await initLlama(
@@ -98,6 +137,7 @@ async function doLoad(backend: Backend, threads: number): Promise<LoadedModel> {
         n_ctx: N_CTX,
         n_threads: threads,
         n_gpu_layers: nGpuLayers,
+        devices,
         n_parallel: 1,
         use_mmap: true,
         use_mlock: false,
@@ -154,6 +194,11 @@ export type AnswerMetrics = {
 
 const N_PREDICT = 512;
 
+/** Drops the empty <think></think> block Qwen3.5 can still emit with thinking off. */
+export function withoutEmptyThinking(text: string): string {
+  return text.replace(/^\s*<think>\s*<\/think>\s*/, '').trim();
+}
+
 /**
  * Asks one question, optionally about one photo (a file:// URI or path), streaming the
  * answer through onText. Thinking mode is off so the latency is that of a direct answer.
@@ -182,7 +227,10 @@ export async function ask(
         { role: 'system', content: SYSTEM_MESSAGE },
         { role: 'user', content },
       ],
+      // Thinking off, both as llama.rn's flag and as the chat template's own switch.
       enable_thinking: false,
+      chat_template_kwargs: { enable_thinking: false },
+      reasoning_format: 'auto',
       n_predict: N_PREDICT,
       // Qwen3.5's suggested sampling for non-thinking answers; fixed seed for repeatable runs.
       temperature: 0.7,
@@ -194,13 +242,13 @@ export async function ask(
     (data) => {
       if (!firstTokenAt) firstTokenAt = Date.now();
       soFar += data.token;
-      onText?.(soFar);
+      onText?.(withoutEmptyThinking(soFar));
     },
   );
   const end = Date.now();
 
   return {
-    text: (result.content || result.text).trim(),
+    text: withoutEmptyThinking(result.content || result.text),
     promptTokens: result.timings.prompt_n,
     promptTps: result.timings.prompt_per_second,
     generatedTokens: result.timings.predicted_n,
