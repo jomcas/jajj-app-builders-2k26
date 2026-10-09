@@ -19,6 +19,8 @@ const SAME_IN_BOTH = new Set([
   '{region} · {elevation} m',
   'Jump-off',
   'Campsite',
+  // The map's licence notice (Hike map) stays as written.
+  '© OpenStreetMap contributors · © Protomaps',
 ]);
 
 const srcDir = join(import.meta.dirname, '..', 'src');
