@@ -48,7 +48,8 @@ const en = {
   simulationSpeed: 'Switch to {speed}×',
   simulationSpeedHint: 'Change how fast the simulated walk goes',
   goOffTrail: 'Go off the Trail',
-  scriptedOffTrail: 'Scripted: {metres} m off the Trail',
+  // The real distance from the Trail, as the Deviation measures it (see simulate/simulationLine.ts).
+  simulatedOffTrail: '{distance} off the Trail',
   // A Deviation (issue #8): the banner, the notification and the permission ask.
   deviationTitle: 'Off the Trail · {distance}',
   deviationHint: 'The Trail is to the {direction}. Head back the way the arrow points.',
@@ -119,7 +120,7 @@ const fil: Record<keyof typeof en, string> = {
   simulationSpeed: 'Gawing {speed}×',
   simulationSpeedHint: 'Palitan ang bilis ng kunwaring lakad',
   goOffTrail: 'Lumihis sa Trail',
-  scriptedOffTrail: 'Naka-script: {metres} m palayo sa Trail',
+  simulatedOffTrail: '{distance} palayo sa Trail',
   deviationTitle: 'Lihis sa Trail · {distance}',
   deviationHint: 'Nasa gawing {direction} ang Trail. Bumalik sa direksyong itinuturo ng arrow.',
   deviationHintBack: 'Bumalik sa Trail.',
