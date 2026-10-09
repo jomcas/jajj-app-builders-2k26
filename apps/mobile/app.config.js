@@ -60,6 +60,7 @@ module.exports = {
       // native libraries to the manifest so llama.rn can load them when the phone has them.
       ['llama.rn', { enableOpenCLAndHexagon: true }],
       './plugins/withArm64Only',
+      './plugins/withLlamaRnVariants',
     ],
   },
 };
