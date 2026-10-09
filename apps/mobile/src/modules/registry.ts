@@ -5,3 +5,4 @@
 // Nothing in src/shell/ changes.
 
 export {};
+export { default as placeholder } from './placeholder';
