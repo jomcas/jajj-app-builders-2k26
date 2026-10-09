@@ -7,3 +7,4 @@
 export { default as assistantSpike } from './assistant-spike';
 export { default as destinationPack } from './destination-pack';
 export { default as explore } from './explore';
+export { default as hike } from './hike';
