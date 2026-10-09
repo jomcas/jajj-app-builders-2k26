@@ -48,6 +48,14 @@ Every wave ends with a checkpoint that can be demoed in airplane mode.
 
 Hard rules: if Wave 0 fails, fix the model before anything else. No new features after hour 17.
 
+### Wave reports
+
+Every wave closes with a report in `docs/waves/wave-<N>-report.md`, written before the next wave starts. It has three parts:
+
+1. **What was built.** Each finished feature described from the hiker's point of view, with the tickets it closed. Also list what was cut or deferred.
+2. **How it was built.** The approach, the key libraries, the decisions made along the way (and any departure from this plan or the ADRs), and known limitations or shortcuts.
+3. **How to test it.** Numbered action items to run on the Flip 6. Each gives the starting state (online or airplane mode, pack downloaded or not), the exact steps, and the expected result. End with a short regression pass over earlier waves' checkpoints.
+
 ## Wave −1 (UI/UX): decisions
 
 All Wave −1 questions are settled. Next step: build the prototype (U7).
