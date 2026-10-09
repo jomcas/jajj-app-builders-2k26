@@ -1,0 +1,30 @@
+{
+  "waypoint-jump_off": {
+    "x": 0,
+    "y": 0,
+    "width": 60,
+    "height": 76,
+    "pixelRatio": 2
+  },
+  "waypoint-campsite": {
+    "x": 60,
+    "y": 0,
+    "width": 60,
+    "height": 76,
+    "pixelRatio": 2
+  },
+  "waypoint-water": {
+    "x": 120,
+    "y": 0,
+    "width": 60,
+    "height": 76,
+    "pixelRatio": 2
+  },
+  "waypoint-summit": {
+    "x": 180,
+    "y": 0,
+    "width": 60,
+    "height": 76,
+    "pixelRatio": 2
+  }
+}
