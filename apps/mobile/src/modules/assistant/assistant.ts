@@ -21,6 +21,15 @@ export function setEmergencyRoute(route: PipelineDeps['emergencyRoute']) {
 // A test switch for "no Destination Pack downloaded" without deleting the pack:
 // tahak://assistant/test?packs=none (and packs=all to undo), or the bench's packs=none.
 let ignorePacks = false;
+/**
+ * Which twin of each passage the model reads: the UI language's (default) or always English
+ * (the bench's passages=en). On the phone, Filipino passages gave the Filipino UI more accurate
+ * answers than translating English ones on the fly.
+ */
+let passageLanguageOverride: 'en' | 'ui' = 'ui';
+export function setPassageLanguage(value: 'en' | 'ui') {
+  passageLanguageOverride = value;
+}
 const testListeners = new Set<() => void>();
 
 export const testFlags = {
@@ -68,6 +77,7 @@ async function runAnswer(
       search: (q) => index.search(q, { ignorePacks: skipPacks }),
       corpus: () => index.chunks({ ignorePacks: skipPacks }),
       threshold,
+      passageLanguage: (ui) => (passageLanguageOverride === 'ui' ? ui : 'en'),
       generate: async (messages, onText) => complete(await loadModel('cpu'), messages, onText),
     },
     onDisplay,

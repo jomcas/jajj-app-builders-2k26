@@ -4,7 +4,8 @@
 //       Runs the test set. mode=gate (default) only embeds, searches and gates each question,
 //       which is fast and is what the threshold is tuned on. mode=full also runs the model.
 //       ui overrides each question's own UI language; packs=none hides every Destination
-//       Pack; embed picks another embedding model file; threshold overrides the model's.
+//       Pack; embed picks another embedding model file; threshold overrides the model's;
+//       passages=en gives the model English passages even in the Filipino UI.
 //   tahak://assistant/test?packs=none|all
 //       The chat's test switch for "no Destination Pack downloaded".
 //   tahak://spike/bench?backend=cpu|gpu|both&threads=<n>&image_tokens=<n>
@@ -20,6 +21,8 @@ export type AssistantBenchOptions = {
   embed?: string;
   threshold?: number;
   ids?: string[];
+  /** passages=en: give the model English passages even in the Filipino UI (default: UI language). */
+  passagesInEnglish?: boolean;
 };
 
 export type SpikeBenchOptions = {
@@ -51,6 +54,7 @@ export function parseAssistantBenchUrl(url: string | null): AssistantBenchOption
     embed: param(url, 'embed') || undefined,
     threshold: Number.isFinite(threshold) && param(url, 'threshold') ? threshold : undefined,
     ids: ids?.length ? ids : undefined,
+    passagesInEnglish: param(url, 'passages') === 'en' || undefined,
   };
 }
 

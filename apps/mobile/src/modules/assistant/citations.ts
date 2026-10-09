@@ -27,8 +27,12 @@ export function usedPassages<T>(raw: string, passages: readonly T[]): T[] {
   return citedNumbers(raw, passages.length).map((n) => passages[n - 1]);
 }
 
+/**
+ * The model said the passages don't answer the question: NONE at the start, or (as it
+ * sometimes does after a citation and an apology) anywhere as a word of its own.
+ */
 export function isNoAnswer(raw: string): boolean {
-  return new RegExp(`^\\W*${NO_ANSWER}\\b`).test(raw.trim());
+  return new RegExp(`(^|[^\\w])${NO_ANSWER}([^\\w]|$)`).test(raw.trim());
 }
 
 /** Caps the shown answer: whole sentences up to maxChars, or a cut at a word with an ellipsis. */

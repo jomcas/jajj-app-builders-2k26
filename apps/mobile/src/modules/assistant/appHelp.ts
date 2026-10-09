@@ -74,7 +74,7 @@ export const APP_HELP: readonly HelpPassage[] = [
   },
   {
     id: 'food',
-    title: { en: 'What to eat before and during a climb', fil: 'Ano ang kakainin bago at habang umaakyat' },
+    title: { en: 'What to eat before and during a climb', fil: 'Ano ang dapat kainin bago at habang umaakyat ng bundok' },
     text: {
       en: 'General advice: eat a proper meal with rice, bread or other carbohydrates a few hours before the climb, and a light snack just before you start. On the trail, eat small amounts often: trail mix, nuts, bananas, bread, biscuits, chocolate or energy bars. Bring packed rice meals for longer hikes. Salty snacks or electrolyte drinks help replace what you sweat out. Avoid heavy, oily food right before a steep climb.',
       fil: 'Pangkalahatang payo: kumain ng maayos na meal na may kanin, tinapay o ibang carbs ilang oras bago umakyat, at light snack bago mag-start. Sa trail, kumain nang paunti-unti pero madalas: trail mix, mani, saging, tinapay, biskwit, tsokolate o energy bar. Magbaon ng packed rice meal kung mahaba ang hike. Nakakatulong ang maaalat na snack o electrolyte drink para mapalitan ang nawawala sa pawis. Iwasan ang mabigat at mamantikang pagkain bago ang matarik na akyat.',

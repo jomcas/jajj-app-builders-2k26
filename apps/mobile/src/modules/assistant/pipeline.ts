@@ -40,6 +40,8 @@ export type PipelineDeps = {
   /** Embeds the question and returns the closest chunks, best first. */
   search: (question: string) => Promise<Hit[]>;
   threshold: number;
+  /** Which language's twin of each passage goes into the prompt, per UI language (default en; the app passes the UI language). */
+  passageLanguage?: (ui: Language) => Language;
   /** Runs the model, calling onText with the raw text so far. */
   generate: (messages: ChatMessage[], onText: (raw: string) => void) => Promise<GenerateResult>;
 };
@@ -73,10 +75,14 @@ export type Reply = EmergencyReply | OffTopicReply | AnswerReply;
 /**
  * The passages for the prompt: the best hits, one per group (an en/fil pair counts once),
  * at most max and within PASSAGE_SCORE_SPREAD of the best (fewer prompt tokens, less noise),
- * using the English twin when there is one. English sources give the 4B model
- * its most accurate grounding; the answer language is set by the system prompt.
+ * using the twin in the prefer language when there is one.
  */
-export function selectPassages(hits: readonly Hit[], all: readonly Chunk[], max = MAX_PROMPT_PASSAGES): Chunk[] {
+export function selectPassages(
+  hits: readonly Hit[],
+  all: readonly Chunk[],
+  max = MAX_PROMPT_PASSAGES,
+  prefer: Language = 'en',
+): Chunk[] {
   const groups: string[] = [];
   const floor = (hits[0]?.score ?? 0) - PASSAGE_SCORE_SPREAD;
   for (const hit of hits) {
@@ -87,7 +93,7 @@ export function selectPassages(hits: readonly Hit[], all: readonly Chunk[], max 
   return groups.map((group) => {
     const twins = all.filter((c) => c.group === group);
     const fromHits = hits.find((h) => h.chunk.group === group)!.chunk;
-    return twins.find((c) => c.language === 'en') ?? fromHits;
+    return twins.find((c) => c.language === prefer) ?? fromHits;
   });
 }
 
@@ -104,7 +110,7 @@ export async function answerQuestion(
   const gate = gateDecision(hits, deps.threshold);
   if (!gate.pass) return { kind: 'off-topic', reason: 'gate', gate, hits };
 
-  const passages = selectPassages(hits, deps.corpus());
+  const passages = selectPassages(hits, deps.corpus(), MAX_PROMPT_PASSAGES, deps.passageLanguage?.(language) ?? 'en');
   const messages = buildMessages(language, passages, question);
   const generation = await deps.generate(messages, (raw) => onDisplay?.(displayText(raw, passages.length)));
   const raw = generation.truncated ? trimUnfinished(generation.text) : generation.text;

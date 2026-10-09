@@ -19,7 +19,7 @@ import { gateDecision } from '../src/modules/assistant/gate.ts';
 import { stripMarkdown } from '../src/modules/assistant/markdown.ts';
 import { answerQuestion, selectPassages, type GenerateResult, type Hit } from '../src/modules/assistant/pipeline.ts';
 import { buildMessages, systemPrompt, userPrompt } from '../src/modules/assistant/prompt.ts';
-import { chipLabel, chipSources } from '../src/modules/assistant/sources.ts';
+import { chipGroups, chipLabel, chipSources } from '../src/modules/assistant/sources.ts';
 import { TEST_SET } from '../src/modules/assistant/testSet.ts';
 import { cosine, normalize, topK } from '../src/modules/assistant/vectors.ts';
 
@@ -180,6 +180,8 @@ test('citations: only numbers of given passages count, in first-cited order', ()
   assert.deepEqual(citedNumbers('[1, 3] text [Passage 2]', 3), [1, 3, 2]);
   assert.deepEqual(citedNumbers('[4] [0] no', 3), []);
   assert.deepEqual(usedPassages('NONE', ['a', 'b']), []);
+  assert.deepEqual(usedPassages('[1] Hindi nakita sa passages.\nNONE', ['a', 'b']), [], 'NONE after a citation');
+  assert.deepEqual(usedPassages('[1] Bring nonessential items.', ['a', 'b']), ['a']);
   assert.deepEqual(usedPassages('[2] yes', ['a', 'b']), ['b']);
 });
 
@@ -280,6 +282,11 @@ test('the prompt gets the best 3 passages close to the top score, one per en/fil
     selectPassages(hits, chunks).map((c) => c.id),
     ['pack:batulao-water-1-en', 'help:water:en', 'help:packing:en'],
   );
+  // The Filipino UI gets the Filipino twins.
+  assert.deepEqual(
+    selectPassages(hits, chunks, 3, 'fil').map((c) => c.id),
+    ['pack:batulao-water-1-fil', 'help:water:fil', 'help:packing:fil'],
+  );
   // Only passages within 0.1 of the best one.
   assert.deepEqual(
     selectPassages([hit('help:food:en', 0.8), hit('help:water:en', 0.69)], chunks).map((c) => c.id),
@@ -305,6 +312,15 @@ test('one chip per pack passage pair, Guide and help topic, with a readable labe
   assert.equal(chipLabel(chunks[0], s), 'Mt. Batulao · Water');
   assert.equal(chipLabel(guide[0], s), 'Guide: Snakebite');
   assert.equal(chipLabel(help[0], s), 'App help · Downloading a Destination Pack');
+  // Two Batulao water passages read the same, so they share one chip.
+  const water2 = packChunks({ ...pack, passages: [{ ...pack.passages[0], id: 'batulao-water-2-en' }] })[0];
+  assert.deepEqual(
+    chipGroups([chunks[0], water2, help[0]], s).map((g) => [g.label, g.chunks.length]),
+    [
+      ['Mt. Batulao · Water', 2],
+      ['App help · Downloading a Destination Pack', 1],
+    ],
+  );
 });
 
 // ---- test set ------------------------------------------------------------------------------

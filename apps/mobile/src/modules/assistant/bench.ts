@@ -9,7 +9,7 @@
 import { Linking } from 'react-native';
 
 import diagnostics from '../../../modules/tahak-diagnostics';
-import { answer, testFlags } from './assistant';
+import { answer, setPassageLanguage, testFlags } from './assistant';
 import {
   parseAssistantBenchUrl,
   parseSpikeBenchUrl,
@@ -56,6 +56,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
     (a, b) => Number((options.ui ?? a.ui) === 'fil') - Number((options.ui ?? b.ui) === 'fil'),
   );
   const memory = memorySampler();
+  setPassageLanguage(options.passagesInEnglish ? 'en' : 'ui');
   try {
     log({ type: 'start', run, mode: options.mode, model: spec.id, threshold, packs: options.ignorePacks ? 'none' : 'all', questions: questions.length, airplane_mode: diagnostics.airplaneMode() });
     const indexStart = Date.now();
@@ -138,6 +139,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
   } catch (error) {
     log({ type: 'error', run, error: error instanceof Error ? error.stack ?? error.message : String(error) });
   } finally {
+    setPassageLanguage('ui');
     memory.stop();
     running = false;
   }

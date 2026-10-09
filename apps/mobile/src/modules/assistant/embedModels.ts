@@ -28,22 +28,16 @@ export const EMBEDDING_GEMMA: EmbedModelSpec = {
   sha256: 'b5ce9d77a3fc4b3b39ccb5643c36777911cc4eb46a66962eadfa3f5f60490d63',
   query: (question) => `task: search result | query: ${question.trim()}`,
   passage: (chunk) => `title: ${chunk.title} | text: ${chunk.text}`,
+  // Tuned on the phone (testSet.ts): in-scope questions scored 0.44 and up, off-topic ones
+  // 0.37 at most; 0.40 sits in that gap.
   threshold: 0.4,
 };
 
-export const MULTILINGUAL_E5_SMALL: EmbedModelSpec = {
-  id: 'multilingual-e5-small-q8_0',
-  file: 'multilingual-e5-small-Q8_0.gguf',
-  url: 'https://huggingface.co/keisuke-miyako/multilingual-e5-small-gguf-q8_0/resolve/main/multilingual-e5-small-Q8_0.gguf',
-  bytes: 131953504,
-  sha256: '0d5a5a0b0ad84faad6357a6145e769b0661f0efbf53acf74598afc34dab454f4',
-  query: (question) => `query: ${question.trim()}`,
-  passage: (chunk) => `passage: ${chunk.title}. ${chunk.text}`,
-  pooling: 'mean',
-  threshold: 0.82,
-};
-
-export const EMBED_MODELS = [EMBEDDING_GEMMA, MULTILINGUAL_E5_SMALL] as const;
+// Also tried on the Flip 6: multilingual-e5-small Q8_0 (keisuke-miyako/multilingual-e5-small-
+// gguf-q8_0, 132 MB). Its third-party GGUF returned NaN vectors in llama.rn (it ships a BERT
+// WordPiece tokenizer for an XLM-R model), so it is not listed. Add a spec here to bench
+// another model with tahak://assistant/bench?embed=<file>.
+export const EMBED_MODELS: readonly EmbedModelSpec[] = [EMBEDDING_GEMMA];
 
 /** The model the app uses. */
 export const DEFAULT_EMBED_MODEL: EmbedModelSpec = EMBEDDING_GEMMA;

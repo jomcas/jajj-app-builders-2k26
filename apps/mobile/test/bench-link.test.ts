@@ -58,6 +58,7 @@ test('the Assistant bench defaults to the fast gate-only mode', () => {
     embed: undefined,
     threshold: undefined,
     ids: undefined,
+    passagesInEnglish: undefined,
   });
 });
 
@@ -73,9 +74,11 @@ test('the Assistant bench reads mode, ui, packs, embed, threshold and ids', () =
       embed: 'multilingual-e5-small-Q8_0.gguf',
       threshold: 0.45,
       ids: ['a', 'b'],
+      passagesInEnglish: undefined,
     },
   );
   assert.equal(parseAssistantBenchUrl('tahak://assistant/bench?ui=de')?.ui, undefined);
+  assert.equal(parseAssistantBenchUrl('tahak://assistant/bench?passages=en')?.passagesInEnglish, true);
   assert.equal(parseAssistantBenchUrl('tahak://assistant/bench?threshold=x')?.threshold, undefined);
 });
 
