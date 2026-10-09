@@ -141,7 +141,7 @@ const help = helpChunks(APP_HELP);
 test('the English UI prompt asks for English and has no Taglish examples', () => {
   const system = systemPrompt('en');
   assert.match(system, /Answer only from the numbered passages/);
-  assert.match(system, /reply\s+with exactly: NONE/);
+  assert.match(system, /reply only: NONE/);
   assert.match(system, /Always answer in clear, simple English/);
   assert.match(system, /under 70 words/);
   assert.doesNotMatch(system, /Taglish:/);
@@ -268,17 +268,22 @@ test('the emergency route runs first and skips everything else', async () => {
   assert.equal(calls.generate, 0);
 });
 
-test('the prompt gets the best 3 passages, one per en/fil pair', () => {
+test('the prompt gets the best 3 passages close to the top score, one per en/fil pair', () => {
   const hits = [
     hit('pack:batulao-water-1-fil', 0.8),
     hit('pack:batulao-water-1-en', 0.79),
-    hit('help:water:fil', 0.7),
-    hit('help:packing:en', 0.6),
-    hit('help:food:en', 0.5),
+    hit('help:water:fil', 0.75),
+    hit('help:packing:en', 0.72),
+    hit('help:food:en', 0.69),
   ];
   assert.deepEqual(
     selectPassages(hits, chunks).map((c) => c.id),
     ['pack:batulao-water-1-en', 'help:water:en', 'help:packing:en'],
+  );
+  // Only passages within 0.1 of the best one.
+  assert.deepEqual(
+    selectPassages([hit('help:food:en', 0.8), hit('help:water:en', 0.69)], chunks).map((c) => c.id),
+    ['help:food:en'],
   );
 });
 

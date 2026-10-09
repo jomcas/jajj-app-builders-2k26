@@ -50,7 +50,11 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
   const spec = embedModelByFile(options.embed) ?? DEFAULT_EMBED_MODEL;
   const index: VectorIndex = spec.id === appIndex.spec.id ? appIndex : createVectorIndex(spec);
   const threshold = options.threshold ?? spec.threshold;
-  const questions = TEST_SET.filter((q) => !options.ids || options.ids.includes(q.id));
+  // Grouped by UI language, as a hiker uses one language at a time: the system prompt (one per
+  // language) can then come from llama.rn's prompt cache.
+  const questions = TEST_SET.filter((q) => !options.ids || options.ids.includes(q.id)).sort(
+    (a, b) => Number((options.ui ?? a.ui) === 'fil') - Number((options.ui ?? b.ui) === 'fil'),
+  );
   const memory = memorySampler();
   try {
     log({ type: 'start', run, mode: options.mode, model: spec.id, threshold, packs: options.ignorePacks ? 'none' : 'all', questions: questions.length, airplane_mode: diagnostics.airplaneMode() });
@@ -95,6 +99,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
         ttft_ms: gen?.ttftMs ?? null,
         gen_tps: gen ? round(gen.generationTps) : null,
         prompt_tokens: gen?.promptTokens ?? null,
+        cached_tokens: gen?.cachedTokens ?? null,
         gen_tokens: gen?.generatedTokens ?? null,
         truncated: gen?.truncated ?? null,
         total_ms: Date.now() - started,

@@ -230,6 +230,7 @@ export async function complete(
   return {
     text: withoutEmptyThinking(result.content || result.text),
     promptTokens: result.timings.prompt_n,
+    cachedTokens: result.timings.cache_n,
     promptTps: result.timings.prompt_per_second,
     generatedTokens: result.timings.predicted_n,
     generationTps: result.timings.predicted_per_second,

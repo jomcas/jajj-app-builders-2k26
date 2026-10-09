@@ -15,7 +15,7 @@ import type { Language } from '../../i18n/types';
 import { displayText, trimUnfinished, usedPassages } from './citations.ts';
 import type { Chunk } from './corpus';
 import { gateDecision, type GateDecision } from './gate.ts';
-import { buildMessages, MAX_PROMPT_PASSAGES, type ChatMessage } from './prompt.ts';
+import { buildMessages, MAX_PROMPT_PASSAGES, PASSAGE_SCORE_SPREAD, type ChatMessage } from './prompt.ts';
 
 export type Hit = { chunk: Chunk; score: number };
 
@@ -28,6 +28,8 @@ export type GenerateResult = {
   truncated: boolean;
   ttftMs: number;
   generationTps: number;
+  /** Prompt tokens reused from llama.rn's cache rather than evaluated. */
+  cachedTokens?: number;
   promptTokens: number;
   generatedTokens: number;
 };
@@ -70,12 +72,15 @@ export type Reply = EmergencyReply | OffTopicReply | AnswerReply;
 
 /**
  * The passages for the prompt: the best hits, one per group (an en/fil pair counts once),
- * at most max, using the English twin when there is one. English sources give the 4B model
+ * at most max and within PASSAGE_SCORE_SPREAD of the best (fewer prompt tokens, less noise),
+ * using the English twin when there is one. English sources give the 4B model
  * its most accurate grounding; the answer language is set by the system prompt.
  */
 export function selectPassages(hits: readonly Hit[], all: readonly Chunk[], max = MAX_PROMPT_PASSAGES): Chunk[] {
   const groups: string[] = [];
+  const floor = (hits[0]?.score ?? 0) - PASSAGE_SCORE_SPREAD;
   for (const hit of hits) {
+    if (hit.score < floor) break;
     if (!groups.includes(hit.chunk.group)) groups.push(hit.chunk.group);
     if (groups.length === max) break;
   }
