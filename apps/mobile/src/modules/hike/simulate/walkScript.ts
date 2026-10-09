@@ -57,11 +57,18 @@ export type WalkSample = LatLon & {
   intendedOffM: number;
 };
 
+/** How much further than its offset an excursion may walk out to really be that far off. */
+const MAX_REACH = 4;
+const REACH_STEP_M = 5;
+
 /**
  * The positions of an excursion that starts and ends at `anchor` on the Trail: walk straight
- * out at right angles to the Trail, hold at the offset, walk back. Goes to whichever side
- * keeps it furthest from every part of the Trail (switchbacks can bring another leg close).
- * One sample per simulated second, starting one second after `startS`.
+ * out, hold at the offset, walk back. It goes at right angles to the Trail, to whichever side
+ * keeps it furthest from every part of the Trail. Where switchbacks bring other legs close,
+ * it walks further out (up to 4× the offset), and in another direction if neither side works,
+ * so it really is `offsetM` from the whole Trail at the hold, as the Deviation measures it
+ * (#8). One sample per simulated second, starting one second after `startS`; the timing does
+ * not change with the extra distance.
  */
 export function excursionSamples(
   trail: PreparedTrail,
@@ -72,10 +79,26 @@ export function excursionSamples(
 ): WalkSample[] {
   const { offsetM, holdS } = EXCURSIONS[kind];
   const { point: anchor, bearingDeg } = pointAlongTrail(trail, anchorAlongM);
-  const sides = [bearingDeg + 90, bearingDeg - 90].map((bearing) => (bearing + 360) % 360);
-  const offTrail = (bearing: number) =>
-    locateOnTrail(destinationPoint(anchor, offsetM, bearing), trail)?.offTrailM ?? 0;
-  const side = offTrail(sides[0]) >= offTrail(sides[1]) ? sides[0] : sides[1];
+  const offTrail = (bearing: number, metres: number) =>
+    locateOnTrail(destinationPoint(anchor, metres, bearing), trail)?.offTrailM ?? 0;
+  /** How far out along `bearing` to walk to be offsetM from the Trail, and how far off that is. */
+  const reachOf = (bearing: number) => {
+    let reachM = offsetM;
+    while (offTrail(bearing, reachM) < offsetM - 0.5 && reachM < offsetM * MAX_REACH) reachM += REACH_STEP_M;
+    return { bearing, reachM, offM: offTrail(bearing, reachM) };
+  };
+  const better = (a: ReturnType<typeof reachOf>, b: ReturnType<typeof reachOf>) =>
+    a.reachM < b.reachM || (a.reachM === b.reachM && a.offM >= b.offM) ? a : b;
+  const normal = (bearing: number) => ((bearing % 360) + 360) % 360;
+  let best = better(reachOf(normal(bearingDeg + 90)), reachOf(normal(bearingDeg - 90)));
+  if (best.offM < offsetM - 0.5) {
+    for (let turn = 0; turn < 360; turn += 30) {
+      const other = reachOf(normal(bearingDeg + turn));
+      if (other.offM > best.offM + 0.5 || (other.offM >= offsetM - 0.5 && other.reachM < best.reachM)) best = other;
+    }
+  }
+  const side = best.bearing;
+  const stretch = best.reachM / offsetM;
 
   const rampS = Math.max(1, Math.round(offsetM / WALK.offTrailMps));
   const offsets: number[] = [];
@@ -84,7 +107,7 @@ export function excursionSamples(
   for (let s = rampS - 1; s >= 0; s--) offsets.push((offsetM * s) / rampS);
 
   return offsets.map((offset, i) => ({
-    ...destinationPoint(anchor, offset, side),
+    ...destinationPoint(anchor, offset * stretch, side),
     tS: startS + i + 1,
     phase,
     alongM: anchorAlongM,

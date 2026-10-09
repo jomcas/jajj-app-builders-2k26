@@ -73,6 +73,24 @@ module.exports = {
           isIosBackgroundLocationEnabled: false,
         },
       ],
+      [
+        'expo-notifications',
+        {
+          // Deviation alerts (issue #8). The small icon is the monochrome app icon (Android
+          // uses only its shape).
+          icon: './assets/android-icon-monochrome.png',
+        },
+      ],
+      [
+        'expo-audio',
+        {
+          // Only plays the short Deviation alert tone (issue #8), in the app: no recording, so
+          // no microphone, and no background playback service.
+          microphonePermission: false,
+          recordAudioAndroid: false,
+          enableBackgroundPlayback: false,
+        },
+      ],
       './plugins/withArm64Only',
       './plugins/withLlamaRnVariants',
     ],

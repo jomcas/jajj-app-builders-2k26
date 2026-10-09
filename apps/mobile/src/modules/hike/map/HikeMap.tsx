@@ -20,6 +20,7 @@ import {
   activeTrailFilter,
   buildMapStyle,
   gpsLayers,
+  hiddenFilter,
   nextWaypointFilter,
   nextWaypointRingLayers,
   trailLayers,
@@ -45,6 +46,8 @@ type HikeMapProps = {
   follow?: boolean;
   /** Called when the hiker drags or zooms the map themselves (to pause following). */
   onUserMove?: () => void;
+  /** Called with the map's bearing (degrees from north-up) whenever it settles. */
+  onBearingChange?: (bearingDeg: number) => void;
   /** Space taken by panels over the map, so the camera centres in what is left. */
   inset?: Inset;
 };
@@ -70,6 +73,7 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
     nextWaypointId = null,
     follow = false,
     onUserMove,
+    onBearingChange,
     inset = NO_INSET,
   },
   ref,
@@ -86,7 +90,8 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
   );
   const geojson = useMemo(() => packToGeoJSON(pack), [pack]);
   const hiker = useMemo(() => positionToGeoJSON(position), [position]);
-  const [trailOutline, trailLine] = trailLayers(colors, { dashed: trailDashed });
+  const [trailOutline, trailLine] = trailLayers(colors);
+  const [, trailLineDashed] = trailLayers(colors, { dashed: true });
   const [gpsHalo, gpsDot] = gpsLayers(colors);
   const [ringOutline, ring] = nextWaypointRingLayers(colors);
   const trailFilter = activeTrailFilter(activeTrailId);
@@ -159,6 +164,7 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
       onRegionDidChange={(event: NativeSyntheticEvent<ViewStateChangeEvent>) => {
         const { center, zoom, bearing } = event.nativeEvent;
         lastView.current = { center, zoom, bearing };
+        onBearingChange?.(bearing ?? 0);
       }}
       style={StyleSheet.absoluteFill}
       mapStyle={mapStyle}
@@ -180,7 +186,9 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
       />
       <GeoJSONSource id="trails" data={geojson.trails}>
         <Layer {...trailOutline} filter={trailFilter} />
-        <Layer {...trailLine} filter={trailFilter} />
+        {/* Both lines stay mounted; a Deviation shows the dashed one instead (#8). */}
+        <Layer {...trailLine} filter={trailDashed ? hiddenFilter : trailFilter} />
+        <Layer {...trailLineDashed} filter={trailDashed ? trailFilter : hiddenFilter} />
       </GeoJSONSource>
       <GeoJSONSource id="waypoints" data={geojson.waypoints}>
         <Layer {...ringOutline} filter={nextWaypointFilter(nextWaypointId)} />
