@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A made-up Trail near Mt. Ulap for testing the Admin Portal. Not a real Trail. -->
+<gpx version="1.1" creator="tahak-admin tests" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Test file</name></metadata>
+  <wpt lat="16.3000" lon="120.6400"><name>Not a Trail point</name></wpt>
+  <trk>
+    <name>Test Trail &amp; Ridge</name>
+    <trkseg>
+      <trkpt lat="16.3100" lon="120.6450"><ele>1200</ele></trkpt>
+      <trkpt lat="16.3080" lon="120.6440"><ele>1260</ele></trkpt>
+      <trkpt lat="16.3080" lon="120.6440"><ele>1260</ele></trkpt>
+      <trkpt lon="120.6425" lat="16.3060"><ele>1330</ele></trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat='16.3040' lon='120.6410'><ele>1400</ele></trkpt>
+      <trkpt lat="16.3015" lon="120.6395"><name>a point name</name></trkpt>
+      <trkpt lat="16.2990" lon="120.6380"/>
+    </trkseg>
+  </trk>
+</gpx>
