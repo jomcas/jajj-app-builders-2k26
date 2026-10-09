@@ -1,6 +1,6 @@
 import type { TextStyle } from 'react-native';
 
-// Font files are embedded in the APK by the expo-font config plugin (app.json), so nothing
+// Font files are embedded in the APK by the expo-font config plugin (app.config.js), so nothing
 // is loaded at runtime (ADR 0002). On Android the family name is the file name.
 export const fonts = {
   heading: 'BarlowCondensed_600SemiBold',
