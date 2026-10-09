@@ -4,8 +4,8 @@
 //   export { default as <id> } from './<id>';
 // Nothing in src/shell/ changes.
 
+export { default as assistant } from './assistant';
 export { default as assistantModel } from './assistant-model';
-export { default as assistantSpike } from './assistant-spike';
 export { default as destinationPack } from './destination-pack';
 export { default as explore } from './explore';
 export { default as firstLaunch } from './first-launch';
