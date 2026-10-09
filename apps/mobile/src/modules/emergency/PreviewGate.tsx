@@ -7,16 +7,18 @@ import { usePreferences, useStrings, useTheme } from '../../settings/preferences
 import { textStyles } from '../../theme/typography';
 import { getGuide } from '../guides';
 import type { LaunchGateProps } from '../types';
+import { DistressCard } from './DistressCard';
 import { EmergencyGuideCard } from './EmergencyGuideCard';
 import { parsePreviewLink, type PreviewRequest } from './previewLink';
 import { routeEmergency } from './route';
 import strings from './strings';
 
-// DEV ONLY. A way to see and test <EmergencyGuideCard> on the phone before the Assistant chat
+// DEV ONLY. A way to see and test <EmergencyGuideCard> and <DistressCard> on the phone before the Assistant chat
 // (#14) shows it, without touching another module's screen:
 //
 //   adb shell am start -a android.intent.action.VIEW -d "tahak://emergency/preview/snakebite?lang=fil&theme=night" com.tahak.app
 //   adb shell am start -a android.intent.action.VIEW -d "tahak://emergency/ask?q=nakagat%20ng%20ahas" com.tahak.app
+//   adb shell am start -a android.intent.action.VIEW -d "tahak://emergency/distress?lang=en&theme=day" com.tahak.app
 //
 // A module without a tab has no screen, so the preview is a launch gate: the link is saved and
 // the JS reloads, and on the next launch the gate shows the preview until it is closed or
@@ -81,7 +83,8 @@ export function PreviewGate({ onDone }: LaunchGateProps) {
   if (!request) return <View style={[styles.fill, { backgroundColor: colors.page }]} />;
 
   const route = request.kind === 'ask' ? routeEmergency(request.question, language) : null;
-  const guideId = request.kind === 'guide' ? request.guideId : route?.guideId;
+  const guideId = request.kind === 'guide' ? request.guideId : route?.kind === 'guide' ? route.guideId : undefined;
+  const distress = request.kind === 'distress' || route?.kind === 'distress';
 
   return (
     <ScrollView
@@ -93,9 +96,11 @@ export function PreviewGate({ onDone }: LaunchGateProps) {
         <View style={styles.block}>
           <Text style={[textStyles.bodyStrong, { color: colors.ink }]}>{fill(s.previewQuestion, { question: request.question })}</Text>
           <Text style={[textStyles.label, { color: colors.muted }]}>
-            {route
+            {route?.kind === 'guide'
               ? `${fill(s.previewRouted, { id: route.guideId, confidence: String(route.confidence) })}\n${fill(s.previewMatched, { matched: route.matched.join(', ') })}`
-              : s.previewNotEmergency}
+              : route?.kind === 'distress'
+                ? `${s.previewDistress}\n${fill(s.previewMatched, { matched: route.matched.join(', ') })}`
+                : s.previewNotEmergency}
           </Text>
         </View>
       ) : null}
@@ -103,6 +108,7 @@ export function PreviewGate({ onDone }: LaunchGateProps) {
         <Text style={[textStyles.body, { color: colors.ink }]}>{fill(s.previewUnknown, { id: guideId })}</Text>
       ) : null}
       {guideId ? <EmergencyGuideCard guideId={guideId} onOpened={() => onDone({ tab: 'guides' })} /> : null}
+      {distress ? <DistressCard onOpened={() => onDone({ tab: 'guides' })} /> : null}
       <View style={styles.row}>
         <Pressable
           accessibilityRole="button"

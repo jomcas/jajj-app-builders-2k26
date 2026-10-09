@@ -1,8 +1,9 @@
 // The fixed emergency-routing test sets (issue #15). Pure data. test/emergency.test.ts runs
 // them, and the Assistant's bench (#14) can reuse them.
 //
-// expected: the Guide id the question must open, or null when it must not trigger the
-// emergency card (the question then goes on to the relevance gate and the Assistant).
+// expected: the Guide id the question must open, 'distress' for the distress card (bare
+// "help" with no topic), or null when it must trigger neither card (the question then goes
+// on to the relevance gate and the Assistant).
 
 export type RoutingCase = { question: string; expected: string | null; note?: string };
 
@@ -99,6 +100,17 @@ export const EMERGENCY_QUESTIONS: readonly RoutingCase[] = [
   { question: 'Flash flood sa creek!', expected: 'flash-floods' },
   { question: 'biglang tumaas ang tubig sa ilog', expected: 'flash-floods' },
   { question: 'Sobrang sakit ng ulo ko sa taas, hirap huminga', expected: 'altitude-sickness' },
+  // Bare distress, no topic: the distress card (911, the Flare hint, the top Emergency Guides).
+  { question: 'help', expected: 'distress' },
+  { question: 'HELP!!!', expected: 'distress' },
+  { question: 'Tulong po!', expected: 'distress' },
+  { question: 'saklolo', expected: 'distress' },
+  { question: 'SOS', expected: 'distress' },
+  { question: 'May emergency!', expected: 'distress' },
+  { question: 'help us please', expected: 'distress' },
+  { question: 'tulungan nyo kami', expected: 'distress' },
+  { question: 'we need help now', expected: 'distress' },
+  { question: "help, I don't know what to do", expected: 'distress' },
 ];
 
 /** Ordinary questions that must not trigger the emergency card. */
@@ -189,4 +201,11 @@ export const EDGE_CASES: readonly RoutingCase[] = [
   { question: 'What should I do if I see a snake on the trail?', expected: 'snakebite', note: 'accepted false positive: a snake encounter opens the Snakebite Guide' },
   { question: 'Is the current strong at the river crossing?', expected: 'flash-floods', note: 'accepted: the Guide covers river crossings' },
   { question: 'is it bad if a snake bit my dog', expected: 'snakebite', note: 'accepted: no Guide for animals; the human Guide is the closest' },
+  { question: 'help, nakagat ng ahas', expected: 'snakebite', note: 'a Guide match wins over distress' },
+  { question: 'Tulong po, naliligaw kami', expected: 'lost-on-the-trail', note: 'a Guide match wins over distress' },
+  { question: 'What does the SOS button do?', expected: null, note: 'app help, not distress' },
+  { question: 'Where is the SOS control?', expected: null, note: 'app help, not distress' },
+  { question: "What's the emergency number in the Philippines?", expected: null, note: 'a question, not distress' },
+  { question: 'Can you help me plan my trip to Batulao?', expected: null, note: '"help" in an ordinary request' },
+  { question: "I don't need help, just checking the app", expected: null, note: 'negated' },
 ];

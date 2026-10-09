@@ -451,3 +451,43 @@ export const SHORT_QUESTION_WORDS = 3;
 
 /** A Guide fires at this score. */
 export const FIRE_AT = 1;
+
+// Distress with no topic ("help", "tulong po", "SOS", "may emergency"). When no Guide fires and
+// the whole message is made of these words, the router returns { kind: 'distress' } and the
+// Assistant shows the distress card (911, the Flare hint, the top Emergency Guides).
+
+/** At least one of these must be in the message. */
+export const DISTRESS_WORDS: ReadonlySet<string> = new Set([
+  'help', 'helpp', 'sos', 'emergency', 'emergencia', 'mayday', 'rescue', '911',
+  'tulong', 'tulungan', 'saklolo', 'sagipin', 'iligtas', 'emerhensya', 'emerhensiya',
+]);
+
+/** Phrases that may surround a distress word ("I don't know what to do"). Removed first. */
+export const DISTRESS_PHRASES: readonly string[] = [
+  'dont know what to do', 'what do i do', 'what do we do', 'what should i do', 'what should we do',
+  'hindi ko alam ano gagawin', 'hindi namin alam ano gagawin', 'hindi ko alam gagawin', 'ano gagawin',
+  'ano gagawin ko', 'ano gagawin namin', 'right now', 'as soon as possible', 'call for help', 'send help',
+];
+
+/**
+ * The only other words a bare distress message may contain: pronouns, politeness, urgency.
+ * No question words ("how", "paano", "what does") and no "use", "button", "work", so questions
+ * about the app ("paano gamitin ang SOS?") are never distress.
+ */
+export const DISTRESS_FILLERS: ReadonlySet<string> = new Set([
+  'please', 'po', 'pakiusap', 'paki', 'naman', 'talaga', 'na', 'ngayon', 'now', 'asap', 'quick', 'quickly', 'agad',
+  'bilis', 'dali', 'need', 'needs', 'needed', 'kailangan', 'ng', 'nang', 'may', 'there', 'is', 'its', 'an', 'a', 'i',
+  'im', 'me', 'my', 'we', 'were', 'us', 'our', 'someone', 'somebody', 'anyone', 'anybody', 'ako', 'ko', 'kami',
+  'namin', 'natin', 'tayo', 'kayo', 'nyo', 'niyo', 'mo', 'ka', 'sa', 'akin', 'amin', 'call', 'send', 'get', 'oh',
+  'god', 'diyos', 'hey', 'guys', 'pls', 'here', 'dito', 'urgent', 'this', 'it', 'and', 'at', 'si', 'ang', 'yung',
+  'mga', 'baka', 'yes',
+]);
+
+/** The Emergency Guides the distress card links to, most likely first. */
+export const DISTRESS_GUIDES: readonly string[] = [
+  'lost-on-the-trail',
+  'bleeding-wounds',
+  'snakebite',
+  'sprains-fractures',
+  'hypothermia',
+];

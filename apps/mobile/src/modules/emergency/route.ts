@@ -1,7 +1,7 @@
 // The router over the bundled Guide Library, built once on first use.
 import type { Language } from '../../i18n/types';
 import { listGuides } from '../guides';
-import { createEmergencyRouter, type EmergencyRoute, type EmergencyRouter, type Explanation, type SecondStage } from './router';
+import { createEmergencyRouter, type EmergencyResult, type EmergencyRouter, type Explanation, type SecondStage } from './router';
 
 let router: EmergencyRouter | null = null;
 
@@ -12,13 +12,16 @@ function getRouter(): EmergencyRouter {
 
 /**
  * Is this question an emergency, and which Guide answers it? Fast (about a millisecond),
- * deterministic and offline. Returns null for anything else, which then goes on to the
- * relevance gate and the Assistant (ADR 0005).
+ * deterministic and offline.
+ *   { kind: 'guide', guideId, confidence, matched }  open that Guide (EmergencyGuideCard)
+ *   { kind: 'distress', matched }                    bare "help"/"tulong"/"SOS" (DistressCard)
+ *   null                                             not an emergency: on to the relevance gate
+ *                                                    and the Assistant (ADR 0005)
  *
  * Matching always uses both English and Filipino, because hikers mix them (Taglish);
  * uiLanguage is accepted for the pipeline's sake and does not change the result.
  */
-export function routeEmergency(question: string, uiLanguage: Language): EmergencyRoute | null {
+export function routeEmergency(question: string, uiLanguage: Language): EmergencyResult | null {
   return getRouter().route(question, uiLanguage);
 }
 
@@ -27,7 +30,7 @@ export function routeEmergencyWithSecondStage(
   question: string,
   uiLanguage: Language,
   secondStage?: SecondStage,
-): Promise<EmergencyRoute | null> {
+): Promise<EmergencyResult | null> {
   return getRouter().routeWithSecondStage(question, uiLanguage, secondStage);
 }
 

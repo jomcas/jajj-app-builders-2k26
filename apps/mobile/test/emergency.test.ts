@@ -5,10 +5,11 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 
-import { RULES, PRIORITY } from '../src/modules/emergency/lexicon.ts';
+import { DISTRESS_GUIDES, PRIORITY, RULES } from '../src/modules/emergency/lexicon.ts';
 import { editDistance, stems, tokenize, wordMatches } from '../src/modules/emergency/normalize.ts';
 import { parsePreviewLink } from '../src/modules/emergency/previewLink.ts';
-import { createEmergencyRouter } from '../src/modules/emergency/router.ts';
+import { isBareDistress } from '../src/modules/emergency/distress.ts';
+import { createEmergencyRouter, type EmergencyResult } from '../src/modules/emergency/router.ts';
 import strings from '../src/modules/emergency/strings.ts';
 import { cardSummary, helpOptions, TWO_LINES } from '../src/modules/emergency/summary.ts';
 import { EDGE_CASES, EMERGENCY_QUESTIONS, ORDINARY_QUESTIONS, type RoutingCase } from '../src/modules/emergency/testSet.ts';
@@ -22,6 +23,12 @@ const guides: Guide[] = loadGuides(
     .map((file) => ({ source: file, raw: JSON.parse(readFileSync(join(contentDir, file), 'utf8')) })),
 ).guides;
 const router = createEmergencyRouter(guides);
+
+/** A route as the test sets write it: the Guide id, 'distress', or null. */
+function outcome(result: EmergencyResult | null): string | null {
+  if (!result) return null;
+  return result.kind === 'guide' ? result.guideId : 'distress';
+}
 const EMERGENCY_IDS = guides.filter((guide) => guide.kind === 'emergency').map((guide) => guide.id);
 
 // Normalisation
@@ -102,13 +109,13 @@ test('editDistance counts edits and adjacent swaps, and stops early', () => {
 test('a tie goes to the more time-critical Guide: bleeding from a snakebite opens Snakebite', () => {
   const explanation = router.explain('bleeding from a snakebite');
   assert.equal(explanation.scores.snakebite, explanation.scores['bleeding-wounds']);
-  assert.equal(router.route('bleeding from a snakebite', 'en')?.guideId, 'snakebite');
+  assert.equal(outcome(router.route('bleeding from a snakebite', 'en')), 'snakebite');
 });
 
 test('a topic word alone does not fire; with a distress cue or a second concept it does', () => {
   assert.equal(router.route('May ahas ba sa Batulao?', 'fil'), null);
-  assert.equal(router.route('May ahas! Tulong!', 'fil')?.guideId, 'snakebite');
-  assert.equal(router.route('a snake, and it bit me', 'en')?.guideId, 'snakebite');
+  assert.equal(outcome(router.route('May ahas! Tulong!', 'fil')), 'snakebite');
+  assert.equal(outcome(router.route('a snake, and it bit me', 'en')), 'snakebite');
 });
 
 test('weather words that are not anchors never fire on a cue alone', () => {
@@ -119,25 +126,26 @@ test('weather words that are not anchors never fire on a cue alone', () => {
 test('negation cancels a match, but not when the negator is part of the phrase', () => {
   assert.equal(router.route('hindi naman dumudugo', 'fil'), null);
   assert.equal(router.route("I'm not lost", 'en'), null);
-  assert.equal(router.route("it won't stop bleeding", 'en')?.guideId, 'bleeding-wounds');
-  assert.equal(router.route('hindi ko alam, dumudugo siya', 'fil')?.guideId, 'bleeding-wounds');
+  assert.equal(outcome(router.route("it won't stop bleeding", 'en')), 'bleeding-wounds');
+  assert.equal(outcome(router.route('hindi ko alam, dumudugo siya', 'fil')), 'bleeding-wounds');
 });
 
 test('the distant past turns routing off unless the problem is still going on', () => {
   assert.equal(router.route('I was bitten by a snake last year, is the trail safe?', 'en'), null);
-  assert.equal(router.route('I was bitten by a snake last year and it still hurts', 'en')?.guideId, 'snakebite');
-  assert.equal(router.route('Natuklaw ako ng ahas kahapon', 'fil')?.guideId, 'snakebite');
+  assert.equal(outcome(router.route('I was bitten by a snake last year and it still hurts', 'en')), 'snakebite');
+  assert.equal(outcome(router.route('Natuklaw ako ng ahas kahapon', 'fil')), 'snakebite');
 });
 
 test('a dampener stops an emergency word that is about something else', () => {
   assert.equal(router.route('Nabali ang tent pole namin, ano gagawin?', 'fil'), null);
-  assert.equal(router.route('Nabali ang binti ko, ano gagawin?', 'fil')?.guideId, 'sprains-fractures');
+  assert.equal(outcome(router.route('Nabali ang binti ko, ano gagawin?', 'fil')), 'sprains-fractures');
 });
 
 test('confidence is between 0 and 1 and every route says what matched', () => {
-  for (const { question } of EMERGENCY_QUESTIONS) {
+  for (const { question, expected } of EMERGENCY_QUESTIONS) {
+    if (expected === 'distress') continue;
     const route = router.route(question, 'en');
-    assert.ok(route, question);
+    assert.ok(route?.kind === 'guide', question);
     assert.ok(route.confidence > 0 && route.confidence <= 1, question);
     assert.ok(route.matched.length > 0, question);
   }
@@ -155,7 +163,7 @@ test("a Guide's own keywords take part in routing", () => {
   const edited: Guide = { ...hypothermia, keywords: { en: [...hypothermia.keywords.en, 'zorblat', 'quxian fever'], fil: hypothermia.keywords.fil } };
   const custom = createEmergencyRouter([...guides.filter((guide) => guide.id !== 'hypothermia'), edited]);
   assert.equal(router.route('zorblat and quxian fever', 'en'), null);
-  assert.equal(custom.route('zorblat and quxian fever', 'en')?.guideId, 'hypothermia');
+  assert.equal(outcome(custom.route('zorblat and quxian fever', 'en')), 'hypothermia');
 });
 
 test('the second stage runs only for near misses and can only pick a near miss', async () => {
@@ -164,11 +172,12 @@ test('the second stage runs only for near misses and can only pick a near miss',
     calls.push(question);
     return candidates[0]?.guideId ?? null;
   };
-  assert.equal((await router.routeWithSecondStage('nakagat ng ahas', 'fil', stage))?.guideId, 'snakebite');
+  assert.equal(outcome(await router.routeWithSecondStage('nakagat ng ahas', 'fil', stage)), 'snakebite');
   assert.deepEqual(calls, [], 'a decided question never reaches the second stage');
   const nearMiss = await router.routeWithSecondStage('May ahas ba sa Batulao?', 'fil', stage);
-  assert.equal(nearMiss?.guideId, 'snakebite');
-  assert.equal(nearMiss?.confidence, 0.5);
+  assert.ok(nearMiss?.kind === 'guide');
+  assert.equal(nearMiss.guideId, 'snakebite');
+  assert.equal(nearMiss.confidence, 0.5);
   assert.equal(await router.routeWithSecondStage('Sino ang presidente?', 'fil', stage), null);
   assert.equal(calls.length, 1, 'a question with no score at all never reaches the second stage');
   assert.equal(await router.routeWithSecondStage('May ahas ba sa Batulao?', 'fil', async () => 'lightning'), null);
@@ -182,6 +191,43 @@ test('routing is fast enough to run before the relevance gate', () => {
   for (let i = 0; i < 5; i++) for (const question of questions) router.route(question, 'en');
   const perQuestion = (performance.now() - start) / (questions.length * 5);
   assert.ok(perQuestion < 5, `${perQuestion.toFixed(2)} ms per question`);
+});
+
+// Distress
+
+test('bare distress returns { kind: distress }, in English, Filipino and Taglish', () => {
+  for (const question of ['help', 'HELP!!!', 'tulong', 'Tulong po!', 'saklolo', 'SOS', 'emergency', 'may emergency', 'help us', 'please help', 'help po', 'tulungan nyo kami', 'we need help now', 'help, I dont know what to do']) {
+    assert.deepEqual(router.route(question, 'en')?.kind, 'distress', question);
+  }
+});
+
+test('a Guide match always wins over distress', () => {
+  assert.equal(outcome(router.route('help, nakagat ng ahas', 'fil')), 'snakebite');
+  assert.equal(outcome(router.route('tulong po naliligaw kami', 'fil')), 'lost-on-the-trail');
+  assert.equal(outcome(router.route('SOS dumudugo', 'fil')), 'bleeding-wounds');
+});
+
+test('distress never fires on questions about the app or on other questions', () => {
+  for (const question of [
+    'How do I use the Flare?',
+    'paano gamitin ang SOS',
+    'What does the SOS button do?',
+    'Where is the SOS control?',
+    'Does the app work in an emergency?',
+    "What's the emergency number in the Philippines?",
+    'Can you help me plan my trip?',
+    'I do not need help',
+    'help me pack for Batulao',
+    '',
+  ]) {
+    assert.equal(router.route(question, 'en'), null, question);
+    assert.equal(isBareDistress(question), false, question);
+  }
+});
+
+test('the distress card links to the five top Emergency Guides, all in the library', () => {
+  assert.deepEqual(DISTRESS_GUIDES, ['lost-on-the-trail', 'bleeding-wounds', 'snakebite', 'sprains-fractures', 'hypothermia']);
+  for (const id of DISTRESS_GUIDES) assert.equal(guides.find((guide) => guide.id === id)?.kind, 'emergency', id);
 });
 
 // The lexicon
@@ -198,7 +244,7 @@ test('every lexicon rule names a bundled Guide, and the tie-break order covers t
 // The fixed test sets
 
 function run(cases: readonly RoutingCase[]) {
-  return cases.map((c) => ({ ...c, got: router.route(c.question, 'en')?.guideId ?? null }));
+  return cases.map((c) => ({ ...c, got: outcome(router.route(c.question, 'en')) ?? null }));
 }
 
 test('the emergency set: at least 15 questions, every Emergency Guide, three or more for snakebite, bleeding and lost', () => {
@@ -206,6 +252,7 @@ test('the emergency set: at least 15 questions, every Emergency Guide, three or 
   const counts = new Map<string, number>();
   for (const { expected } of EMERGENCY_QUESTIONS) counts.set(expected ?? '', (counts.get(expected ?? '') ?? 0) + 1);
   for (const id of EMERGENCY_IDS) assert.ok((counts.get(id) ?? 0) >= 1, `no question for ${id}`);
+  assert.ok((counts.get('distress') ?? 0) >= 5, 'bare distress');
   for (const id of ['snakebite', 'bleeding-wounds', 'lost-on-the-trail']) assert.ok((counts.get(id) ?? 0) >= 3, id);
 });
 
@@ -281,6 +328,7 @@ test('tahak://emergency/preview/<id> and tahak://emergency/ask?q=… parse; othe
     language: undefined,
     theme: undefined,
   });
+  assert.deepEqual(parsePreviewLink('tahak://emergency/distress?lang=fil'), { kind: 'distress', language: 'fil', theme: undefined });
   assert.equal(parsePreviewLink('tahak://emergency/ask?q='), null);
   assert.equal(parsePreviewLink('tahak://emergency/preview'), null);
   assert.equal(parsePreviewLink('tahak://guides/snakebite'), null);

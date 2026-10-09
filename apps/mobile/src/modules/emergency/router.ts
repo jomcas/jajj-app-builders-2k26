@@ -19,10 +19,12 @@ import {
   SHORT_QUESTION_WORDS,
   type GuideRules,
 } from './lexicon.ts';
+import { bareDistress } from './distress.ts';
 import { BOUNDARY, tokenize, wordMatches } from './normalize.ts';
 
-/** What routeEmergency returns when a question is an emergency. */
+/** What routeEmergency returns when a question is an emergency with a matching Guide. */
 export type EmergencyRoute = {
+  kind: 'guide';
   /** The Guide to open. Always one in the Guide Library. */
   guideId: string;
   /** 0–1. 1 means a decisive phrase plus a distress cue, or two decisive phrases. */
@@ -30,6 +32,15 @@ export type EmergencyRoute = {
   /** The phrases that decided it, as written in the lexicon or the Guide's keywords. */
   matched: string[];
 };
+
+/**
+ * Bare distress with no topic ("help", "tulong po", "SOS", "may emergency"): the Assistant
+ * shows the distress card (911, the Flare hint, the top Emergency Guides).
+ */
+export type DistressRoute = { kind: 'distress'; matched: string[] };
+
+/** Either result; null means "not an emergency", and the question goes on to the Assistant. */
+export type EmergencyResult = EmergencyRoute | DistressRoute;
 
 /**
  * An optional second stage for near misses, such as an embedding check (issue #14's embedder
@@ -51,8 +62,8 @@ export type Explanation = {
 };
 
 export type EmergencyRouter = {
-  route(question: string, uiLanguage: Language): EmergencyRoute | null;
-  routeWithSecondStage(question: string, uiLanguage: Language, secondStage?: SecondStage): Promise<EmergencyRoute | null>;
+  route(question: string, uiLanguage: Language): EmergencyResult | null;
+  routeWithSecondStage(question: string, uiLanguage: Language, secondStage?: SecondStage): Promise<EmergencyResult | null>;
   explain(question: string): Explanation;
 };
 
@@ -261,11 +272,16 @@ export function createEmergencyRouter(guides: readonly Guide[]): EmergencyRouter
       .map(([guideId, score]) => ({ guideId, score }));
   }
 
-  function route(question: string, _uiLanguage: Language): EmergencyRoute | null {
+  function route(question: string, _uiLanguage: Language): EmergencyResult | null {
     const explanation = explain(question);
     const best = ranked(explanation)[0];
-    if (!best || best.score < FIRE_AT) return null;
+    if (!best || best.score < FIRE_AT) {
+      // No Guide: is it bare distress? A Guide match always wins over this.
+      const distress = bareDistress(explanation.tokens);
+      return distress ? { kind: 'distress', matched: distress } : null;
+    }
     return {
+      kind: 'guide',
       guideId: best.guideId,
       confidence: round(Math.min(1, best.score / 1.5)),
       matched: explanation.matched[best.guideId],
@@ -276,14 +292,14 @@ export function createEmergencyRouter(guides: readonly Guide[]): EmergencyRouter
     question: string,
     uiLanguage: Language,
     secondStage?: SecondStage,
-  ): Promise<EmergencyRoute | null> {
+  ): Promise<EmergencyResult | null> {
     const decided = route(question, uiLanguage);
     if (decided || !secondStage) return decided;
     const nearMisses = ranked(explain(question)).filter(({ score }) => score >= NEAR_MISS);
     if (!nearMisses.length) return null;
     const guideId = await secondStage(question, nearMisses);
     if (!guideId || !nearMisses.some((candidate) => candidate.guideId === guideId)) return null;
-    return { guideId, confidence: 0.5, matched: ['second stage'] };
+    return { kind: 'guide', guideId, confidence: 0.5, matched: ['second stage'] };
   }
 
   return { route, routeWithSecondStage, explain };

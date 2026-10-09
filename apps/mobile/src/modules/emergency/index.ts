@@ -8,8 +8,12 @@ import { listenForPreviewLinks, PreviewGate } from './PreviewGate';
 //
 // Public interface:
 //
-//   routeEmergency(question, uiLanguage) → { guideId, confidence, matched } | null
+//   routeEmergency(question, uiLanguage) →
+//       { kind: 'guide', guideId, confidence, matched }   show <EmergencyGuideCard guideId>
+//     | { kind: 'distress', matched }                     bare "help"/"tulong"/"SOS": <DistressCard>
+//     | null                                              not an emergency: on to the gate
 //       Fast (about a millisecond), deterministic and offline: words and phrases, not a model.
+//       A Guide match always wins over distress ("help, nakagat ng ahas" opens Snakebite).
 //       English, Filipino and Taglish, with Filipino affixes, typos, negation ("hindi naman
 //       dumudugo") and the distant past ("last year") handled. Rules: lexicon.ts.
 //   routeEmergencyWithSecondStage(question, uiLanguage, secondStage?) → Promise<… | null>
@@ -18,16 +22,20 @@ import { listenForPreviewLinks, PreviewGate } from './PreviewGate';
 //   <EmergencyGuideCard guideId onOpened? />
 //       Icon, title, at most two lines of the Guide's own summary, "Open Guide", and "Call
 //       911" / the Flare hint where the Guide's call for help gives them. No model text.
+//   <DistressCard onOpened? />
+//       Call 911, the Flare hint (it never fires the Flare), and links to the top 5 Emergency
+//       Guides. Fixed catalog text only.
 //   EMERGENCY_QUESTIONS, ORDINARY_QUESTIONS, EDGE_CASES: the fixed test sets.
 //
-// Dev only: tahak://emergency/preview/<id> and tahak://emergency/ask?q=… show the card
+// Dev only: tahak://emergency/preview/<id>, …/distress and …/ask?q=… show the cards
 // (PreviewGate.tsx).
 
 listenForPreviewLinks();
 
+export { DistressCard } from './DistressCard';
 export { EmergencyGuideCard } from './EmergencyGuideCard';
 export { explainEmergency, routeEmergency, routeEmergencyWithSecondStage } from './route';
-export type { EmergencyRoute, Explanation, SecondStage } from './router';
+export type { DistressRoute, EmergencyResult, EmergencyRoute, Explanation, SecondStage } from './router';
 export { EDGE_CASES, EMERGENCY_QUESTIONS, ORDINARY_QUESTIONS, type RoutingCase } from './testSet';
 
 export default {
