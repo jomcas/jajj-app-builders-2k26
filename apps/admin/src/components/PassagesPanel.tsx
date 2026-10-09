@@ -3,8 +3,8 @@
 
 import { useState, type FormEvent } from 'react';
 import { deletePassage, savePassage } from '../lib/api';
-import type { PackContent, PassageRow } from '../lib/types';
-import { passageForm, slugify, validatePassage, type FieldErrors, type PassageForm } from '../lib/validate';
+import { PASSAGE_TOPIC_LABELS, PASSAGE_TOPICS, type PackContent, type PassageRow } from '../lib/types';
+import { passageForm, passageId, validatePassage, type FieldErrors, type PassageForm } from '../lib/validate';
 import { errorMessage, Field, Notice } from './Field';
 
 const LANGUAGE_LABELS = { en: 'English', fil: 'Filipino' } as const;
@@ -69,7 +69,8 @@ function PassageEditor({
   const [status, setStatus] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const suggestedId = (f: PassageForm) => `${destinationId}-${slugify(f.topic)}-${f.language}`;
+  const taken = new Set(pack.passages.map((p) => p.id));
+  const suggestedId = (f: PassageForm) => passageId(destinationId, f.topic, f.language, taken);
   function set(key: keyof PassageForm, value: string) {
     const next = { ...form, [key]: value };
     // Suggest an id from topic and language until the id is edited by hand.
@@ -81,8 +82,7 @@ function PassageEditor({
 
   async function save(event: FormEvent) {
     event.preventDefault();
-    const taken = new Set(isNew ? pack.passages.map((p) => p.id) : []);
-    const result = validatePassage(form, destinationId, taken);
+    const result = validatePassage(form, destinationId, isNew ? taken : new Set());
     setErrors(result.ok ? {} : result.errors);
     if (!result.ok) return;
     setBusy(true);
@@ -112,7 +112,16 @@ function PassageEditor({
       <h3>{isNew ? 'New reference passage' : `Edit ${passage.topic} (${LANGUAGE_LABELS[passage.language]})`}</h3>
       <div className="row">
         <Field label="Topic" error={errors.topic}>
-          <input value={form.topic} onChange={(e) => set('topic', e.target.value)} placeholder="fees" />
+          <select value={form.topic} onChange={(e) => set('topic', e.target.value)}>
+            <option value="">Pick a topic</option>
+            {PASSAGE_TOPICS.map((topic) => (
+              <option key={topic} value={topic}>{PASSAGE_TOPIC_LABELS[topic]}</option>
+            ))}
+            {/* Keep a topic from older content that is not in the list. */}
+            {form.topic && !(PASSAGE_TOPICS as readonly string[]).includes(form.topic) ? (
+              <option value={form.topic}>{form.topic}</option>
+            ) : null}
+          </select>
         </Field>
         <Field label="Language" error={errors.language}>
           <select value={form.language} onChange={(e) => set('language', e.target.value)}>

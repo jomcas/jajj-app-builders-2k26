@@ -16,6 +16,17 @@ export const WAYPOINT_TYPE_LABELS: Record<WaypointType, string> = {
   summit: 'Summit',
 };
 
+/** The reference passage topics the seeded content uses (content/batulao/README.md). */
+export const PASSAGE_TOPICS = ['getting_there', 'registration', 'water', 'campsites', 'hazards'] as const;
+
+export const PASSAGE_TOPIC_LABELS: Record<(typeof PASSAGE_TOPICS)[number], string> = {
+  getting_there: 'Getting there and the Trails',
+  registration: 'Registration, fees and guides',
+  water: 'Water',
+  campsites: 'Campsites',
+  hazards: 'Hazards, weather and emergencies',
+};
+
 export const LANGUAGES = ['en', 'fil'] as const;
 export type Language = (typeof LANGUAGES)[number];
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  passageId,
   slugify,
   validateDestination,
   validatePassage,
@@ -111,7 +112,7 @@ describe('validateWaypoint', () => {
 });
 
 describe('validatePassage', () => {
-  const form = { id: 'test-destination-fees-en', topic: 'fees', language: 'en', text: 'Entrance fee.', source: 'Test', as_of: '2026-10' };
+  const form = { id: 'test-destination-registration-en', topic: 'registration', language: 'en', text: 'Entrance fee.', source: 'Test', as_of: '2026-10' };
 
   it('accepts a passage with an as-of month', () => {
     const result = validatePassage(form, 'test-destination');
@@ -122,5 +123,15 @@ describe('validatePassage', () => {
     const result = validatePassage({ ...form, language: 'es', as_of: 'Oct 2026' }, 'test-destination');
     expect(result.ok).toBe(false);
     if (!result.ok) expect(Object.keys(result.errors).sort()).toEqual(['as_of', 'language']);
+  });
+});
+
+describe('passageId', () => {
+  it('numbers passages that share a topic, keeping the language last', () => {
+    expect(passageId('ulap', 'registration', 'en', new Set())).toBe('ulap-registration-en');
+    expect(passageId('ulap', 'registration', 'fil', new Set(['ulap-registration-fil']))).toBe('ulap-registration-2-fil');
+    expect(passageId('ulap', 'registration', 'en', new Set(['ulap-registration-en', 'ulap-registration-2-en']))).toBe(
+      'ulap-registration-3-en',
+    );
   });
 });

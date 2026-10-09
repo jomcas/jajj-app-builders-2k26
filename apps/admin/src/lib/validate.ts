@@ -90,6 +90,14 @@ export function destinationForm(row?: DestinationRow): DestinationForm {
   };
 }
 
+/** A passage id like 'ulap-registration-2-en' that is not taken yet. */
+export function passageId(destinationId: string, topic: string, language: string, taken: ReadonlySet<string>): string {
+  const base = `${destinationId}-${slugify(topic) || 'passage'}`;
+  let id = `${base}-${language}`;
+  for (let n = 2; taken.has(id); n++) id = `${base}-${n}-${language}`;
+  return id;
+}
+
 /** existingIds: ids already taken, when creating a Destination. Empty when editing one. */
 export function validateDestination(
   form: DestinationForm,
