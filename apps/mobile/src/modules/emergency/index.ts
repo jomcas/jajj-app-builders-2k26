@@ -32,6 +32,7 @@ import { listenForPreviewLinks, PreviewGate } from './PreviewGate';
 
 listenForPreviewLinks();
 
+export { toAssistantReply, type AssistantEmergencyReply } from './assistantReply';
 export { DistressCard } from './DistressCard';
 export { EmergencyGuideCard } from './EmergencyGuideCard';
 export { explainEmergency, routeEmergency, routeEmergencyWithSecondStage } from './route';

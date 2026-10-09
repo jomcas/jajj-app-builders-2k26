@@ -8,6 +8,8 @@ import { test } from 'node:test';
 import { DISTRESS_GUIDES, PRIORITY, RULES } from '../src/modules/emergency/lexicon.ts';
 import { editDistance, stems, tokenize, wordMatches } from '../src/modules/emergency/normalize.ts';
 import { parsePreviewLink } from '../src/modules/emergency/previewLink.ts';
+import { answerQuestion } from '../src/modules/assistant/pipeline.ts';
+import { toAssistantReply } from '../src/modules/emergency/assistantReply.ts';
 import { isBareDistress } from '../src/modules/emergency/distress.ts';
 import { createEmergencyRouter, type EmergencyResult } from '../src/modules/emergency/router.ts';
 import strings from '../src/modules/emergency/strings.ts';
@@ -228,6 +230,39 @@ test('distress never fires on questions about the app or on other questions', ()
 test('the distress card links to the five top Emergency Guides, all in the library', () => {
   assert.deepEqual(DISTRESS_GUIDES, ['lost-on-the-trail', 'bleeding-wounds', 'snakebite', 'sprains-fractures', 'hypothermia']);
   for (const id of DISTRESS_GUIDES) assert.equal(guides.find((guide) => guide.id === id)?.kind, 'emergency', id);
+});
+
+// The Assistant's pipeline (#14): the emergency route runs first, and for an emergency
+// neither the relevance gate's search nor the model runs.
+
+function pipelineDeps(calls: string[]) {
+  return {
+    emergencyRoute: async (question: string, language: 'en' | 'fil') => toAssistantReply(router.route(question, language)),
+    search: async () => {
+      calls.push('search');
+      return [];
+    },
+    corpus: () => [],
+    threshold: 0.5,
+    generate: async () => {
+      calls.push('generate');
+      throw new Error('the model must not run');
+    },
+  };
+}
+
+test('in the pipeline, an emergency opens its Guide before the gate and the model', async () => {
+  const calls: string[] = [];
+  assert.deepEqual(await answerQuestion('nakagat ng ahas yung kasama ko', 'fil', pipelineDeps(calls)), { kind: 'emergency', guideId: 'snakebite' });
+  assert.deepEqual(await answerQuestion('help!', 'en', pipelineDeps(calls)), { kind: 'emergency', distress: true });
+  assert.deepEqual(calls, []);
+});
+
+test('in the pipeline, an ordinary question goes on to the gate', async () => {
+  const calls: string[] = [];
+  const reply = await answerQuestion('May tubig ba sa Batulao?', 'fil', pipelineDeps(calls));
+  assert.equal(reply.kind, 'off-topic');
+  assert.deepEqual(calls, ['search']);
 });
 
 // The lexicon

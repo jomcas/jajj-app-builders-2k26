@@ -37,7 +37,7 @@ const top = (hits: { chunk: { id: string }; score: number }[], n = 5) =>
 
 function verdictOf(reply: Reply): string {
   if (reply.kind === 'answer') return 'answer';
-  if (reply.kind === 'emergency') return 'emergency';
+  if (reply.kind === 'emergency') return reply.distress ? 'distress' : `emergency:${reply.guideId}`;
   return `off-topic-${reply.reason}`;
 }
 

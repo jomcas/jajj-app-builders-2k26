@@ -15,9 +15,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePreferences, useStrings, useTheme } from '../../settings/preferences';
-import { openGuide } from '../guides';
 import type { Palette } from '../../theme/tokens';
 import { textStyles } from '../../theme/typography';
+import { DistressCard, EmergencyGuideCard } from '../emergency';
+import { openGuide } from '../guides';
 import { answer, testFlags } from './assistant';
 import type { Chunk } from './corpus';
 import { errorMessage, fill } from './format';
@@ -220,8 +221,8 @@ function AssistantBubble({
   let body: React.ReactNode;
   if (error) body = <Text style={[textStyles.body, { color: colors.ink }]}>{fill(s.answerError, { error })}</Text>;
   else if (reply?.kind === 'off-topic') body = <Text style={[textStyles.body, { color: colors.ink }]}>{s.offTopic}</Text>;
-  else if (reply?.kind === 'emergency')
-    body = <Chip label={s.emergencyGuide} onPress={() => openGuide(reply.guideId)} colors={colors} />;
+  // ADR 0003: an emergency gets the Guide's own card (or the distress card), never model text.
+  else if (reply?.kind === 'emergency') body = reply.guideId ? <EmergencyGuideCard guideId={reply.guideId} /> : <DistressCard />;
   else if (text) body = <Text selectable style={[textStyles.body, { color: colors.ink }]}>{text}</Text>;
   else body = <Text style={[textStyles.body, { color: colors.muted }]}>{s.answering}</Text>;
 

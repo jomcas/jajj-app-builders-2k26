@@ -19,8 +19,13 @@ import { buildMessages, MAX_PROMPT_PASSAGES, PASSAGE_SCORE_SPREAD, type ChatMess
 
 export type Hit = { chunk: Chunk; score: number };
 
-/** What #15's emergency route returns when it takes over a question. */
-export type EmergencyReply = { kind: 'emergency'; guideId: string; summary?: string };
+/**
+ * What #15's emergency route returns when it takes over a question: a Guide to open, or bare
+ * distress ("help", "tulong", "SOS") with no Guide, which gets the distress card.
+ */
+export type EmergencyReply =
+  | { kind: 'emergency'; guideId: string; summary?: string; distress?: undefined }
+  | { kind: 'emergency'; distress: true; guideId?: undefined; summary?: undefined };
 
 export type GenerateResult = {
   text: string;

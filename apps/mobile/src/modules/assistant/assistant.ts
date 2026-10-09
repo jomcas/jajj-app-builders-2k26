@@ -3,15 +3,19 @@
 //
 //   answer(question) = emergencyRoute? → relevanceGate → retrieve → generate
 //
-// #15 plugs the emergency check in with setEmergencyRoute(); it runs before the gate.
+// Stage 1 is #15's emergency routing (routeEmergency): an emergency opens its Guide, bare
+// distress gets the distress card, and neither the gate nor the model runs (ADR 0003).
+// setEmergencyRoute() replaces it, for tests.
 
 import diagnostics from '../../../modules/tahak-diagnostics';
 import type { Language } from '../../i18n/types';
+import { routeEmergency, toAssistantReply } from '../emergency';
 import { complete, loadModel } from './llm';
 import { answerQuestion, type PipelineDeps, type Reply } from './pipeline';
 import { appIndex, type VectorIndex } from './vectorIndex';
 
-let emergencyRoute: PipelineDeps['emergencyRoute'];
+let emergencyRoute: PipelineDeps['emergencyRoute'] = async (question, language) =>
+  toAssistantReply(routeEmergency(question, language));
 
 /** Stage 1 of the pipeline (ADR 0003), set by the emergency-routing ticket (#15). */
 export function setEmergencyRoute(route: PipelineDeps['emergencyRoute']) {
@@ -96,7 +100,8 @@ function logReply(question: string, language: Language, reply: Reply, ms: number
         type: 'answer',
         question,
         ui: language,
-        verdict: reply.kind === 'off-topic' ? `off-topic-${reply.reason}` : reply.kind,
+        verdict: reply.kind === 'off-topic' ? `off-topic-${reply.reason}` : reply.kind === 'emergency' && reply.distress ? 'distress' : reply.kind,
+        guide: reply.kind === 'emergency' ? (reply.guideId ?? null) : null,
         best: reply.kind === 'emergency' ? null : Math.round(reply.gate.best * 1000) / 1000,
         threshold: reply.kind === 'emergency' ? null : reply.gate.threshold,
         llm_ran: !!generation,
