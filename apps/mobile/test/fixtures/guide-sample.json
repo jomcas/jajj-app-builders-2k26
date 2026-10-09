@@ -1,0 +1,24 @@
+{
+  "id": "sample-ordinary",
+  "kind": "ordinary",
+  "category": "camp",
+  "order": 99,
+  "title": { "en": "Sample Guide (development only)", "fil": "Halimbawang Guide (pang-development lang)" },
+  "summary": {
+    "en": "A placeholder ordinary Guide for testing the layout. Not real advice.",
+    "fil": "Pansamantalang ordinaryong Guide para subukan ang layout. Hindi totoong payo."
+  },
+  "callForHelp": {
+    "en": "This sample has no real advice. Use the real Guides.",
+    "fil": "Walang totoong payo ang halimbawang ito. Gamitin ang mga totoong Guide."
+  },
+  "steps": {
+    "en": ["First sample step.", "Second sample step.", "Third sample step."],
+    "fil": ["Unang halimbawang hakbang.", "Ikalawang halimbawang hakbang.", "Ikatlong halimbawang hakbang."]
+  },
+  "doNot": { "en": ["Do not follow this sample on the trail."], "fil": ["Huwag sundin ang halimbawang ito sa trail."] },
+  "watchFor": { "en": ["Nothing: this is a sample."], "fil": ["Wala: halimbawa lang ito."] },
+  "keywords": { "en": ["sample"], "fil": ["halimbawa"] },
+  "sources": [{ "title": "Tahak test fixture", "org": "Tahak", "url": "", "accessed": "2026-10-10" }],
+  "review": { "redCrossChecked": false, "checkedBy": null, "notes": "Test fixture for test/guides.test.ts. Not part of the app." }
+}

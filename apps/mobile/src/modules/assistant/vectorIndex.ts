@@ -9,11 +9,11 @@ import { Directory, File, Paths } from 'expo-file-system';
 
 import diagnostics from '../../../modules/tahak-diagnostics';
 import { getPack, listDownloaded, subscribe as subscribeToPacks } from '../destination-pack';
+import { listGuides } from '../guides';
 import { APP_HELP } from './appHelp';
 import { contentHash, guideChunks, helpChunks, needsReembed, packChunks, type Chunk } from './corpus';
 import { DEFAULT_EMBED_MODEL, type EmbedModelSpec } from './embedModels';
 import { embedderAvailable, loadEmbedder, type Embedder } from './embedder';
-import { loadGuideJson } from './guideContent';
 import type { Hit } from './pipeline';
 import { topK } from './vectors';
 
@@ -135,7 +135,7 @@ export function createVectorIndex(spec: EmbedModelSpec = DEFAULT_EMBED_MODEL): V
   async function doSync() {
     try {
       await ensurePart('help', helpChunks(APP_HELP));
-      await ensurePart('guides', loadGuideJson().flatMap((g) => guideChunks(g as never)));
+      await ensurePart('guides', listGuides().flatMap((g) => guideChunks(g)));
       const downloaded = await listDownloaded();
       const live = new Set<string>();
       for (const destination of downloaded) {

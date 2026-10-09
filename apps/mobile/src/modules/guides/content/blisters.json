@@ -1,0 +1,86 @@
+{
+  "id": "blisters",
+  "kind": "ordinary",
+  "category": "injury",
+  "order": 6,
+  "title": { "en": "Blisters", "fil": "Paltos" },
+  "summary": {
+    "en": "Keep a blister clean and covered. If it isn't too painful, leave it whole and protect it with moleskin or a blister pad.",
+    "fil": "Panatilihing malinis at may takip ang paltos. Kung hindi masyadong masakit, huwag itong putukin at protektahan ng moleskin o blister pad."
+  },
+  "callForHelp": {
+    "en": "Blisters rarely need emergency help. See a doctor if a blister becomes an open wound or shows signs of infection, or if the person has diabetes or a weak immune system. A large blood blister should be treated by a medical professional.",
+    "fil": "Bihirang mangailangan ng emergency na tulong ang paltos. Magpatingin sa doktor kung naging bukas na sugat ang paltos o may palatandaan ng impeksyon, o kung may diabetes o mahinang resistensya ang tao. Dapat ipagamot sa doktor o nars ang malaking paltos na may dugo."
+  },
+  "steps": {
+    "en": [
+      "Wash the blister and the skin around it with clean water and gently pat it dry.",
+      "If the blister is whole and not too painful, leave it unbroken.",
+      "Cover it with moleskin or a blister pad, and tape over it if needed.",
+      "If it has already burst, clean it like a small wound and cover it with a sterile dressing.",
+      "Only if a whole blister is very painful or about to burst: clean the skin, then prick it twice at its lower edge with a sterile needle, leaving the roof of skin on.",
+      "Gently press the fluid out, rinse with clean water, pat the skin around it dry, and cover it with a sterile dressing.",
+      "If the blister is open, bleeding or getting worse, stop the activity that caused it if you can.",
+      "To prevent more blisters, wear dry socks and shoes that fit, and tape spots that rub before you start walking."
+    ],
+    "fil": [
+      "Hugasan ng malinis na tubig ang paltos at ang balat sa paligid nito, at dahan-dahang patuyuin.",
+      "Kung buo ang paltos at hindi masyadong masakit, huwag itong putukin.",
+      "Takpan ito ng moleskin o blister pad, at lagyan ng tape sa ibabaw kung kailangan.",
+      "Kung pumutok na, linisin ito gaya ng maliit na sugat at takpan ng malinis at sterile na gasa.",
+      "Kung buo pero sobrang sakit o malapit nang pumutok lang: linisin ang balat, saka tusukin nang dalawang beses sa ibabang gilid gamit ang sterile na karayom, at huwag tanggalin ang balat na nakatakip.",
+      "Dahan-dahang pigain palabas ang tubig, banlawan ng malinis na tubig, patuyuin ang balat sa paligid, at takpan ng sterile na gasa.",
+      "Kung bukas, dumudugo o lumalala ang paltos, itigil kung kaya ang gawaing nagdulot nito.",
+      "Para makaiwas sa paltos, magsuot ng tuyong medyas at sapatos na tama ang sukat, at lagyan ng tape ang mga bahaging nagagasgas bago magsimulang maglakad."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not peel off the roof of skin over a blister.",
+      "Do not pop a large blood blister yourself.",
+      "Do not use hydrocolloid blister plasters on a long hike; they are very hard to remove from damaged skin."
+    ],
+    "fil": [
+      "Huwag balatan ang balat na nakatakip sa paltos.",
+      "Huwag putukin nang mag-isa ang malaking paltos na may dugo.",
+      "Huwag gumamit ng hydrocolloid na blister plaster sa mahabang hike; napakahirap itong tanggalin sa napinsalang balat."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Redness, heat, pain that keeps growing, or pus.",
+      "A fever.",
+      "The blister turns into an open wound.",
+      "The person has diabetes or a weak immune system. Their blisters get infected more easily."
+    ],
+    "fil": [
+      "Pamumula, init, lumalalang sakit, o nana.",
+      "Lagnat.",
+      "Naging bukas na sugat ang paltos.",
+      "May diabetes o mahinang resistensya ang tao. Mas madaling maimpeksyon ang kanilang paltos."
+    ]
+  },
+  "keywords": {
+    "en": ["blister", "blisters", "hot spot", "sore feet", "rubbing shoes", "blood blister", "popped blister"],
+    "fil": ["paltos", "nagpaltos", "nagkapaltos", "may paltos", "paltos sa paa", "lintos", "masakit ang paa", "nagagasgas ang sapatos", "nag-blister", "pumutok ang paltos"]
+  },
+  "sources": [
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Blister' (pp. 209-210)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Community-Based Health and First Aid flipchart (Manila, June 2011): 'Basic First Aid for Burns' ('Do NOT open blisters that are unbroken')",
+      "org": "Philippine Red Cross",
+      "url": "https://www.rcrc-resilience-southeastasia.org/wp-content/uploads/2016/07/Community-Based-Health-and-First-Aid-Flipchart-.pdf",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. PRC has no material on friction blisters. The only related PRC line is in the 2011 CBHFA flipchart's burns page, 'Do NOT open blisters that are unbroken'. That is about burn blisters, but it agrees with step 2. All steps follow IFRC 2020 'Blister': keep intact if not seriously uncomfortable; wash with clean water and pat dry; moleskin or blister pad, tape to reinforce; a self-drained blister is cleaned and given a sterile dressing like a cut; special case for a painful intact blister (puncture twice at the lower edge with a sterile needle, leave the roof, push the fluid out, rinse, dry, sterile dressing); a large blood blister goes to a medical professional; stop the activity if there is an open wound, bleeding or infection; seek medical advice for infection, diabetes or a weak immune system; prevention with dry socks, well-fitting shoes, and taping rub spots in advance. The hydrocolloid warning is IFRC's ('should not be used at longer distances'). No 911 or 143 is given because blisters are not an emergency; reviewer may want to add the generic hotline line."
+  }
+}

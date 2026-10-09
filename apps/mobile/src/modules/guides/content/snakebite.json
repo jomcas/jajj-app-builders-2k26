@@ -1,0 +1,118 @@
+{
+  "id": "snakebite",
+  "kind": "emergency",
+  "category": "injury",
+  "order": 1,
+  "title": { "en": "Snakebite", "fil": "Kagat ng ahas" },
+  "summary": {
+    "en": "Keep the person calm and still, keep the bitten limb still, and get them to a hospital fast. Never cut, suck, tie off, or put ice or herbs on the bite.",
+    "fil": "Panatilihing kalmado at hindi gumagalaw ang tao at ang nakagat na braso o binti, at dalhin agad sa ospital. Huwag hiwain, sipsipin, talian nang mahigpit, o lagyan ng yelo o halamang-gamot ang kagat."
+  },
+  "callForHelp": {
+    "en": "Every snakebite needs a hospital, even if the person feels fine. Call 911 or the Philippine Red Cross hotline 143 as soon as anyone has signal. Say it is a snakebite, where you are, when it happened, and what the snake looked like. Not every hospital has antivenom, so ask which hospital to go to. If there is no signal, send someone for help with these details while others stay with the person.",
+    "fil": "Kailangang dalhin sa ospital ang lahat ng nakagat ng ahas, kahit mukhang ayos lang ang pakiramdam. Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 sa sandaling may signal ang kahit sino. Sabihing kagat ng ahas ito, kung nasaan kayo, kailan nangyari, at ano ang itsura ng ahas. Hindi lahat ng ospital ay may antivenom, kaya itanong kung saang ospital pupunta. Kung walang signal, magpadala ng tao para humingi ng tulong dala ang mga detalyeng ito, habang may naiiwang kasama ng nakagat."
+  },
+  "steps": {
+    "en": [
+      "Move away from the snake. Do not try to catch or kill it. If it is safe, take a photo of it from a distance.",
+      "Help the person lie down and keep as still and calm as possible. Moving spreads the venom faster.",
+      "Remove rings, watches, bracelets and tight clothing near the bite before it swells. Move the limb as little as possible while you do this.",
+      "Keep the bitten arm or leg still. Wrap it with a non-stretchy bandage or with clothing such as a shirt or trousers, or use a splint or sling, to stop it moving.",
+      "Keep the bitten part at or below the level of the heart.",
+      "If help is far away, gently pour clean drinking water over the bite and cover it with a clean dressing. Do not rub it.",
+      "Do not let the person walk on a bitten leg unless there is no other way. Carry them on an improvised stretcher, or with two people making a seat with their arms.",
+      "Keep checking their breathing and whether they respond to you until medical help takes over.",
+      "Remember the time of the bite and what the snake looked like, and tell the medical staff."
+    ],
+    "fil": [
+      "Lumayo sa ahas. Huwag itong hulihin o patayin. Kung ligtas, kunan ito ng litrato mula sa malayo.",
+      "Tulungang humiga ang tao at panatilihin siyang hindi gumagalaw at kalmado hangga't maaari. Mas mabilis kumalat ang kamandag kapag gumagalaw.",
+      "Tanggalin ang singsing, relo, pulseras at masisikip na damit malapit sa kagat bago ito mamaga. Igalaw nang kaunti lang ang braso o binti habang ginagawa ito.",
+      "Panatilihing hindi gumagalaw ang nakagat na braso o binti. Balutin ito ng bendang hindi nababanat o ng damit gaya ng t-shirt o pantalon, o gumamit ng splint o sling, para hindi ito gumalaw.",
+      "Panatilihin ang nakagat na bahagi na kapantay o mas mababa sa puso.",
+      "Kung malayo ang tulong, dahan-dahang buhusan ng malinis na inuming tubig ang kagat at takpan ng malinis na tela o gasa. Huwag itong kuskusin.",
+      "Huwag palakarin ang tao kung sa binti siya nakagat, maliban kung wala nang ibang paraan. Buhatin siya sa ginawang stretcher, o ng dalawang taong bumubuo ng upuan gamit ang kanilang mga braso.",
+      "Patuloy na tingnan ang kanyang paghinga at kung sumasagot pa siya sa iyo hanggang dumating ang tulong medikal.",
+      "Tandaan ang oras ng pagkagat at ang itsura ng ahas, at sabihin ito sa mga doktor o nars."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not use a tourniquet or tie a tight band around the limb.",
+      "Do not cut the wound or try to suck out the venom.",
+      "Do not put ice or a cold pack on the bite.",
+      "Do not rub or massage the bite.",
+      "Do not put herbs, chemicals, ointment or a 'snake stone' on the bite, and do not let traditional treatment delay the trip to hospital.",
+      "Do not try to catch or kill the snake. Even a dead snake can still bite."
+    ],
+    "fil": [
+      "Huwag gumamit ng tourniquet o magtali nang mahigpit sa braso o binti.",
+      "Huwag hiwain ang sugat o subukang sipsipin ang kamandag.",
+      "Huwag lagyan ng yelo o cold pack ang kagat.",
+      "Huwag kuskusin o masahihin ang kagat.",
+      "Huwag lagyan ng halamang-gamot, kemikal, ointment o 'batong pang-ahas' ang kagat, at huwag hayaang maantala ng albularyo o tradisyonal na gamutan ang pagpunta sa ospital.",
+      "Huwag hulihin o patayin ang ahas. Nakakakagat pa rin kahit patay na ang ahas."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Trouble breathing.",
+      "Blurred or double vision, numbness, or weakness that spreads.",
+      "Swelling that spreads quickly up the limb.",
+      "Vomiting, heavy sweating, or a lot of saliva.",
+      "Pale or grey skin, confusion or fainting (signs of shock).",
+      "Bleeding that won't stop.",
+      "Seizures, or the person stops responding."
+    ],
+    "fil": [
+      "Hirap sa paghinga.",
+      "Malabo o dobleng paningin, pamamanhid, o panghihina na kumakalat.",
+      "Pamamaga na mabilis kumakalat pataas sa braso o binti.",
+      "Pagsusuka, labis na pagpapawis, o maraming laway.",
+      "Maputla o kulay-abong balat, pagkalito o pagkahimatay (mga palatandaan ng shock).",
+      "Pagdurugo na hindi tumitigil.",
+      "Kombulsyon, o hindi na sumasagot ang tao."
+    ]
+  },
+  "keywords": {
+    "en": ["snake", "snakebite", "snake bite", "bitten by a snake", "fang", "fangs", "venom", "venomous", "cobra", "viper", "pit viper"],
+    "fil": ["ahas", "kagat ng ahas", "kinagat ng ahas", "nakagat ng ahas", "tuklaw", "tinuklaw", "natuklaw", "tinuklaw ng ahas", "kamandag", "ulupong", "cobra", "na-bite ng snake", "kinagat ng snake", "nakagat ng snake"]
+  },
+  "sources": [
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020, 'Snakebites' (pp. 254-256)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Guidelines for the Clinical Management of Snake Bites in the South-East Asia Region (2005), section 4.1 'First aid treatment' and 4.2 'Transport to hospital'",
+      "org": "World Health Organization, Regional Office for South-East Asia",
+      "url": "https://iris.who.int/server/api/core/bitstreams/7f7acc8f-6df3-488d-a24c-24bb1ca1f28f/content",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Celebrating UP-PGH National Poison Prevention Week: Insights on Venoms, Common Poisons, and First Aid Tips (2 July 2024)",
+      "org": "University of the Philippines Manila / UP-PGH National Poison Management and Control Center",
+      "url": "https://www.upm.edu.ph/cpt_news/celebrating-up-pgh-national-poison-prevention-week-insights-on-venoms-common-poisons-and-first-aid-tips/",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Snakebite envenoming, fact sheet",
+      "org": "World Health Organization",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/snakebite-envenoming",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: hotline only. No Philippine Red Cross snakebite material could be found online: redcross.org.ph has no snakebite page, the 2011 PRC Community-Based Health and First Aid flipchart has no snakebite section, and the PRC Standard First Aid manual is only online as unofficial Scribd/Studocu uploads that could not be read. The PRC source is cited only to confirm hotline 143. Steps follow IFRC 2020 'Snakebites' (the Red Cross Red Crescent movement's international guideline): key action keep still; remove jewellery and tight clothing; keep the limb at or below heart level; in remote areas immobilise with a non-elastic bandage or clothing, wash with potable water, and carry rather than walk; no tourniquet, suction, cold compress, rubbing or cutting. WHO SEARO 2005 adds: reassure, splint or sling, no herbs, chemicals, snake stones or ice, do not kill the snake ('even a severed head can bite'). UP-PGH toxicologist (2024): clean the bite, bandage to immobilise, no tourniquet, no cutting or sucking; PH only has antivenom for the Philippine cobra. DISAGREEMENTS: (1) Pressure immobilisation. IFRC allows it only for properly trained providers in remote areas; WHO SEARO recommends it for neurotoxic elapids (cobras, kraits, sea snakes) but NOT for vipers or cobras whose venom causes local necrosis. A hiker cannot tell which snake it was, so this Guide uses plain immobilisation only (non-stretchy wrap, splint or sling) and never a firm pressure bandage. (2) Washing the bite. IFRC (remote) and UP-PGH say clean it; WHO SEARO says avoid interfering with the wound; Australian Red Cross says do not wash (for venom detection kits, which PH does not use). Followed IFRC and UP-PGH with 'gently pour, do not rub'. FOR THE REVIEWER: check the PRC Standard First Aid manual's snakebite section, especially whether it teaches a constricting band, pressure bandage or elevation. This Guide deliberately does none of these."
+  }
+}

@@ -3,7 +3,6 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
-  Linking,
   Modal,
   Platform,
   Pressable,
@@ -16,15 +15,13 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePreferences, useStrings, useTheme } from '../../settings/preferences';
+import { openGuide } from '../guides';
 import type { Palette } from '../../theme/tokens';
 import { textStyles } from '../../theme/typography';
 import { answer, testFlags } from './assistant';
 import type { Chunk } from './corpus';
-import { embedderAvailable } from './embedder';
 import { errorMessage, fill } from './format';
-import { guideLink } from './guideContent';
 import { engineStore } from './llm';
-import { assistantModelFiles, fileExists } from './modelFiles';
 import type { Reply } from './pipeline';
 import { chipLabel, chipSources, inLanguage } from './sources';
 import strings from './strings';
@@ -38,14 +35,6 @@ type Message =
 
 let nextId = 0;
 const newId = () => String(++nextId);
-
-function modelPresent(): boolean {
-  try {
-    return fileExists(assistantModelFiles().llm) && embedderAvailable();
-  } catch {
-    return false;
-  }
-}
 
 /** The Ask tab (U4): a chat with the on-device Assistant, answering from the search corpus. */
 export function AskScreen() {
@@ -64,7 +53,6 @@ export function AskScreen() {
   const [topOffset, setTopOffset] = useState(0);
   const containerRef = useRef<View>(null);
   const listRef = useRef<FlatList<Message>>(null);
-  const [hasModel] = useState(modelPresent);
 
   useEffect(() => {
     if (!cameraNote) return;
@@ -93,7 +81,7 @@ export function AskScreen() {
   }
 
   function openSource(chunk: Chunk) {
-    if (chunk.target.type === 'guide') void Linking.openURL(guideLink(chunk.target.guideId)).catch(() => undefined);
+    if (chunk.target.type === 'guide') openGuide(chunk.target.guideId);
     else setSheet(chunk);
   }
 
@@ -132,11 +120,10 @@ export function AskScreen() {
               {messages.length === 0 ? (
                 <View style={styles.chips}>
                   {[s.exampleWater, s.exampleFood, s.exampleDownload].map((example) => (
-                    <Chip key={example} label={example} onPress={() => send(example)} colors={colors} disabled={busy || !hasModel} />
+                    <Chip key={example} label={example} onPress={() => send(example)} colors={colors} disabled={busy} />
                   ))}
                 </View>
               ) : null}
-              {!hasModel ? <Text style={[textStyles.bodyStrong, ink]}>{s.modelMissing}</Text> : null}
               {ignorePacks ? <Text style={[textStyles.label, { color: colors.onButter, backgroundColor: colors.butter }, styles.banner]}>{s.packsIgnored}</Text> : null}
             </View>
           }
@@ -177,10 +164,10 @@ export function AskScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={s.send}
-            accessibilityState={{ disabled: busy || !question.trim() || !hasModel }}
-            disabled={busy || !question.trim() || !hasModel}
+            accessibilityState={{ disabled: busy || !question.trim() }}
+            disabled={busy || !question.trim()}
             onPress={() => send()}
-            style={[styles.iconButton, { backgroundColor: colors.primary, opacity: busy || !question.trim() || !hasModel ? 0.5 : 1 }]}
+            style={[styles.iconButton, { backgroundColor: colors.primary, opacity: busy || !question.trim() ? 0.5 : 1 }]}
           >
             <MaterialCommunityIcons name="send" size={22} color={colors.onPrimary} />
           </Pressable>
@@ -225,7 +212,7 @@ function AssistantBubble({
   if (error) body = <Text style={[textStyles.body, { color: colors.ink }]}>{fill(s.answerError, { error })}</Text>;
   else if (reply?.kind === 'off-topic') body = <Text style={[textStyles.body, { color: colors.ink }]}>{s.offTopic}</Text>;
   else if (reply?.kind === 'emergency')
-    body = <Chip label={s.emergencyGuide} onPress={() => void Linking.openURL(guideLink(reply.guideId))} colors={colors} />;
+    body = <Chip label={s.emergencyGuide} onPress={() => openGuide(reply.guideId)} colors={colors} />;
   else if (text) body = <Text selectable style={[textStyles.body, { color: colors.ink }]}>{text}</Text>;
   else body = <Text style={[textStyles.body, { color: colors.muted }]}>{s.answering}</Text>;
 

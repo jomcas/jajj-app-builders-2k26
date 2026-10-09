@@ -1,0 +1,94 @@
+{
+  "id": "leech-bites",
+  "kind": "ordinary",
+  "category": "injury",
+  "order": 3,
+  "title": { "en": "Leech bites", "fil": "Kagat ng limatik" },
+  "summary": {
+    "en": "Leech bites are usually harmless. Break the leech's grip with a fingernail instead of pulling it off, then wash the bite and press on it, as it may bleed longer than a normal cut.",
+    "fil": "Kadalasang hindi delikado ang kagat ng limatik. Tanggalin ang kapit nito gamit ang kuko sa halip na hilahin, saka hugasan ang kagat at diinan, dahil puwede itong dumugo nang mas matagal kaysa karaniwang hiwa."
+  },
+  "callForHelp": {
+    "en": "A leech bite rarely needs emergency help. See a doctor if the bite becomes red, hot, swollen or infected, or turns into an ulcer. Call 911 or the Philippine Red Cross hotline 143 at once if the person has trouble breathing, swelling of the face or lips, or feels faint.",
+    "fil": "Bihirang mangailangan ng emergency na tulong ang kagat ng limatik. Magpatingin sa doktor kung namumula, umiinit, namamaga o naiimpeksyon ang kagat, o nagiging singaw o sugat na hindi gumagaling. Tumawag agad sa 911 o sa hotline ng Philippine Red Cross na 143 kung hirap huminga ang tao, namamaga ang mukha o labi, o parang mahihimatay."
+  },
+  "steps": {
+    "en": [
+      "Stay calm. Leeches are usually easy to remove, and many drop off by themselves once they have fed.",
+      "Find the narrow head end. Slide your fingernail under it and push it sideways until the suction lets go.",
+      "Do the same at the other end, then flick the leech away.",
+      "Wash the bite with soap and clean water.",
+      "Press on the bite with a clean cloth until the bleeding stops. Leech saliva stops blood clotting, so it may bleed for a while.",
+      "Clean it with an antiseptic and keep it covered.",
+      "Use a cold pack if it is painful or swollen.",
+      "To avoid more bites, wear long sleeves and trousers tucked into your socks, and use an insect repellent with DEET on exposed skin."
+    ],
+    "fil": [
+      "Manatiling kalmado. Kadalasang madaling tanggalin ang limatik, at marami ang kusang natatanggal kapag busog na.",
+      "Hanapin ang makitid na dulo, ang ulo nito. Isingit ang kuko sa ilalim nito at itulak patagilid hanggang bumitaw ang kapit.",
+      "Gawin din ito sa kabilang dulo, saka pitikin palayo ang limatik.",
+      "Hugasan ang kagat ng sabon at malinis na tubig.",
+      "Diinan ang kagat ng malinis na tela hanggang tumigil ang pagdurugo. Pinipigilan ng laway ng limatik ang pamumuo ng dugo, kaya puwede itong dumugo nang matagal-tagal.",
+      "Linisin ito ng antiseptic at panatilihing may takip.",
+      "Gumamit ng cold pack kung masakit o namamaga.",
+      "Para makaiwas sa susunod na kagat, magsuot ng mahabang manggas at pantalong nakasuksok sa medyas, at maglagay ng insect repellent na may DEET sa nakalantad na balat."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not pull the leech off hard. It can tear the skin or leave its jaws in the wound, which can get infected.",
+      "Do not burn it off with a lighter, cigarette or hot coal. You can burn your skin."
+    ],
+    "fil": [
+      "Huwag hilahin nang malakas ang limatik. Puwedeng mapunit ang balat o maiwan ang panga nito sa sugat, na puwedeng maimpeksyon.",
+      "Huwag itong sunugin gamit ang lighter, sigarilyo o baga. Puwede kang mapaso."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Redness, heat, swelling or pus around the bite, or a fever.",
+      "A sore or ulcer at the bite that does not heal.",
+      "Large red marks or a rash, swelling around the eyes or lips, faintness, or trouble breathing. These can be an allergic reaction."
+    ],
+    "fil": [
+      "Pamumula, init, pamamaga o nana sa paligid ng kagat, o lagnat.",
+      "Sugat o singaw sa kagat na hindi gumagaling.",
+      "Malalaking pulang marka o pantal, pamamaga sa paligid ng mata o labi, pagkahilo na parang mahihimatay, o hirap huminga. Puwedeng allergic reaction ang mga ito."
+    ]
+  },
+  "keywords": {
+    "en": ["leech", "leeches", "leech bite", "bloodsucker", "bleeding from a leech bite"],
+    "fil": ["limatik", "linta", "kagat ng limatik", "kinagat ng limatik", "nilimatik", "may limatik", "dinikitan ng limatik", "kagat ng linta", "may linta"]
+  },
+  "sources": [
+    {
+      "title": "Leeches, ticks, snakes and spiders (last updated 1 April 2026)",
+      "org": "NSW National Parks and Wildlife Service",
+      "url": "https://www.nationalparks.nsw.gov.au/get-inspired/stories/leeches-ticks-snakes-and-spiders",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Leech bites: removal and treatment (Dr Hamish Black, nib Medical Advisor, 1 August 2024)",
+      "org": "nib health funds (Australia)",
+      "url": "https://www.nib.com.au/the-checkup/treatments-for-leech-bites",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Allergic reaction and anaphylaxis' (pp. 279-281)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: hotline only. No Philippine Red Cross material on leech bites exists online, and IFRC 2020 has no leech section either. The PRC source is cited only for hotline 143. Steps follow NSW National Parks and Wildlife Service (a government park authority): leeches are easy to remove or fall off after feeding; push the narrow head end sideways with a fingernail until the suction releases, then the other end; disinfect and keep covered; watch for large red marks or rashes (allergy); prevention with long sleeves, pants tucked into socks and DEET. The nib medical advisor (Dr Hamish Black) adds: don't pull (skin tears, jaw parts left behind, infection); don't use a lighter, cigarette or hot coal (burns); wash with soap and water and apply pressure until bleeding stops; cold pack for pain or swelling; see a doctor for redness, heat, infection, an ulcer or an allergic reaction. Prolonged bleeding is explained by hirudin, the anticoagulant in leech saliva (StatPearls 'Leech Bite'; only a search-result excerpt could be read, the page itself is paywalled, so it is not listed as a source). Allergy danger signs are from IFRC 'Allergic reaction and anaphylaxis'. DISAGREEMENT: nib recommends putting salt, saltwater or vinegar on a feeding leech to make it fall off; a web-search excerpt of a Popular Science article (not opened) quotes an expert warning that irritants can make leeches regurgitate into the wound. Salt is neither recommended nor forbidden here. Reviewer: decide whether to add it. A PH source (DOH, or a PH mountaineering or first aid body) on limatik would strengthen this Guide."
+  }
+}

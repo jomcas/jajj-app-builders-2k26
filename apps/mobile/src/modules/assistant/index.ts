@@ -10,6 +10,7 @@
 // tahak://assistant/bench, the no-pack test switch tahak://assistant/test?packs=none, and
 // the Wave 0 model benchmark tahak://spike/bench.
 
+import { withModelGate } from '../assistant-model';
 import type { FeatureModule } from '../types';
 import { AskScreen } from './AskScreen';
 import { listenForAssistantLinks } from './bench';
@@ -26,7 +27,8 @@ startIndexing();
 export default {
   id: 'assistant',
   tab: 'ask',
-  Screen: AskScreen,
+  // Download progress until the model files are on the phone, then the chat (#13).
+  Screen: withModelGate(AskScreen),
   hikeModes: ['solo', 'group'],
   offlineNeeds: ['model', 'guide-library'],
 } satisfies FeatureModule;

@@ -7,14 +7,23 @@ import { textStyles } from '../../../theme/typography';
 import { fill } from '../format';
 import type { SimulatedWalk } from '../simulate/player';
 import { SPEEDS } from '../simulate/simLink';
+import { simulationLine } from '../simulate/simulationLine';
 import strings from '../strings';
 
 /**
  * Says, the whole time a simulated walk runs, that the position is simulated, at what speed,
- * and when the script has stepped off the Trail. Also changes the speed and sends the walk
- * off the Trail on demand (for #8's Deviation). Sky, the info colour; never red.
+ * and how far off the Trail the walk really is (see simulate/simulationLine.ts). Also changes
+ * the speed and sends the walk off the Trail on demand (for #8's Deviation). Sky, the info
+ * colour; never red.
  */
-export function SimulationBar({ walk }: { walk: SimulatedWalk }) {
+export function SimulationBar({
+  walk,
+  offTrailM,
+}: {
+  walk: SimulatedWalk;
+  /** The real distance from the whole Trail, as the Deviation measures it; null before a position. */
+  offTrailM: number | null;
+}) {
   const s = useStrings(strings);
   const { colors } = useTheme();
   const sim = useSyncExternalStore(walk.subscribe, walk.getSnapshot);
@@ -32,9 +41,7 @@ export function SimulationBar({ walk }: { walk: SimulatedWalk }) {
             {fill(s.simulationRunning, { speed: Math.round(sim.speed) })}
           </Text>
           <Text style={[textStyles.label, styles.numbers, { color: colors.onSky }]}>
-            {sim.excursion
-              ? fill(s.scriptedOffTrail, { metres: Math.round(sim.intendedOffM) })
-              : s.simulationNote}
+            {simulationLine(offTrailM, s)}
           </Text>
         </View>
       </View>
