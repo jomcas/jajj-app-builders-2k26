@@ -64,13 +64,13 @@ const near = (actual: number, expected: number, tolerance: number, message?: str
 const EAST_LINE = lineFrom(START, [[90, 500], [90, 500]]);
 const east = prepareTrail(EAST_LINE)!;
 
-/** The placeholder Batulao Old Trail from the seed, the Trail on the phone today. */
-function seedTrail(): PreparedTrail {
+/** The first Batulao Trail in the seed, with the length the seed gives for it. */
+function seedTrail(): { trail: PreparedTrail; seedLengthM: number } {
   const sql = readFileSync(join(import.meta.dirname, '..', '..', '..', 'supabase', 'seed', 'batulao.sql'), 'utf8');
-  const json = sql.match(/'(\{"type":"LineString"[^']+)'/)![1];
-  return prepareTrail(JSON.parse(json).coordinates)!;
+  const [, length, json] = sql.match(/, (\d+(?:\.\d+)?),\s*'(\{"type":"LineString"[^']+)'/)!;
+  return { trail: prepareTrail(JSON.parse(json).coordinates)!, seedLengthM: Number(length) };
 }
-const batulao = seedTrail();
+const { trail: batulao, seedLengthM: batulaoSeedLengthM } = seedTrail();
 
 function waypoint(id: string, type: WaypointType, at: LatLon, position: number, distance: number): Waypoint {
   return {
@@ -100,8 +100,8 @@ describe('locateOnTrail', () => {
       haversine += distanceM({ latitude: latA, longitude: lonA }, { latitude: latB, longitude: lonB });
     }
     near(batulao.lengthM, haversine, haversine * 0.001);
-    // The seed says 3211 m for this Trail.
-    near(batulao.lengthM, 3211, 60);
+    // The measured length agrees with the length the seed gives for this Trail.
+    near(batulao.lengthM, batulaoSeedLengthM, 60);
   });
 
   test('a position on the line: no distance off, no bearing', () => {
