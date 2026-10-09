@@ -1,0 +1,104 @@
+{
+  "id": "purifying-water",
+  "kind": "ordinary",
+  "category": "camp",
+  "order": 15,
+  "title": { "en": "Purifying water", "fil": "Paglilinis ng tubig" },
+  "summary": {
+    "en": "Treat stream, spring and rain water before you drink it. Boiling is the most reliable way: bring clear water to a full, rolling boil and keep it boiling for at least 3 minutes.",
+    "fil": "Linisin muna ang tubig mula sa ilog, bukal at ulan bago inumin. Pinakasigurado ang pagpapakulo: pakuluan nang husto ang malinaw na tubig at ituloy ang pagkulo nang hindi bababa sa 3 minuto."
+  },
+  "callForHelp": {
+    "en": "Get medical help if someone has diarrhoea or vomiting that doesn't stop, or shows signs of dehydration, after drinking untreated water. Open the Dehydration Guide. Call 911 or the Philippine Red Cross hotline 143 if they become confused or very drowsy.",
+    "fil": "Humingi ng tulong medikal kung may nagtatae o nagsusuka nang hindi tumitigil, o may palatandaan ng dehydration, matapos uminom ng tubig na hindi nalinis. Buksan ang Guide sa Dehydration. Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 kung nalilito na siya o sobrang antukin."
+  },
+  "steps": {
+    "en": [
+      "Treat any water from streams, springs or rain that you are not sure is safe. If unsure, boil it.",
+      "If the water is cloudy, first filter it through a clean cloth or towel, or let it settle and pour off the clear water.",
+      "Put the water in a clean pot and bring it to a full, rolling boil.",
+      "Keep it boiling for at least 3 minutes.",
+      "Keep it covered while it cools, and let it cool before drinking so you don't get burned.",
+      "Store it in clean containers with tight covers.",
+      "If you can't boil it, filter the water first, then disinfect it.",
+      "Use chlorine, chlorine dioxide or iodine tablets exactly as the label says, including how long to wait before drinking.",
+      "Wash your hands with soap and water before handling drinking water and food."
+    ],
+    "fil": [
+      "Linisin ang anumang tubig mula sa ilog, bukal o ulan na hindi ka sigurado kung ligtas. Kung hindi sigurado, pakuluan ito.",
+      "Kung malabo ang tubig, salain muna ito sa malinis na tela o tuwalya, o hayaang tumining at ibuhos ang malinaw na bahagi.",
+      "Ilagay ang tubig sa malinis na kaldero at pakuluan nang husto hanggang bumubulwak ang kulo.",
+      "Ituloy ang pagkulo nang hindi bababa sa 3 minuto.",
+      "Takpan ito habang lumalamig, at hayaang lumamig bago inumin para hindi ka mapaso.",
+      "Itago ito sa malinis na lalagyang may mahigpit na takip.",
+      "Kung hindi mapakuluan, salain muna ang tubig, saka i-disinfect.",
+      "Gumamit ng chlorine, chlorine dioxide o iodine tablet nang eksakto ayon sa label, kasama kung gaano katagal maghihintay bago inumin.",
+      "Maghugas ng kamay gamit ang sabon at tubig bago humawak ng inuming tubig at pagkain."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not drink untreated water from streams, springs or rain.",
+      "Do not drink flood water, or water that may contain fuel or chemicals. Boiling and tablets cannot make it safe, so find another source.",
+      "Do not rely on chlorine or iodine tablets alone to kill parasites. Filter the water first, or boil it."
+    ],
+    "fil": [
+      "Huwag uminom ng hindi nalinis na tubig mula sa ilog, bukal o ulan.",
+      "Huwag uminom ng tubig-baha, o tubig na maaaring may gasolina o kemikal. Hindi ito kayang gawing ligtas ng pagpapakulo o tablet, kaya maghanap ng ibang mapagkukunan.",
+      "Huwag umasa sa chlorine o iodine tablet lang para mapatay ang mga parasite. Salain muna ang tubig, o pakuluan ito."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Diarrhoea, vomiting or stomach cramps after drinking. Replace lost fluid with an oral rehydration solution (ORS).",
+      "Signs of dehydration: very little or dark urine, sunken eyes, dizziness, or drowsiness.",
+      "Water that smells or tastes of fuel or chemicals."
+    ],
+    "fil": [
+      "Pagtatae, pagsusuka o pananakit ng tiyan matapos uminom. Palitan ang nawalang tubig ng oral rehydration solution (ORS).",
+      "Palatandaan ng dehydration: kaunti o maitim na ihi, lubog na mata, pagkahilo, o pagiging antukin.",
+      "Tubig na amoy o lasang gasolina o kemikal."
+    ]
+  },
+  "keywords": {
+    "en": ["purify water", "water purification", "boil water", "drinking water", "safe to drink", "filter water", "water treatment", "stream water", "spring water", "water tablets"],
+    "fil": ["malinis na tubig", "linisin ang tubig", "paglilinis ng tubig", "pakuluan ang tubig", "magpakulo ng tubig", "inuming tubig", "tubig sa ilog", "tubig sa bukal", "salain ang tubig", "safe ba inumin", "pwede bang inumin", "puwede bang inumin ang tubig"]
+  },
+  "sources": [
+    {
+      "title": "Community-Based Health and First Aid flipchart (Manila, June 2011): 'How to ensure drinking water is safe', 'Proper Hygiene'",
+      "org": "Philippine Red Cross",
+      "url": "https://www.rcrc-resilience-southeastasia.org/wp-content/uploads/2016/07/Community-Based-Health-and-First-Aid-Flipchart-.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PRC warns against common summer diseases (10 April 2019): 'Drink water only from safe sources. If unsure, boil water.'",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=867",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "About Water Treatment Options When Hiking, Camping, or Traveling",
+      "org": "U.S. Centers for Disease Control and Prevention",
+      "url": "https://www.cdc.gov/drinking-water/prevention/water-treatment-hiking-camping-traveling.html",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "How to Make Water Safe in an Emergency",
+      "org": "U.S. Centers for Disease Control and Prevention",
+      "url": "https://www.cdc.gov/water-emergency/about/index.html",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Water treatment while hiking, camping, and traveling (chart)",
+      "org": "U.S. Centers for Disease Control and Prevention",
+      "url": "https://www.cdc.gov/healthywater/pdf/drinking/Backcountry_Water_Treatment-508.pdf",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. Compared with the PRC CBHFA flipchart (Manila, June 2011), 'How to ensure drinking water is safe': if cloudy, filter before boiling through a clean towel, cheesecloth or other fabric; clean container; full boil, continue boiling for at least 3 minutes; keep covered while cooling; chemical treatment with Hyposol or chlorine tablets. Steps 2-5 follow it. The 'Proper Hygiene' page gives handwashing (step 9). PRC 2019: 'Drink water only from safe sources. If unsure, boil water.' (step 1). The PRC flood checklist says not to drink flood water (doNot 2). CDC: boiling is the most reliable method; if you cannot boil, filter and then disinfect; follow the product label including contact time; chlorine and iodine do not work well against parasites (Cryptosporidium not killed, Giardia only partly, per the CDC chart); chemicals and fuel can't be removed by boiling or disinfecting; store in clean covered containers. DISAGREEMENT: boiling time. CDC says 1 minute, or 3 minutes above 6,500 ft (about 2,000 m); WHO says reaching a rolling boil is enough; the PRC flipchart says at least 3 minutes. Followed PRC (3 minutes), which also covers CDC's high-altitude case on the highest PH peaks. Bleach drops per litre were deliberately left out (dosing depends on bleach strength; 'follow the label' instead). The flipchart's 'Hyposol' (a PH sodium hypochlorite product) is covered by 'chlorine'."
+  }
+}

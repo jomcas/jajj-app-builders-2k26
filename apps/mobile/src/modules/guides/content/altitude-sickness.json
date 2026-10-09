@@ -5,8 +5,8 @@
   "order": 13,
   "title": { "en": "Altitude sickness", "fil": "Altitude sickness (sakit sa taas ng bundok)" },
   "summary": {
-    "en": "Altitude sickness can start from about 2,400 m, so it is possible on the highest Philippine peaks. A headache with tiredness, dizziness or nausea after climbing high means stop climbing. If it gets worse, go down.",
-    "fil": "Puwedeng magsimula ang altitude sickness mula mga 2,400 metro, kaya posible ito sa pinakamatataas na bundok sa Pilipinas. Kapag sumakit ang ulo kasabay ng pagod, pagkahilo o pagduduwal matapos umakyat nang mataas, huminto sa pag-akyat. Kung lumalala, bumaba."
+    "en": "Altitude sickness can start from about 2,400 m, so it is possible on the highest Philippine peaks. A headache with tiredness, dizziness or nausea after climbing high means stop climbing, and go down if it gets worse.",
+    "fil": "Puwedeng magsimula ang altitude sickness mula mga 2,400 metro, kaya posible ito sa pinakamatataas na bundok sa Pilipinas. Kapag sumakit ang ulo kasabay ng pagod, pagkahilo o pagduduwal matapos umakyat nang mataas, huminto sa pag-akyat, at bumaba kung lumalala."
   },
   "callForHelp": {
     "en": "Call 911 or the Philippine Red Cross hotline 143 if the person is breathless even at rest, has a bad cough, is confused or clumsy, or cannot get down on their own. These can be life-threatening and need a safe descent right away. If there is no signal, send someone for help while others help the person down.",

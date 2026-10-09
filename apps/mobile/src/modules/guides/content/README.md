@@ -74,4 +74,4 @@ python3 -I apps/mobile/src/modules/guides/content/validate.py            # all 1
 python3 -I apps/mobile/src/modules/guides/content/validate.py --partial  # only the files present
 ```
 
-Standard library only. It checks that every id is present, that kinds and categories match CONTEXT.md and docs/plan.md, `en`/`fil` parity, non-empty fields, the step count, 911 in Emergency Guides, the source fields, and that each Guide has a Philippine Red Cross source or a note saying why not. It also prints how many Guides a human has checked.
+Standard library only. It checks that every id is present, that kinds and categories match CONTEXT.md and docs/plan.md, `en`/`fil` parity, non-empty fields, the step count, summaries of at most 2 sentences, 911 in Emergency Guides, the source fields, and that each Guide has a Philippine Red Cross source or a note saying why not. It also prints how many Guides a human has checked.

@@ -51,6 +51,7 @@ REVIEW_KEYS = {"redCrossChecked", "checkedBy", "notes"}
 PRC = "Philippine Red Cross"
 PRC_BASIS = re.compile(r"^PRC basis: (full|partial|hotline only|none)\.")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+SENTENCE_END = re.compile(r"[.!?](?:\s|$)")
 MIN_STEPS, MAX_STEPS = 5, 10
 
 
@@ -102,6 +103,8 @@ def check_guide(path, errors):
         for lang in LANGS:
             if not nonempty_str(value[lang]):
                 err(f"{field}.{lang} is empty")
+            elif field == "summary" and len(SENTENCE_END.findall(value[lang])) > 2:
+                err(f"summary.{lang} is longer than 2 sentences")
 
     for field in PAIRED_LISTS:
         value = guide.get(field)
