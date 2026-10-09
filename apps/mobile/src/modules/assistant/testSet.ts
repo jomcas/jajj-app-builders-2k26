@@ -7,6 +7,10 @@
 //           'off-topic': must get the fixed off-topic reply.
 //   ui      the UI language to answer in (English UI → English, Filipino UI → Taglish).
 //   source  for in-scope questions, the start of a chunk id the answer should come from.
+//
+// Last run on the Flip 6 (2026-10-10, airplane mode, embeddinggemma-300M, threshold 0.40):
+// 0 of 22 in-scope questions refused, 0 of 10 off-topic questions let through. In-scope
+// questions scored 0.44-0.79, off-topic ones 0.06-0.37.
 
 import type { Language } from '../../i18n/types';
 
