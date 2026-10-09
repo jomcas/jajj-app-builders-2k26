@@ -140,17 +140,19 @@ export function createForecastCard(store: ForecastStore) {
         )}
 
         {status === 'failed' ? (
-          <View style={styles.failed}>
-            <Text style={[textStyles.label, styles.grow, { color: colors.muted }]}>{s.refreshFailed}</Text>
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => store.refreshKey(key)}
-              hitSlop={8}
-              style={({ pressed }) => [styles.refresh, { backgroundColor: colors.tint, opacity: pressed ? 0.8 : 1 }]}
-            >
-              <Text style={[textStyles.labelStrong, { color: colors.onTint }]}>{s.refresh}</Text>
-            </Pressable>
-          </View>
+          <Text style={[textStyles.label, { color: colors.muted }]}>{s.refreshFailed}</Text>
+        ) : null}
+
+        {forecast !== undefined && status !== 'refreshing' ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => store.refreshKey(key)}
+            hitSlop={8}
+            style={({ pressed }) => [styles.refresh, { backgroundColor: colors.tint, opacity: pressed ? 0.8 : 1 }]}
+          >
+            <MaterialCommunityIcons name="refresh" size={18} color={colors.onTint} />
+            <Text style={[textStyles.labelStrong, { color: colors.onTint }]}>{s.refresh}</Text>
+          </Pressable>
         ) : null}
       </View>
     );
@@ -207,13 +209,11 @@ const styles = StyleSheet.create({
   numbers: {
     fontVariant: ['tabular-nums'],
   },
-  failed: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
   refresh: {
-    minHeight: 40,
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    gap: 6,
+    minHeight: 44,
     paddingHorizontal: 14,
     borderRadius: 12,
     alignItems: 'center',
