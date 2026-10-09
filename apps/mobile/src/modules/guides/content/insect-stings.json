@@ -1,0 +1,94 @@
+{
+  "id": "insect-stings",
+  "kind": "ordinary",
+  "category": "injury",
+  "order": 2,
+  "title": { "en": "Insect and bee stings", "fil": "Kagat ng insekto at bubuyog" },
+  "summary": {
+    "en": "Scrape a bee stinger out quickly, wash the sting and cool it to ease swelling. Get help at once if the person has trouble breathing, swelling of the face or throat, or was stung in the mouth or throat.",
+    "fil": "Kayurin agad palabas ang naiwang tusok ng bubuyog, hugasan ang kagat at palamigin para mabawasan ang pamamaga. Humingi agad ng tulong kung hirap huminga ang tao, namamaga ang mukha o lalamunan, o natusok sa bibig o lalamunan."
+  },
+  "callForHelp": {
+    "en": "Call 911 or the Philippine Red Cross hotline 143 at once if the person has trouble breathing or swallowing, swelling of the lips, tongue or throat, feels faint, or was stung in the mouth or throat. If they carry an epinephrine auto-injector, help them use it. Also get medical care if they were stung many times, you can't get the stinger out, or they keep getting worse over the next day.",
+    "fil": "Tumawag agad sa 911 o sa hotline ng Philippine Red Cross na 143 kung hirap huminga o lumunok ang tao, namamaga ang labi, dila o lalamunan, parang mahihimatay, o natusok sa bibig o lalamunan. Kung may dala siyang epinephrine auto-injector, tulungan siyang gamitin ito. Magpatingin din sa doktor kung marami ang kagat, hindi matanggal ang tusok, o patuloy na lumalala sa loob ng isang araw."
+  },
+  "steps": {
+    "en": [
+      "Move away from the bees or wasps. Stay calm and don't wave your arms at them. If a swarm attacks, run and find shelter.",
+      "If a stinger is left in the skin, scrape it out quickly with a flat edge, such as a card or the blunt side of a knife.",
+      "Wash the sting with clean water. If you have no clean water, use an antiseptic.",
+      "Cool the area with ice in a bag or a cold pack wrapped in cloth to ease swelling, itching and pain.",
+      "If the sting is on the hand or arm, remove rings and bracelets before it swells.",
+      "Tell the person not to scratch it.",
+      "Watch the person closely for signs of a severe allergic reaction (see below).",
+      "If they have a severe reaction and carry an epinephrine auto-injector, help them use it in the middle of the outer thigh. It can go through thin clothing.",
+      "If they have trouble breathing, help them sit up. Otherwise help them lie down while you wait for help."
+    ],
+    "fil": [
+      "Lumayo sa mga bubuyog o putakti. Manatiling kalmado at huwag iwasiwas ang mga braso. Kung inatake ng kuyog, tumakbo at maghanap ng masisilungan.",
+      "Kung may naiwang tusok sa balat, kayurin agad ito palabas gamit ang patag na gilid, gaya ng card o mapurol na bahagi ng kutsilyo.",
+      "Hugasan ang kagat ng malinis na tubig. Kung walang malinis na tubig, gumamit ng antiseptic.",
+      "Palamigin ang bahagi gamit ang yelo sa supot o cold pack na nakabalot sa tela para mabawasan ang pamamaga, pangangati at sakit.",
+      "Kung sa kamay o braso ang kagat, tanggalin ang singsing at pulseras bago ito mamaga.",
+      "Sabihan ang tao na huwag itong kamutin.",
+      "Bantayang mabuti ang tao para sa mga palatandaan ng malubhang allergic reaction (tingnan sa ibaba).",
+      "Kung may malubhang reaksyon at may dala siyang epinephrine auto-injector, tulungan siyang iturok ito sa gitna ng labas na bahagi ng hita. Puwede itong tumagos sa manipis na damit.",
+      "Kung hirap siyang huminga, tulungan siyang umupo. Kung hindi, tulungan siyang humiga habang naghihintay ng tulong."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not pull the stinger out with your fingers or tweezers. Squeezing it pushes in more venom.",
+      "Do not scratch the sting; it can get infected.",
+      "Do not wave your arms at bees or wasps; they react to movement.",
+      "Do not touch or disturb hives and nests."
+    ],
+    "fil": [
+      "Huwag bunutin ang tusok gamit ang daliri o tiyani. Kapag naipit ito, mas maraming kamandag ang napapasok.",
+      "Huwag kamutin ang kagat; puwede itong maimpeksyon.",
+      "Huwag iwasiwas ang braso sa mga bubuyog o putakti; tumutugon sila sa galaw.",
+      "Huwag hawakan o galawin ang mga pugad."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Trouble breathing, wheezing or noisy breathing.",
+      "Swelling of the lips, tongue or throat, a hoarse voice, or trouble swallowing.",
+      "Pale or grey skin, confusion, dizziness or fainting.",
+      "A sting inside the mouth or throat.",
+      "Many stings at once.",
+      "Redness, warmth and pain that keep getting worse after a day or two, or a fever. These are signs of infection."
+    ],
+    "fil": [
+      "Hirap sa paghinga, humuhuni o maingay na paghinga.",
+      "Pamamaga ng labi, dila o lalamunan, pamamaos, o hirap lumunok.",
+      "Maputla o kulay-abong balat, pagkalito, pagkahilo o pagkahimatay.",
+      "Kagat sa loob ng bibig o lalamunan.",
+      "Maraming kagat nang sabay-sabay.",
+      "Pamumula, init at sakit na patuloy na lumalala pagkalipas ng isa o dalawang araw, o lagnat. Mga palatandaan ito ng impeksyon."
+    ]
+  },
+  "keywords": {
+    "en": ["bee", "bees", "wasp", "hornet", "sting", "stung", "stinger", "insect bite", "bug bite", "ant bite", "swarm", "allergic reaction"],
+    "fil": ["bubuyog", "putakti", "pukyutan", "kagat ng bubuyog", "kinagat ng putakti", "natusok ng bubuyog", "kagat ng insekto", "kinagat ng insekto", "kinagat ng langgam", "pantal", "namantal", "namaga ang kagat", "na-sting", "na-sting ng bee"]
+  },
+  "sources": [
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Insect bites or stings' (pp. 244-246), 'Allergic reaction and anaphylaxis' (pp. 279-281)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: hotline only. No Philippine Red Cross material on insect or bee stings could be found online. The 2011 PRC CBHFA flipchart only mentions insect bites on its herbal-medicine page (akapulko), which was deliberately not used. The PRC source is cited only for hotline 143. Steps follow IFRC 2020 'Insect bites or stings': remove a bee stinger as soon as possible by scraping with a flat object, never tweezers or fingers (they press the venom sac); clean with potable water, or antiseptic if none; cool with ice in a bag; remove rings for hand stings; do not scratch; stay calm, don't wave hands, run and find shelter if attacked by a swarm; access EMS for stings to the mouth or throat or any severe allergic reaction; seek care if the stinger can't be removed, there are many stings, or symptoms worsen up to 24 hours later. Allergy signs and the auto-injector steps (outer thigh, through thin clothing, sit up if breathing is difficult, otherwise lie down) are from IFRC 'Allergic reaction and anaphylaxis'. Epinephrine doses were deliberately left out (the person's own prescribed auto-injector carries the dose). Tick removal was left out (not a common PH trail issue). Check against the PRC Standard First Aid manual's bites and stings and anaphylaxis sections, especially whether PRC allows first aiders to help with an auto-injector."
+  }
+}

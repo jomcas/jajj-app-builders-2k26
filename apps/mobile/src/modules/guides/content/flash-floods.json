@@ -1,0 +1,112 @@
+{
+  "id": "flash-floods",
+  "kind": "emergency",
+  "category": "hazard",
+  "order": 12,
+  "title": { "en": "Flash floods and river crossings", "fil": "Biglaang baha at pagtawid sa ilog" },
+  "summary": {
+    "en": "Mountain streams can rise suddenly after heavy rain. Don't camp in low spots by the water, don't cross fast, muddy or rising water (if in doubt, stay out), and move to higher ground at the first sign of a flash flood.",
+    "fil": "Puwedeng biglang tumaas ang mga ilog sa bundok pagkatapos ng malakas na ulan. Huwag magkampo sa mabababang lugar malapit sa tubig, huwag tumawid sa mabilis, malabo o tumataas na tubig (kapag nagdududa, huwag nang tumawid), at umakyat sa mas mataas na lugar sa unang palatandaan ng biglaang baha."
+  },
+  "callForHelp": {
+    "en": "If someone is swept away or you are trapped by moving water, call 911 or the Philippine Red Cross hotline 143. If you are trapped, climb to the highest point you can reach and stay there. Say where you are and how many people need help. If there is no signal, signal with a whistle and the Flare (tap SOS at the top of the screen, then press and hold).",
+    "fil": "Kung may tinangay ng agos o na-trap kayo ng rumaragasang tubig, tumawag sa 911 o sa hotline ng Philippine Red Cross na 143. Kung na-trap, umakyat sa pinakamataas na lugar na maaabot at manatili roon. Sabihin kung nasaan kayo at ilan ang nangangailangan ng tulong. Kung walang signal, magbigay ng signal gamit ang pito at ang Flare (pindutin ang SOS sa itaas ng screen, saka pindutin nang matagal)."
+  },
+  "steps": {
+    "en": [
+      "Before you go, check the Forecast and any rain or flood warnings, and be ready to change plans.",
+      "Do not camp in low spots, dry stream beds or ravines, or right beside rivers.",
+      "Know the signs of danger: water rising, turning brown or muddy, carrying branches and debris, flowing faster than walking pace, or roaring.",
+      "At the first sign, move away from the stream to higher ground at once.",
+      "Before any river crossing, look first. Don't cross if the water shows any danger sign or you can't find a safe way in and out. If in doubt, stay out.",
+      "Wait for the water to go down, or turn back. Your safety matters more than your schedule.",
+      "If you must cross a slow, shallow stream, unbuckle your pack's hip belt so you can drop it, face upstream, and use a sturdy stick or hold on to each other to keep two points on the ground.",
+      "If you are trapped by rising water, climb to the highest point you can reach and call or signal for help."
+    ],
+    "fil": [
+      "Bago umalis, tingnan ang Forecast at anumang babala sa ulan o baha, at maging handang baguhin ang plano.",
+      "Huwag magkampo sa mabababang lugar, tuyong daluyan ng tubig o bangin, o mismong tabi ng ilog.",
+      "Alamin ang mga palatandaan ng panganib: tumataas ang tubig, nagiging kulay-tsokolate o malabo, may dalang sanga at kalat, mas mabilis ang agos kaysa paglakad, o umuugong.",
+      "Sa unang palatandaan, lumayo agad sa ilog papunta sa mas mataas na lugar.",
+      "Bago tumawid sa ilog, tingnan muna. Huwag tumawid kung may kahit isang palatandaan ng panganib o walang ligtas na daan papasok at palabas. Kapag nagdududa, huwag nang tumawid.",
+      "Hintaying bumaba ang tubig, o bumalik na lang. Mas mahalaga ang kaligtasan mo kaysa sa iskedyul.",
+      "Kung kailangan talagang tumawid sa mabagal at mababaw na ilog, tanggalin ang pagkaka-buckle ng hip belt ng bag para mabitawan mo ito, humarap sa pinanggagalingan ng agos, at gumamit ng matibay na tungkod o maghawakan para laging may dalawang tukod sa lupa.",
+      "Kung na-trap kayo ng tumataas na tubig, umakyat sa pinakamataas na lugar na maaabot at tumawag o magbigay ng signal para humingi ng tulong."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not walk through flood water. Just 15 cm (6 inches) of fast-moving water can knock you off your feet.",
+      "Do not cross bridges or trail sections that are under water.",
+      "Do not cross a river when you are unsure it is safe.",
+      "Do not drink, play or swim in flood water."
+    ],
+    "fil": [
+      "Huwag lumusong sa baha. Kahit 15 cm (6 pulgada) lang ng rumaragasang tubig ay kayang magpatumba sa iyo.",
+      "Huwag tumawid sa tulay o bahagi ng trail na lubog sa tubig.",
+      "Huwag tumawid sa ilog kapag hindi ka sigurado na ligtas ito.",
+      "Huwag uminom, maglaro o lumangoy sa tubig-baha."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Water rising around your camp or the trail.",
+      "The stream turns muddy, fills with debris, or gets louder.",
+      "Someone swept into the water, or stuck on the far bank as the water rises.",
+      "Anyone who has been in the water and is now very cold or shivering. Open the Hypothermia Guide."
+    ],
+    "fil": [
+      "Tumataas ang tubig sa paligid ng kampo o ng trail.",
+      "Lumalabo, dumarami ang kalat, o lumalakas ang ugong ng ilog.",
+      "May tinangay ng tubig, o may naiwan sa kabilang pampang habang tumataas ang tubig.",
+      "Sinumang nalubog sa tubig at ngayon ay giniginaw nang husto o nanginginig. Buksan ang Guide sa Hypothermia."
+    ]
+  },
+  "keywords": {
+    "en": ["flash flood", "flood", "flooding", "river crossing", "cross the river", "rising river", "rising water", "swept away", "strong current", "stream", "high water"],
+    "fil": ["baha", "biglang baha", "flash flood", "rumaragasang tubig", "malakas ang agos", "tumataas ang ilog", "tumataas ang tubig", "tawid ilog", "pagtawid sa ilog", "tumawid sa ilog", "inanod", "tinangay ng agos", "lumalim ang ilog", "ilog"]
+  },
+  "sources": [
+    {
+      "title": "Floods: Preparation (before, during and after a flood). Checklist credited to the Philippine Red Cross, published by Iloilo City CDRRMO",
+      "org": "Philippine Red Cross",
+      "url": "https://cdrrmo.iloilocity.gov.ph/resources/disaster-preparedness/floods-preparation/",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "During a Flood",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/safety/flood-during",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Turn Around Don't Drown",
+      "org": "U.S. National Weather Service (NOAA)",
+      "url": "https://www.weather.gov/safety/flood-turn-around-dont-drown",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "River crossings",
+      "org": "New Zealand Department of Conservation",
+      "url": "https://www.doc.govt.nz/parks-and-recreation/know-before-you-go/river-crossings/",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Backcountry Hikers Advised to Use Caution When Crossing Rivers (news release, 6 August 2018)",
+      "org": "U.S. National Park Service, Mount Rainier National Park",
+      "url": "https://www.nps.gov/mora/learn/news/hikers-advised-to-use-caution-when-crossing-rivers.htm",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Finding and Setting Up a Campsite",
+      "org": "U.S. National Park Service",
+      "url": "https://www.nps.gov/subjects/camping/finding-and-setting-up-a-campsite.htm",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. The PRC source is a flood checklist that Iloilo City's CDRRMO publishes and credits to the Philippine Red Cross (hosted on cdrrmo.iloilocity.gov.ph, not on redcross.org.ph): monitor the weather forecast every day; take heed of flood or flashflood warnings; move to higher ground; avoid crossing bridges or roads that are flooded; stay away from low-lying areas; do not drink from, play or swim in flood water. Steps 1 and 4 and doNot 2 and 4 follow it. It is written for communities, not hikers. River-crossing steps follow NZ Department of Conservation (danger signs: faster than walking pace, discoloured, debris, roaring; do not cross if flooded or unsure; 'If in doubt? Stay out'; be ready to wait or turn back) and NPS Mount Rainier (unfasten the pack belt, sturdy stick for two points of contact, face upstream, 'your safety is more important than your itinerary'). NWS: 6 inches of moving water can knock you off your feet (converted to 15 cm); camping in a low-lying area means get to higher ground; trapped by moving water means go to the highest point and call 911. NPS campsites: avoid ravines that could flood. Left out because they could not be verified from a fetched page: the Maui County warning that flash floods can come under sunny skies from rain higher up (page returned 403), and NZ DOC's 'usually a few hours' wait time. Not included: what to do if swept away (no reliable source fetched). Reviewer: a PAGASA or NDRRMC source on mountain flash floods would strengthen this; check PRC water-safety training material if available."
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "id": "heat-illness",
+  "kind": "emergency",
+  "category": "injury",
+  "order": 8,
+  "title": { "en": "Heat exhaustion and heatstroke", "fil": "Heat exhaustion at heatstroke" },
+  "summary": {
+    "en": "Heat exhaustion (heavy sweating, pale moist skin, dizziness) can turn into heatstroke (no sweating; hot, red, dry skin; confusion), which can kill. Stop, get into the shade, and cool the person fast.",
+    "fil": "Ang heat exhaustion (labis na pagpapawis, maputla at basang balat, pagkahilo) ay puwedeng mauwi sa heatstroke (hindi na pinagpapawisan; mainit, mapula at tuyong balat; pagkalito), na nakamamatay. Huminto, pumunta sa lilim, at palamigin agad ang tao."
+  },
+  "callForHelp": {
+    "en": "Heatstroke is life-threatening. Call 911 or the Philippine Red Cross 24/7 hotline 143 right away if the person is confused, has stopped sweating, has a seizure, cannot drink without vomiting, or stops responding. Say where you are. If there is no signal, send someone for help while others keep cooling the person.",
+    "fil": "Nakamamatay ang heatstroke. Tumawag agad sa 911 o sa 24/7 na hotline ng Philippine Red Cross na 143 kung nalilito ang tao, hindi na pinagpapawisan, nangingisay, sumusuka tuwing iinom, o hindi na sumasagot. Sabihin kung nasaan kayo. Kung walang signal, magpadala ng tao para humingi ng tulong habang patuloy na pinalalamig ng iba ang tao."
+  },
+  "steps": {
+    "en": [
+      "Stop all activity. Move the person to a cool, shaded, airy place.",
+      "Loosen or remove extra clothing.",
+      "Heatstroke signs (hot, red, dry skin; confusion): start cooling at once. If there is safe, calm water, put the person in cool water up to the neck, holding them so their head stays above water.",
+      "If you cannot put them in water, spray or pour water on their skin, cover them with a wet cloth and fan them. Put cold packs on the neck and groin if you have them.",
+      "Keep cooling (about 15 minutes if they are in water) while you wait for help, and keep checking their breathing and whether they respond.",
+      "Heat exhaustion signs (heavy sweating, pale moist skin, dizziness): cool them with wet cloths, cool water on the hands and feet, and fanning.",
+      "If they are alert and not vomiting, give cool water or an oral rehydration solution (ORS) to drink.",
+      "Let them rest and stay cool. If they do not improve, or get worse, get medical help."
+    ],
+    "fil": [
+      "Itigil ang lahat ng gawain. Dalhin ang tao sa malamig, malilim at mahanging lugar.",
+      "Luwagan o hubarin ang sobrang damit.",
+      "Palatandaan ng heatstroke (mainit, mapula at tuyong balat; pagkalito): simulan agad ang pagpapalamig. Kung may ligtas at kalmadong tubig, ilubog ang tao sa malamig na tubig hanggang leeg, habang hawak siya para manatiling nakaangat ang ulo sa tubig.",
+      "Kung hindi siya mailubog sa tubig, wisikan o buhusan ng tubig ang kanyang balat, takpan ng basang tela at paypayan. Lagyan ng cold pack ang leeg at singit kung mayroon.",
+      "Ituloy ang pagpapalamig (mga 15 minuto kung nakalubog sa tubig) habang naghihintay ng tulong, at patuloy na tingnan ang kanyang paghinga at kung sumasagot pa siya.",
+      "Palatandaan ng heat exhaustion (labis na pagpapawis, maputla at basang balat, pagkahilo): palamigin siya gamit ang basang tela, malamig na tubig sa kamay at paa, at pagpapaypay.",
+      "Kung gising na gising siya at hindi sumusuka, painumin siya ng malamig na tubig o oral rehydration solution (ORS).",
+      "Pagpahingahin siya at panatilihing malamig. Kung hindi bumubuti o lumalala, humingi ng tulong medikal."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not let someone with heat illness keep hiking.",
+      "Do not wait for help to arrive before you start cooling a person with heatstroke.",
+      "Do not give drinks to someone who is confused, very drowsy or vomiting.",
+      "Do not give alcohol, and avoid soft drinks and other very sugary drinks. Water or ORS is better."
+    ],
+    "fil": [
+      "Huwag hayaang ituloy ang pag-hike ng taong may heat illness.",
+      "Huwag nang hintayin ang tulong bago simulan ang pagpapalamig sa taong may heatstroke.",
+      "Huwag painumin ang taong nalilito, sobrang antukin o sumusuka.",
+      "Huwag painumin ng alak, at iwasan ang softdrinks at iba pang sobrang tamis na inumin. Mas mabuti ang tubig o ORS."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "No sweating, with hot, red, dry or flushed skin.",
+      "Confusion, disorientation or unusual behaviour.",
+      "A seizure.",
+      "Cannot drink without vomiting.",
+      "Fainting, or the person stops responding."
+    ],
+    "fil": [
+      "Hindi na pinagpapawisan, at mainit, mapula, tuyo o namumulang balat.",
+      "Pagkalito, pagkawala sa sarili o kakaibang kilos.",
+      "Pangingisay o kombulsyon.",
+      "Sumusuka tuwing iinom.",
+      "Nahimatay, o hindi na sumasagot ang tao."
+    ]
+  },
+  "keywords": {
+    "en": ["heatstroke", "heat stroke", "heat exhaustion", "overheated", "overheating", "too hot", "dizzy from the heat", "collapsed in the heat", "sun stroke", "stopped sweating", "heat cramps"],
+    "fil": ["heatstroke", "na-heatstroke", "na-heat stroke", "heat exhaustion", "init", "sobrang init", "init na init", "naiinitan", "nahilo sa init", "nahihilo sa init", "nanghihina sa init", "nawalan ng malay sa init", "hindi na pinagpapawisan", "nainitan ng araw"]
+  },
+  "sources": [
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025)",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PRC warns against common summer diseases (10 April 2019)",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=867",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Hyperthermia' (pp. 332-334)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. Compared with the PRC advisory of 5 March 2025 (redcross.org.ph/?p=7916). Heatstroke signs per PRC: 'absence of sweating; red, hot, dry, and flushed skin; confusion, and disorientation'. Heat exhaustion signs per PRC: 'heavy sweating, paleness, dizziness, vomiting, fainting, and moist skin'. First aid per PRC Secretary-General: 'move the patient to a cooler area, spray water on the skin', 'immerse the patient in cool water (for heat stroke)', 'have the patient drink an Oral Rehydration Solution (for heat exhaustion)', call 143. Steps 1, 3, 4 and 7 and the watchFor list match it. The PRC 2019 advisory gives prevention only (hydrate, light cotton clothing, avoid 11am-3pm sun, outdoor activity early or late). Added from IFRC 2020 'Hyperthermia': stop all activity and remove excess clothing; immerse up to the neck for about 15 minutes, or else wet sheet, water, ice packs on neck and groin, fanning; access EMS for confusion, seizure, no sweating, temperature above 39 C, or cannot drink without vomiting; drinks only if responsive enough. The temperature thresholds (39 C, 40 C) and water temperatures were left out because hikers rarely carry a thermometer. 'Holding them so their head stays above water' is a safety addition not stated in either source; reviewer please confirm. DISAGREEMENT: PRC says 'avoid sugary drinks' (prevention, aimed at soft drinks); IFRC suggests sports drinks or a sugar-and-salt ORS. Resolved by recommending water or ORS and advising against soft drinks and very sugary drinks. Check against the PRC Standard First Aid manual's heat emergencies section."
+  }
+}

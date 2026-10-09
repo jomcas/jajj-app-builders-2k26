@@ -1,0 +1,100 @@
+{
+  "id": "sprains-fractures",
+  "kind": "emergency",
+  "category": "injury",
+  "order": 4,
+  "title": { "en": "Sprains and fractures", "fil": "Pilay at bali" },
+  "summary": {
+    "en": "Treat any injured arm or leg as a possible broken bone: keep it still and supported. Cool it for up to 20 minutes, and splint it before moving the person over rough ground.",
+    "fil": "Ituring na posibleng bali ang anumang napinsalang braso o binti: panatilihin itong hindi gumagalaw at may suporta. Palamigin ito nang hanggang 20 minuto, at lagyan ng splint bago ilipat ang tao sa magaspang na daan."
+  },
+  "callForHelp": {
+    "en": "Call 911 or the Philippine Red Cross hotline 143 if there is a lot of pain or swelling, the limb is bent or out of place, bone shows through the skin, or the person cannot walk. Say where you are and how the person is. If there is no signal, send someone for help with these details while others stay with the person.",
+    "fil": "Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 kung matindi ang sakit o pamamaga, baluktot o wala sa lugar ang braso o binti, may butong lumalabas sa balat, o hindi makalakad ang tao. Sabihin kung nasaan kayo at ano ang lagay ng tao. Kung walang signal, magpadala ng tao para humingi ng tulong dala ang mga detalyeng ito, habang may naiiwang kasama ng napinsala."
+  },
+  "steps": {
+    "en": [
+      "Treat the injury as a broken bone unless you are sure it is not. Only an X-ray can tell.",
+      "Tell the person to keep still and not to move the injured part.",
+      "Support the injury in the position you found it, in the way that hurts least, for example with rolled-up clothing.",
+      "If there is a wound or bone showing, carefully place padding over the wound to control the bleeding.",
+      "Cool the injury with ice or something cold wrapped in cloth, for up to 20 minutes. Stop if it hurts too much.",
+      "Raise the injured arm or leg if that is comfortable, to reduce swelling.",
+      "Immobilise the injured part with padding, bandages, and a sling or splint. Sticks or other straight, stiff items padded with clothing can serve as a splint.",
+      "Before moving the person over a long or rough trail, splint the limb so it cannot move.",
+      "Keep the person warm, calm and resting. Watch for shock, especially if a thigh bone may be broken.",
+      "Note the time of the injury and tell the medical staff."
+    ],
+    "fil": [
+      "Ituring na bali ang pinsala maliban kung sigurado kang hindi. X-ray lang ang makapagsasabi.",
+      "Sabihan ang tao na huwag gumalaw at huwag igalaw ang napinsalang bahagi.",
+      "Suportahan ang pinsala sa posisyong dinatnan mo ito, sa paraang pinakakaunti ang sakit, halimbawa gamit ang nirolyong damit.",
+      "Kung may sugat o may butong lumalabas, maingat na lagyan ng pantapal ang sugat para mapigil ang pagdurugo.",
+      "Palamigin ang pinsala gamit ang yelo o anumang malamig na nakabalot sa tela, nang hanggang 20 minuto. Itigil kung masyadong masakit.",
+      "Itaas ang napinsalang braso o binti kung komportable ito, para mabawasan ang pamamaga.",
+      "Pigilang gumalaw ang napinsalang bahagi gamit ang pantapal, benda, at sling o splint. Puwedeng gawing splint ang mga patpat o ibang tuwid at matigas na bagay na sinapinan ng damit.",
+      "Bago ilipat ang tao sa mahaba o magaspang na trail, lagyan ng splint ang braso o binti para hindi ito gumalaw.",
+      "Panatilihing mainit, kalmado at nagpapahinga ang tao. Bantayan ang shock, lalo na kung maaaring bali ang buto ng hita.",
+      "Tandaan ang oras ng pagkakapinsala at sabihin ito sa mga doktor o nars."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not try to straighten a bent limb or push a bone back in. Leave that to trained responders and doctors.",
+      "Do not let the person walk on a leg that might be broken.",
+      "Do not put ice directly on the skin, and do not cool for more than 20 minutes at a time.",
+      "Do not use heat, or switch between hot and cold, on a fresh sprain or break."
+    ],
+    "fil": [
+      "Huwag subukang ituwid ang baluktot na braso o binti o ibalik ang buto sa puwesto. Ipaubaya iyon sa mga sinanay na rescuer at doktor.",
+      "Huwag palakarin ang tao sa binting maaaring bali.",
+      "Huwag idikit nang direkta ang yelo sa balat, at huwag magpalamig nang lampas 20 minuto bawat beses.",
+      "Huwag gumamit ng mainit, o magsalitan ng mainit at malamig, sa bagong pilay o bali."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "The limb is bent, twisted or shorter than the other one, or bone shows through the skin.",
+      "The hand or foot beyond the injury becomes cold, pale or numb.",
+      "Heavy bleeding from a wound at the injury.",
+      "Pale or grey skin, cold and clammy skin, dizziness, fast breathing, or the person becomes anxious or sleepy (signs of shock).",
+      "After a fall from more than standing height: neck or back pain, or tingling or weakness in the arms or legs. Keep the person still, do not move them unless they are in danger, and get help."
+    ],
+    "fil": [
+      "Baluktot, pilipit o mas maikli ang braso o binti kaysa sa kabila, o may butong lumalabas sa balat.",
+      "Lumalamig, namumutla o namamanhid ang kamay o paa sa dulo ng pinsala.",
+      "Malakas na pagdurugo mula sa sugat sa napinsalang bahagi.",
+      "Maputla o kulay-abong balat, malamig at malagkit na balat, pagkahilo, mabilis na paghinga, o nagiging balisa o antukin ang tao (mga palatandaan ng shock).",
+      "Pagkatapos mahulog mula sa taas na higit sa pagkakatayo: masakit ang leeg o likod, o may pangingilig o panghihina sa braso o binti. Panatilihing hindi gumagalaw ang tao, huwag siyang ilipat maliban kung nasa panganib siya, at humingi ng tulong."
+    ]
+  },
+  "keywords": {
+    "en": ["sprain", "sprained", "fracture", "broken bone", "broken leg", "broken arm", "twisted ankle", "rolled ankle", "dislocated", "splint", "fell", "fall", "swollen ankle"],
+    "fil": ["pilay", "napilay", "bali", "nabali", "nabalian", "baling buto", "nabali ang buto", "natapilok", "tapilok", "na-sprain", "na-fracture", "namaga ang paa", "nahulog", "nadulas", "natumba", "na-twist ang ankle"]
+  },
+  "sources": [
+    {
+      "title": "Community-Based Health and First Aid flipchart (Manila, June 2011): 'Basic first aid for fractures'",
+      "org": "Philippine Red Cross",
+      "url": "https://www.rcrc-resilience-southeastasia.org/wp-content/uploads/2016/07/Community-Based-Health-and-First-Aid-Flipchart-.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Fractures, sprains and strains' (pp. 223-225), 'Spinal injury' (pp. 228-229), 'Shock' (pp. 288-289)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. Compared with the PRC Community-Based Health and First Aid flipchart (Manila, June 2011), page 'Basic first aid for fractures': advise the casualty to keep still; prevent further movement of the fractured limb; immobilise with padding, bandages and slings; if bleeding, carefully place padding over the wound; seek immediate medical assistance. Steps 2, 4 and 7 follow it nearly word for word. Added from IFRC 2020 'Fractures, sprains and strains': treat any limb injury as a possible fracture and stabilise in the position found; ice or something cold for up to 20 minutes, wrapped in cloth, stop if too painful; elevation 'may help'; splint before bumpy transport in remote areas; assess for shock especially with femur; record the time of injury; only cold, not alternating hot and cold; do not walk on a possible fracture. Straightening an angulated fracture is allowed by IFRC only for trained providers in remote settings, so this Guide says not to. Spinal warning from IFRC 'Spinal injury'. NOTE: a web-search summary quoted a redcross.org.ph item recommending a cervical collar for suspected spinal injury (page not opened, unverified); IFRC 2020 says first aid providers should NOT apply one. This Guide mentions neither, only 'keep still and do not move'. Check against the PRC Standard First Aid manual's splinting and RICE sections, especially the cold duration (20 min) and whether PRC recommends compression wraps for sprains (IFRC: optional if comfortable; left out)."
+  }
+}

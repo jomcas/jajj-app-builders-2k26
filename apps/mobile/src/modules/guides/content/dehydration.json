@@ -1,0 +1,98 @@
+{
+  "id": "dehydration",
+  "kind": "emergency",
+  "category": "injury",
+  "order": 9,
+  "title": { "en": "Dehydration", "fil": "Dehydration (kakulangan sa tubig ng katawan)" },
+  "summary": {
+    "en": "Hiking in the heat drains water through sweat. If someone has a dry mouth, dark urine, headache or dizziness, stop in the shade and give plenty to drink: water for mild cases, an oral rehydration solution (ORS) for worse ones.",
+    "fil": "Nauubos ang tubig ng katawan sa pawis kapag nagha-hike sa init. Kung tuyo ang bibig, madilaw o maitim ang ihi, masakit ang ulo o nahihilo ang isang tao, huminto sa lilim at painumin siya nang marami: tubig kung banayad, oral rehydration solution (ORS) kung mas malala."
+  },
+  "callForHelp": {
+    "en": "Call 911 or the Philippine Red Cross hotline 143 if the person is confused, very hard to wake, or stops responding. Get medical help if they don't improve quickly, keep vomiting or have diarrhoea, pass little or no urine, or are a child or an older adult. If there is no signal, send someone for help.",
+    "fil": "Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 kung nalilito ang tao, hirap gisingin, o hindi na sumasagot. Humingi ng tulong medikal kung hindi agad bumubuti, patuloy na nagsusuka o nagtatae, kaunti o walang ihi, o kung bata o matanda ang tao. Kung walang signal, magpadala ng tao para humingi ng tulong."
+  },
+  "steps": {
+    "en": [
+      "Stop and rest in a cool, shaded place.",
+      "Reassure the person and give them plenty to drink.",
+      "For mild dehydration, water is enough.",
+      "For worse dehydration, give an oral rehydration solution (ORS) from a sachet, mixed as the pack says.",
+      "If you have no ORS sachet, mix half a teaspoon of salt and six teaspoons of sugar into one litre of clean drinking water.",
+      "If you have no ORS at all, coconut water, a sports drink or water can help.",
+      "If they also have signs of heat illness (heavy sweating, dizziness, or hot, dry skin), open the Heat exhaustion and heatstroke Guide.",
+      "Let them rest and keep drinking until they feel better before going on, and avoid hiking in the hottest part of the day."
+    ],
+    "fil": [
+      "Huminto at magpahinga sa malamig at malilim na lugar.",
+      "Palakasin ang loob ng tao at painumin siya nang marami.",
+      "Kung banayad ang dehydration, sapat na ang tubig.",
+      "Kung mas malala, painumin ng oral rehydration solution (ORS) mula sa sachet, tinimpla ayon sa nakasulat sa pakete.",
+      "Kung walang ORS na sachet, paghaluin ang kalahating kutsarita ng asin at anim na kutsarita ng asukal sa isang litro ng malinis na inuming tubig.",
+      "Kung walang ORS talaga, makakatulong ang buko juice, sports drink o tubig.",
+      "Kung may palatandaan din ng heat illness (labis na pagpapawis, pagkahilo, o mainit at tuyong balat), buksan ang Guide sa Heat exhaustion at heatstroke.",
+      "Pagpahingahin siya at patuloy na painumin hanggang gumaan ang pakiramdam bago magpatuloy, at iwasang mag-hike sa pinakamainit na oras ng araw."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not give drinks to someone who is confused or not fully awake.",
+      "Do not drink untreated water from streams or springs. Open the Purifying water Guide.",
+      "Do not drink alcohol or rely on soft drinks to rehydrate.",
+      "Do not push on with hard hiking in the heat while still dehydrated."
+    ],
+    "fil": [
+      "Huwag painumin ang taong nalilito o hindi lubos na gising.",
+      "Huwag uminom ng tubig mula sa ilog o bukal na hindi nalinis. Buksan ang Guide sa Paglilinis ng tubig.",
+      "Huwag uminom ng alak o umasa sa softdrinks para mapalitan ang nawalang tubig.",
+      "Huwag ituloy ang mabigat na pag-hike sa init habang dehydrated pa."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Confusion, or very drowsy and hard to wake.",
+      "Not able to drink, or drinking poorly.",
+      "Sunken eyes, or pinched skin that goes back slowly.",
+      "Very little or no urine, or dark urine.",
+      "Vomiting or diarrhoea that doesn't stop.",
+      "Fever or signs of heat illness."
+    ],
+    "fil": [
+      "Pagkalito, o sobrang antukin at mahirap gisingin.",
+      "Hindi makainom, o kaunti lang ang naiinom.",
+      "Lubog na mata, o kinurot na balat na mabagal bumalik.",
+      "Kaunti o walang ihi, o maitim ang ihi.",
+      "Pagsusuka o pagtatae na hindi tumitigil.",
+      "Lagnat o palatandaan ng heat illness."
+    ]
+  },
+  "keywords": {
+    "en": ["dehydration", "dehydrated", "thirsty", "very thirsty", "out of water", "no water", "dry mouth", "dark urine", "not peeing", "ORS", "oral rehydration", "cramps"],
+    "fil": ["dehydration", "dehydrated", "na-dehydrate", "uhaw", "uhaw na uhaw", "nauuhaw", "tuyo ang bibig", "kulang sa tubig", "naubusan ng tubig", "walang tubig", "maitim ang ihi", "hindi umiihi", "pulikat", "ORS"]
+  },
+  "sources": [
+    {
+      "title": "Community-Based Health and First Aid flipchart (Manila, June 2011): 'Management and Treatment of Water Borne Diseases', 'Danger Signs of Dehydration'",
+      "org": "Philippine Red Cross",
+      "url": "https://www.rcrc-resilience-southeastasia.org/wp-content/uploads/2016/07/Community-Based-Health-and-First-Aid-Flipchart-.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025)",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Dehydration' (pp. 337-339)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. Compared with the PRC CBHFA flipchart (Manila, June 2011): replace fluid loss with oral rehydration solution; continue feeding and breastfeeding; danger signs (lethargic or unconscious, sunken eyes, not able to drink or drinking poorly, skin pinch goes back slowly) mean refer to a health facility at once. These are in watchFor. The PRC 2025 heat advisory says 'stay hydrated and avoid sugary drinks' and recommends ORS for heat exhaustion. Steps follow IFRC 2020 'Dehydration': reassure and give plenty of fluids; water for mild; ORS for severe; if ORS unavailable, apple juice, coconut water or water; carbohydrate-electrolyte (sports) drinks for exertion-related dehydration; seek medical advice if no quick improvement, losing more fluid than taken in, little or dark urine, fever or heat exhaustion, babies, children, older adults; EMS for altered responsiveness. The 'do not push on in the heat' line is from IFRC prevention ('avoid doing any vigorous activity outside during the hottest part of the day'). IMPORTANT DISAGREEMENT, PLEASE CHECK: the homemade ORS recipe. IFRC 2020 (p. 339): half a teaspoon of salt, six teaspoons of sugar, one litre of drinking water (this matches the WHO home recipe). The 2011 PRC flipchart says 'One table spoon of salt, four teaspoons of sugar, one litre', which is about six times the salt. This Guide follows IFRC. The flipchart figure looks like an error, but the reviewer must confirm what the current PRC manual says. If in doubt, delete step 5 and keep 'ORS sachet' only. Coconut water is listed by IFRC as an alternative; also check that PRC agrees."
+  }
+}

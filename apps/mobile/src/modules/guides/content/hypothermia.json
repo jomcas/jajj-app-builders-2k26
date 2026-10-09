@@ -1,0 +1,98 @@
+{
+  "id": "hypothermia",
+  "kind": "emergency",
+  "category": "injury",
+  "order": 7,
+  "title": { "en": "Hypothermia", "fil": "Hypothermia (sobrang lamig ng katawan)" },
+  "summary": {
+    "en": "Hypothermia can happen even in the tropics when you are wet, tired and in the wind. Get the person out of the wind and rain, swap wet clothes for dry ones, and warm them gradually in a sleeping bag or blankets.",
+    "fil": "Puwedeng magka-hypothermia kahit sa mainit na bansa kapag basa, pagod at nahahanginan ka. Ilayo ang tao sa hangin at ulan, palitan ng tuyo ang basang damit, at painitin siya nang unti-unti sa sleeping bag o kumot."
+  },
+  "callForHelp": {
+    "en": "Get medical help for every case of hypothermia. Call 911 or the Philippine Red Cross hotline 143 as soon as anyone has signal, and say where you are and how the person is. If there is no signal, send someone for help with these details while others keep the person warm.",
+    "fil": "Humingi ng tulong medikal sa bawat kaso ng hypothermia. Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 sa sandaling may signal ang kahit sino, at sabihin kung nasaan kayo at ano ang lagay ng tao. Kung walang signal, magpadala ng tao para humingi ng tulong dala ang mga detalyeng ito, habang pinananatiling mainit ng iba ang tao."
+  },
+  "steps": {
+    "en": [
+      "Move the person out of the cold, wind and rain, into a tent or other shelter if you can. Handle them gently.",
+      "Put a layer such as a mat, tarp or sleeping bag between them and the ground.",
+      "Help them take off wet clothes, and carefully dry their skin.",
+      "Put dry clothes on them and cover their head and body with a sleeping bag or blanket. Add a foil emergency blanket if you have one.",
+      "If they are awake and can swallow, give them a warm, sweet drink such as hot chocolate, or some high-energy food.",
+      "If they are not shivering, or are confused or drowsy, warm them gradually with hot water bottles or warm packs wrapped in cloth.",
+      "If you have no shelter, build one and, where it is safe and allowed, make a fire to warm them.",
+      "Stay with them, reassure them, and keep checking their breathing and whether they respond to you."
+    ],
+    "fil": [
+      "Ilayo ang tao sa lamig, hangin at ulan, papasok sa tent o ibang silungan kung kaya. Hawakan siya nang maingat.",
+      "Lagyan ng sapin gaya ng mat, tarp o sleeping bag sa pagitan niya at ng lupa.",
+      "Tulungan siyang hubarin ang basang damit, at maingat na patuyuin ang kanyang balat.",
+      "Suotan siya ng tuyong damit at takpan ang kanyang ulo at katawan ng sleeping bag o kumot. Dagdagan ng foil na emergency blanket kung mayroon.",
+      "Kung gising siya at kayang lumunok, painumin siya ng mainit at matamis na inumin gaya ng hot chocolate, o pakainin ng pagkaing mataas sa enerhiya.",
+      "Kung hindi siya nanginginig, o lito o antukin, painitin siya nang unti-unti gamit ang hot water bottle o warm pack na nakabalot sa tela.",
+      "Kung walang silungan, gumawa ng isa at, kung ligtas at pinapayagan, magsiga para mainitan siya.",
+      "Samahan siya, palakasin ang loob niya, at patuloy na tingnan ang kanyang paghinga at kung sumasagot pa siya sa iyo."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not rub or massage their skin. It can damage the skin and muscles.",
+      "Do not put hot water bottles, heat packs or warm stones directly on the skin. They can burn.",
+      "Do not leave them in wet clothes.",
+      "Do not give food or drink to someone too drowsy to swallow.",
+      "Do not give alcohol."
+    ],
+    "fil": [
+      "Huwag kuskusin o masahihin ang kanyang balat. Puwede itong makasira sa balat at kalamnan.",
+      "Huwag idikit nang direkta sa balat ang hot water bottle, heat pack o mainit na bato. Puwede itong makapaso.",
+      "Huwag siyang hayaang nakasuot ng basang damit.",
+      "Huwag pakainin o painumin ang taong sobrang antok para lumunok.",
+      "Huwag painumin ng alak."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Shivering stops while the person is still cold.",
+      "Confusion, memory loss, or strange or incoherent behaviour.",
+      "They can no longer walk or use their hands.",
+      "Lips, fingers and exposed skin turn blue, or skin looks blue and swollen.",
+      "They become very drowsy or stop responding. Check their breathing."
+    ],
+    "fil": [
+      "Tumigil ang panginginig pero malamig pa rin ang tao.",
+      "Pagkalito, pagkalimot, o kakaiba o walang-saysay na kilos o pananalita.",
+      "Hindi na siya makalakad o magamit ang kanyang mga kamay.",
+      "Nangangasul ang labi, daliri at nakalantad na balat, o mukhang asul at namamaga ang balat.",
+      "Sobrang antukin na siya o hindi na sumasagot. Tingnan ang kanyang paghinga."
+    ]
+  },
+  "keywords": {
+    "en": ["hypothermia", "cold", "freezing", "shivering", "can't stop shivering", "chilled", "wet and cold", "numb from cold", "too cold"],
+    "fil": ["hypothermia", "ginaw", "giniginaw", "lamig", "nilalamig", "sobrang lamig", "nanginginig", "nanginginig sa lamig", "basang-basa", "nanigas sa lamig", "hindi tumitigil ang panginginig", "malamig na malamig"]
+  },
+  "sources": [
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Hypothermia' (pp. 343-345)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "Lost in the Woods (brochure): 'Hypothermia can kill even when temperatures are above freezing'",
+      "org": "New York State Department of Environmental Conservation",
+      "url": "https://extapps.dec.ny.gov/docs/legal_protection_pdf/lostinwoods.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: hotline only. No Philippine Red Cross hypothermia material could be found online (redcross.org.ph and the 2011 PRC CBHFA flipchart have none; a partial copy of PRC 'Learn First Aid' only says to keep an injured person warm and guard against chilling, as part of shock care). The PRC source is cited only for hotline 143. All steps follow IFRC 2020 'Hypothermia': remove from cold, remove wet clothes and dry, cover head and body, sleeping bag or blanket plus foil blanket, insulate from the ground, warm sugary drink or high-energy food only if responsive and able to swallow, actively warm a non-shivering person (hot water bottles, heating pads, warm stones, never directly on skin), do not rub the skin, campfire and shelter in limited-resource settings, access EMS for all cases, monitor breathing and response. IFRC also states hypothermia 'can even occur in warm temperatures if a person is wet and inactive', which supports the tropical framing in the summary. NYSDEC adds that it can kill above freezing. 'Do not give alcohol' comes from IFRC's prevention advice ('Avoid alcohol'), not its first aid steps. Check against the PRC Standard First Aid manual's cold-emergency section."
+  }
+}

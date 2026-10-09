@@ -1,0 +1,98 @@
+{
+  "id": "bleeding-wounds",
+  "kind": "emergency",
+  "category": "injury",
+  "order": 5,
+  "title": { "en": "Bleeding wounds", "fil": "Mga sugat na dumudugo" },
+  "summary": {
+    "en": "Press hard and directly on the wound right away, and keep pressing until the bleeding stops. Once it stops, cover the wound; clean small cuts with clean water first.",
+    "fil": "Diinan agad nang mariin at direkta ang sugat, at ituloy ang pagdiin hanggang tumigil ang pagdurugo. Kapag tumigil na, takpan ang sugat; hugasan muna ng malinis na tubig ang maliliit na hiwa."
+  },
+  "callForHelp": {
+    "en": "Call 911 or the Philippine Red Cross hotline 143 for any heavy bleeding: blood spurting or pooling, soaking through cloth, or not stopping with firm pressure. Say what caused the injury, how the person is, and where you are. If there is no signal, send someone for help with these details while another person keeps pressing on the wound.",
+    "fil": "Tumawag sa 911 o sa hotline ng Philippine Red Cross na 143 kapag malakas ang pagdurugo: bumubulwak o namumuo ang dugo, tumatagos sa tela, o hindi tumitigil kahit diinan nang mariin. Sabihin kung ano ang sanhi ng sugat, ano ang lagay ng tao, at kung nasaan kayo. Kung walang signal, magpadala ng tao para humingi ng tulong dala ang mga detalyeng ito, habang may isang patuloy na dumidiin sa sugat."
+  },
+  "steps": {
+    "en": [
+      "Protect your hands with gloves or a plastic bag. If you have neither, use a cloth between your hand and the wound.",
+      "Help the person sit or lie down. If they can, ask them to press on their own wound.",
+      "Check the wound for anything stuck in it. If something is stuck in it, do not pull it out; press around it and keep it from moving.",
+      "Press firmly and directly on the wound with a clean cloth, pad or your hand. Keep pressing until the bleeding stops.",
+      "If blood soaks through, leave the first cloth on, put another on top and press harder.",
+      "When the bleeding has stopped, cover the wound with a bandage.",
+      "For heavy bleeding, help the person lie on their back and keep them warm with clothing or a blanket, because shock can follow.",
+      "If pressure cannot stop life-threatening bleeding from an arm or leg, use a tourniquet if you have one, preferably a manufactured one. Once it is on, leave it on until medical help takes over.",
+      "For small cuts and grazes, once the bleeding stops, rinse the wound with clean drinking water, dry the skin around it, and cover it."
+    ],
+    "fil": [
+      "Protektahan ang iyong kamay gamit ang guwantes o plastik. Kung wala, gumamit ng tela sa pagitan ng kamay mo at ng sugat.",
+      "Tulungang umupo o humiga ang tao. Kung kaya niya, ipadiin sa kanya ang sarili niyang sugat.",
+      "Tingnan kung may nakabaon sa sugat. Kung mayroon, huwag itong bunutin; diinan ang paligid nito at pigilang gumalaw.",
+      "Diinan nang mariin at direkta ang sugat gamit ang malinis na tela, gasa o ang kamay mo. Ituloy ang pagdiin hanggang tumigil ang pagdurugo.",
+      "Kung tumagos ang dugo, huwag tanggalin ang unang tela; patungan ito ng isa pa at diinan nang mas mariin.",
+      "Kapag tumigil na ang pagdurugo, takpan ang sugat ng benda.",
+      "Kung malakas ang pagdurugo, tulungang humiga nang nakatihaya ang tao at panatilihin siyang mainit gamit ang damit o kumot, dahil maaaring sumunod ang shock.",
+      "Kung hindi mapigilan ng pagdiin ang malubhang pagdurugo sa braso o binti, gumamit ng tourniquet kung mayroon, mas mabuti kung yaring-pabrika. Kapag naikabit na, huwag na itong tanggalin hanggang dumating ang tulong medikal.",
+      "Sa maliliit na hiwa at gasgas, kapag tumigil na ang dugo, banlawan ang sugat ng malinis na inuming tubig, patuyuin ang balat sa paligid, at takpan ito."
+    ]
+  },
+  "doNot": {
+    "en": [
+      "Do not pull out an object that is stuck in the wound.",
+      "Do not take off a blood-soaked cloth to look at the wound; add another on top.",
+      "Do not press on 'pressure points' away from the wound instead of pressing on the wound itself.",
+      "Do not loosen or remove a tourniquet once it is on; leave that to medical staff."
+    ],
+    "fil": [
+      "Huwag bunutin ang bagay na nakabaon sa sugat.",
+      "Huwag tanggalin ang telang basa ng dugo para silipin ang sugat; patungan ito ng isa pa.",
+      "Huwag diinan ang mga 'pressure point' na malayo sa sugat bilang kapalit ng pagdiin sa mismong sugat.",
+      "Huwag luwagan o tanggalin ang tourniquet kapag naikabit na; ipaubaya iyon sa mga tauhang medikal."
+    ]
+  },
+  "watchFor": {
+    "en": [
+      "Blood spurting or pooling, or bleeding that does not stop with firm pressure.",
+      "Pale or grey skin, bluish lips, cold and clammy skin, dizziness, fast breathing, or the person becomes anxious or sleepy (signs of shock).",
+      "The person stops responding. Check their breathing.",
+      "Over the next days: skin around the wound turns red, purple or darker, feels warm and painful, or the person gets a fever. These are signs of infection.",
+      "A deep or dirty wound in someone not up to date with tetanus shots. They should see a doctor."
+    ],
+    "fil": [
+      "Bumubulwak o namumuong dugo, o pagdurugo na hindi tumitigil kahit diinan nang mariin.",
+      "Maputla o kulay-abong balat, nangangasul na labi, malamig at malagkit na balat, pagkahilo, mabilis na paghinga, o nagiging balisa o antukin ang tao (mga palatandaan ng shock).",
+      "Hindi na sumasagot ang tao. Tingnan ang kanyang paghinga.",
+      "Sa mga susunod na araw: namumula, nangingitim o nagiging kulay-ube ang balat sa paligid ng sugat, mainit at masakit ito, o nilalagnat ang tao. Mga palatandaan ito ng impeksyon.",
+      "Malalim o maruming sugat sa taong hindi kumpleto ang bakuna kontra tetano. Dapat siyang magpatingin sa doktor."
+    ]
+  },
+  "keywords": {
+    "en": ["bleeding", "blood", "bleed", "cut", "wound", "gash", "laceration", "graze", "scrape", "stab", "won't stop bleeding", "tourniquet"],
+    "fil": ["dugo", "dumudugo", "nagdurugo", "sugat", "nasugatan", "may sugat", "hiwa", "nahiwa", "galos", "gasgas", "duguan", "nag-bleed", "nagbi-bleed", "ayaw tumigil ng dugo", "malalim na sugat"]
+  },
+  "sources": [
+    {
+      "title": "Community-Based Health and First Aid flipchart (Manila, June 2011): 'Basic first aid for bleeding'",
+      "org": "Philippine Red Cross",
+      "url": "https://www.rcrc-resilience-southeastasia.org/wp-content/uploads/2016/07/Community-Based-Health-and-First-Aid-Flipchart-.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "International First Aid, Resuscitation, and Education Guidelines 2020: 'Severe bleeding' (pp. 187-189), 'Cuts and grazes' (pp. 202-203), 'Shock' (pp. 288-289)",
+      "org": "International Federation of Red Cross and Red Crescent Societies (IFRC), Global First Aid Reference Centre",
+      "url": "https://www.ifrc.org/sites/default/files/2022-02/EN_GFARC_GUIDELINES_2020.pdf",
+      "accessed": "2026-10-10"
+    },
+    {
+      "title": "PH Red Cross alerts the public against heat-related emergencies amid rising heat indices (5 March 2025), cited only for the 24/7 hotline 143",
+      "org": "Philippine Red Cross",
+      "url": "https://redcross.org.ph/?p=7916",
+      "accessed": "2026-10-10"
+    }
+  ],
+  "review": {
+    "redCrossChecked": false,
+    "checkedBy": null,
+    "notes": "PRC basis: partial. Compared with the PRC Community-Based Health and First Aid flipchart (Manila, June 2011, published by PRC Community Health and Nursing Services, hosted on the IFRC Southeast Asia resilience portal), page 'Basic first aid for bleeding': sit or lie down; make sure no foreign body is embedded; direct pressure with cloth, cotton pad or your own hand; maintain pressure until bleeding stops; cover with bandage; seek medical help. Steps 2-6 match it. Added from IFRC 2020 'Severe bleeding': protect hands, let the person press their own wound, press around an embedded object, add a second dressing over a soaked one, keep warm and lie flat for shock, tourniquet only for life-threatening limb bleeding when pressure fails (manufactured preferred, leave on until EMS), no pressure points. Step 9 from IFRC 'Cuts and grazes'. Shock signs from IFRC 'Shock'. DISAGREEMENTS TO CHECK: (1) Older PRC/American-style manuals teach elevation and pressure points; IFRC 2020 says first aid providers 'should not use pressure points' and does not recommend elevation for bleeding. Followed IFRC. Check what the current PRC Standard First Aid manual says. (2) PRC flipchart does not mention tourniquets; IFRC allows them as a last resort. Check PRC's position. The flipchart's head-wound advice ('place triangular bandage tightly around head') was left out. The PRC flipchart also suggests bayabas leaf decoction for wound cleaning (herbal page); deliberately not included."
+  }
+}
