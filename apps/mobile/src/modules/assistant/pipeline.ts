@@ -1,8 +1,10 @@
 // The Assistant's answer pipeline (ADR 0003, ADR 0005), in this order:
 //
-//   answer(question) = emergencyRoute? → relevanceGate → retrieve → generate
+//   answer(question) = emergencyRoute? → tool? → relevanceGate → retrieve → generate
 //
 // 1. emergencyRoute (#15): an emergency or medical question opens its Guide; nothing else runs.
+// 1b. tool (#19, ADR 0001): a question a module's tool matches ("how far to the next
+//    campsite?", "help me signal") runs that tool and shows its fixed text; no model runs.
 // 2. relevanceGate: the question is embedded and searched; if the closest passage scores
 //    below the threshold, the fixed off-topic reply is shown and the model never runs.
 // 3. retrieve: the best few passages (one per language pair) go into the prompt.
@@ -12,10 +14,12 @@
 // Pure: the search, the model and the emergency route are passed in, so tests run in Node.
 
 import type { Language } from '../../i18n/types';
+import type { AssistantTool, ToolResult } from '../types';
 import { displayText, trimUnfinished, usedPassages } from './citations.ts';
 import type { Chunk } from './corpus';
 import { gateDecision, type GateDecision } from './gate.ts';
 import { buildMessages, MAX_PROMPT_PASSAGES, PASSAGE_SCORE_SPREAD, type ChatMessage } from './prompt.ts';
+import { matchTool } from './tools.ts';
 
 export type Hit = { chunk: Chunk; score: number };
 
@@ -42,6 +46,8 @@ export type GenerateResult = {
 export type PipelineDeps = {
   /** Stage 1, from #15. Returns null when the question is not an emergency. */
   emergencyRoute?: (question: string, language: Language) => Promise<EmergencyReply | null>;
+  /** The registered modules' tools (ADR 0001), matched after the emergency route. */
+  tools?: readonly AssistantTool[];
   /** Embeds the question and returns the closest chunks, best first. */
   search: (question: string) => Promise<Hit[]>;
   threshold: number;
@@ -75,7 +81,15 @@ export type AnswerReply = {
   generation: GenerateResult;
 };
 
-export type Reply = EmergencyReply | OffTopicReply | AnswerReply;
+/** A module's tool answered: its own fixed text, never the model's. */
+export type ToolReply = {
+  kind: 'tool';
+  toolId: string;
+  args: Record<string, unknown>;
+  result: ToolResult;
+};
+
+export type Reply = EmergencyReply | ToolReply | OffTopicReply | AnswerReply;
 
 /**
  * The passages for the prompt: the best hits, one per group (an en/fil pair counts once),
@@ -110,6 +124,12 @@ export async function answerQuestion(
 ): Promise<Reply> {
   const emergency = await deps.emergencyRoute?.(question, language);
   if (emergency) return emergency;
+
+  const call = matchTool(deps.tools ?? [], question);
+  if (call) {
+    const result = await call.tool.run(call.args, { language });
+    return { kind: 'tool', toolId: call.tool.id, args: call.args, result };
+  }
 
   const hits = await deps.search(question);
   const gate = gateDecision(hits, deps.threshold);

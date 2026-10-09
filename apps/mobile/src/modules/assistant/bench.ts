@@ -38,6 +38,7 @@ const top = (hits: { chunk: { id: string }; score: number }[], n = 5) =>
 function verdictOf(reply: Reply): string {
   if (reply.kind === 'answer') return 'answer';
   if (reply.kind === 'emergency') return reply.distress ? 'distress' : `emergency:${reply.guideId}`;
+  if (reply.kind === 'tool') return `tool:${reply.toolId}`;
   return `off-topic-${reply.reason}`;
 }
 
@@ -79,7 +80,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
       }
       const reply = await answer(q.question, { language: ui, index, threshold, ignorePacks: options.ignorePacks });
       const verdict = verdictOf(reply);
-      const best = reply.kind === 'emergency' ? 1 : reply.gate.best;
+      const best = reply.kind === 'emergency' || reply.kind === 'tool' ? 1 : reply.gate.best;
       results.push({ id: q.id, best, expect: q.expect, verdict });
       const gen = reply.kind === 'answer' ? reply.generation : reply.kind === 'off-topic' ? reply.generation : undefined;
       if (gen) ttfts.push(gen.ttftMs);
@@ -93,7 +94,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
         verdict,
         correct: q.expect === 'answer' ? verdict === 'answer' : verdict.startsWith('off-topic'),
         best: round(best, 3),
-        top: reply.kind === 'emergency' ? [] : top(reply.hits),
+        top: reply.kind === 'emergency' || reply.kind === 'tool' ? [] : top(reply.hits),
         sources: reply.kind === 'answer' ? reply.sources.map((s) => s.id) : [],
         given: reply.kind === 'answer' ? reply.passages.map((s) => s.id) : [],
         llm_ran: !!gen,
@@ -106,7 +107,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
         total_ms: Date.now() - started,
         pss_kb: diagnostics.memoryKb().pss ?? null,
       });
-      logChunks(log, { type: 'a', run, id: q.id, question: q.question }, reply.kind === 'answer' ? reply.text : reply.kind === 'off-topic' ? `(off-topic reply; model said: ${reply.raw ?? 'not run'})` : '(emergency)');
+      logChunks(log, { type: 'a', run, id: q.id, question: q.question }, reply.kind === 'answer' ? reply.text : reply.kind === 'off-topic' ? `(off-topic reply; model said: ${reply.raw ?? 'not run'})` : reply.kind === 'tool' ? reply.result.text : '(emergency)');
     }
 
     const inScope = results.filter((r) => r.expect === 'answer');
