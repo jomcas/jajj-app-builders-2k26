@@ -59,6 +59,20 @@ module.exports = {
       // On-device model runtime. Adds the optional OpenCL (Adreno GPU) and Hexagon (NPU)
       // native libraries to the manifest so llama.rn can load them when the phone has them.
       ['llama.rn', { enableOpenCLAndHexagon: true }],
+      // The Hike map (issue #6). MapLibre Native renders the Destination Pack's PMTiles file;
+      // withMapAssets bundles the glyphs and sprites the style needs, so nothing is fetched.
+      '@maplibre/maplibre-react-native',
+      './plugins/withMapAssets',
+      [
+        'expo-location',
+        {
+          // Foreground only: the GPS dot on the Hike map. Android shows its own system dialog;
+          // the app explains why first, in the hiker's language.
+          locationWhenInUsePermission: 'Tahak uses your location to show where you are on the trail map.',
+          isAndroidBackgroundLocationEnabled: false,
+          isIosBackgroundLocationEnabled: false,
+        },
+      ],
       './plugins/withArm64Only',
       './plugins/withLlamaRnVariants',
     ],
