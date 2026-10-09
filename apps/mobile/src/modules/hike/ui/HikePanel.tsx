@@ -4,18 +4,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useStrings, useTheme } from '../../../settings/preferences';
 import { textStyles } from '../../../theme/typography';
 import { ForecastChip } from '../../forecast';
-import { fill, formatDistance, pad2, splitDuration } from '../format';
+import { etaText, fill, formatDistance } from '../format';
 import strings from '../strings';
 import type { HikeView } from '../trail/progress';
 import { Panel, PanelButton, WAYPOINT_ICONS } from './parts';
-
-type Strings = Record<keyof (typeof strings)['en'], string>;
-
-function etaText(s: Strings, seconds: number): string {
-  const { hours, minutes } = splitDuration(seconds);
-  if (hours === 0) return minutes === 0 ? s.etaUnderMinute : fill(s.etaMinutes, { minutes });
-  return fill(s.etaHours, { hours, minutes: pad2(minutes) });
-}
 
 /**
  * During a Hike: the next Waypoint (type icon and name), a peach chip with the distance along
