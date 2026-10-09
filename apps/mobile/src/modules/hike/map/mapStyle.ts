@@ -146,7 +146,11 @@ export function buildMapStyle({
 // Overlay layers. They go inside a GeoJSONSource, which supplies `source`.
 type Overlay<T> = Omit<T, 'source'>;
 
-export const TRAIL_LAYER_IDS = { outline: 'trail-outline', line: 'trail-line' } as const;
+export const TRAIL_LAYER_IDS = {
+  outline: 'trail-outline',
+  line: 'trail-line',
+  dashedLine: 'trail-line-dashed',
+} as const;
 
 const trailWidth = (base: number) =>
   ['interpolate', ['linear'], ['zoom'], 10, base * 0.5, 14, base, 18, base * 1.8] as const;
@@ -169,7 +173,9 @@ export function trailLayers(
       paint: { 'line-color': colors.trailOutline, 'line-width': trailWidth(9) as never },
     },
     {
-      id: TRAIL_LAYER_IDS.line,
+      // Its own layer: on the phone, setting line-dasharray on the drawn line later did not
+      // redraw it dashed, so the map keeps both lines and shows one (see hiddenFilter).
+      id: dashed ? TRAIL_LAYER_IDS.dashedLine : TRAIL_LAYER_IDS.line,
       type: 'line',
       layout: dashed ? { ...layout, 'line-cap': 'butt' } : layout,
       paint: {
@@ -281,3 +287,6 @@ export function nextWaypointFilter(waypointId: string | null): FilterSpecificati
 export function activeTrailFilter(trailId: string | null): FilterSpecification {
   return trailId ? ['==', ['get', 'trailId'], trailId] : ['has', 'trailId'];
 }
+
+/** A filter that matches nothing, to hide a layer that stays mounted. */
+export const hiddenFilter: FilterSpecification = ['==', ['get', 'trailId'], ''];
