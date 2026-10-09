@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Tahak",
+    "slug": "tahak",
+    "scheme": "tahak",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#F7F4EC",
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.tahak.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#F7F4EC",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./node_modules/@expo-google-fonts/barlow/400Regular/Barlow_400Regular.ttf",
+            "./node_modules/@expo-google-fonts/barlow/500Medium/Barlow_500Medium.ttf",
+            "./node_modules/@expo-google-fonts/barlow/600SemiBold/Barlow_600SemiBold.ttf",
+            "./node_modules/@expo-google-fonts/barlow-condensed/600SemiBold/BarlowCondensed_600SemiBold.ttf",
+            "./node_modules/@expo-google-fonts/barlow-condensed/700Bold/BarlowCondensed_700Bold.ttf",
+            "./node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"
+          ]
+        }
+      ],
+      "expo-system-ui",
+      "./plugins/withArm64Only"
+    ]
+  }
+}
