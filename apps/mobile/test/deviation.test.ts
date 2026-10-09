@@ -243,6 +243,27 @@ for (const [name, trail] of [['Batulao Old Trail', seedTrail()], ['a straight Tr
       );
     });
 
+    test('"Go off the Trail" anywhere on the walk starts exactly one Deviation; a short excursion never does', () => {
+      // Switchbacks bring other legs of the Trail close: the excursion must still end up more
+      // than 40 m from the whole Trail, as the detector measures it.
+      const plain = buildSimulatedWalk(trail, { excursions: false });
+      const duration = walkDurationS(plain);
+      for (let f = 0; f < 1; f += 0.01) {
+        const at = Math.round(duration * f);
+        // Only the stretch around the excursion: the rest of the walk is on the Trail.
+        const around = (kind: 'long' | 'short') => {
+          const { samples: walk, startS } = insertExcursion(trail, plain, at, kind);
+          return walk.slice(Math.max(0, startS - 5), startS + 200);
+        };
+        assert.deepEqual(
+          detect(trail, around('long')).events.map((e) => e.event),
+          ['started', 'cleared'],
+          `long excursion at ${f.toFixed(2)} of the walk`,
+        );
+        assert.deepEqual(detect(trail, around('short')).events, [], `short excursion at ${f.toFixed(2)} of the walk`);
+      }
+    });
+
     test('the short excursion alone never starts one', () => {
       const shortOnly = samples.filter((sample) => sample.excursion !== 'long');
       // Re-time so the walk stays continuous without the long excursion.
