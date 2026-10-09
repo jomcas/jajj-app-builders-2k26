@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react';
 
 import { useTheme } from '../settings/preferences';
 import { Header } from './Header';
+import { applyPendingTab, navigationRef } from './navigation';
 import { TabBar } from './TabBar';
 import { tabRoots } from './TabScreen';
 import type { TabParamList } from './tabs';
@@ -40,7 +41,7 @@ export function AppShell() {
   }, [mode, colors]);
 
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer ref={navigationRef} onReady={applyPendingTab} theme={navigationTheme}>
       <StatusBar style={mode === 'night' ? 'light' : 'dark'} />
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}
