@@ -30,6 +30,8 @@ export type Palette = {
   /** Red fill for the Deviation banner and the active Flare. */
   danger: string;
   onDanger: string;
+  /** Dims the screen behind a sheet or dialog. */
+  scrim: string;
 };
 
 const day: Palette = {
@@ -55,6 +57,7 @@ const day: Palette = {
   dangerIcon: '#A8201A',
   danger: '#A8201A',
   onDanger: '#FFFFFF',
+  scrim: 'rgba(0, 0, 0, 0.4)',
 };
 
 // The plan gives night text colors for peach, sky and butter; the fills come from the
@@ -82,6 +85,8 @@ const night: Palette = {
   dangerIcon: '#FF8A80',
   danger: '#A8201A',
   onDanger: '#FFFFFF',
+  // Stronger than by day: the night page is already black, so the sheet needs more separation.
+  scrim: 'rgba(0, 0, 0, 0.6)',
 };
 
 export const palettes: Record<ThemeMode, Palette> = { day, night };

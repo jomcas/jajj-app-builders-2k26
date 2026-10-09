@@ -51,7 +51,12 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.scrim} onPress={onClose} />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={s.close}
+        style={[styles.scrim, { backgroundColor: colors.scrim }]}
+        onPress={onClose}
+      />
       <View
         style={[
           styles.sheet,
@@ -95,7 +100,6 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
 const styles = StyleSheet.create({
   scrim: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   sheet: {
     borderTopLeftRadius: 20,
