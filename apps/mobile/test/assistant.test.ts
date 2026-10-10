@@ -323,6 +323,37 @@ test('one chip per pack passage pair, Guide and help topic, with a readable labe
   );
 });
 
+test('distinct pack passages that share a topic each get a chip, named after the passage (#53)', () => {
+  const s = {
+    appHelp: 'App help',
+    guideChip: 'Guide: {title}',
+    topicGettingThere: 'Getting there',
+    topicRegistration: 'Registration and fees',
+    topicWater: 'Water',
+    topicCampsites: 'Campsites',
+    topicHazards: 'Hazards',
+  };
+  const ulap = packChunks({
+    destination: { id: 'ulap', name: 'Mt. Ulap', packVersion: 1 },
+    passages: [
+      { id: 'ulap-04-fees-en', topic: 'registration', language: 'en', text: 'Registration ₱100.', source: 'a.com' },
+      { id: 'ulap-05-guides-and-porters-en', topic: 'registration', language: 'en', text: 'Guide ₱800 per group.', source: 'a.com' },
+      { id: 'ulap-09-summit-and-campsites-en', topic: 'campsites', language: 'en', text: 'Camp at the summit.', source: 'a.com' },
+    ],
+  });
+  // The phone case: "Magkano ang bayad sa Mt. Ulap?" cited all three; one chip went missing.
+  assert.deepEqual(
+    chipGroups(ulap, s).map((g) => [g.label, g.chunks.map((c) => c.id)]),
+    [
+      ['Mt. Ulap · Fees', ['pack:ulap-04-fees-en']],
+      ['Mt. Ulap · Guides and porters', ['pack:ulap-05-guides-and-porters-en']],
+      ['Mt. Ulap · Campsites', ['pack:ulap-09-summit-and-campsites-en']],
+    ],
+  );
+  // Without a clash, a chip keeps its (translated) topic label.
+  assert.deepEqual(chipGroups([ulap[1]], s).map((g) => g.label), ['Mt. Ulap · Registration and fees']);
+});
+
 // ---- test set ------------------------------------------------------------------------------
 
 test('the test set has ~30 questions in all three languages, both kinds, with the issue examples', () => {
