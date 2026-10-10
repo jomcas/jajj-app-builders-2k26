@@ -1,2 +1,53 @@
+# Repo-wide ignores for anything generated while running the apps locally.
+# apps/*, content/* and supabase/ keep their own .gitignore for app-specific rules.
+
+# OS
 .DS_Store
-.env*.local
+Thumbs.db
+
+# Env files (keep the .env.example templates)
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+web-build/
+*.tsbuildinfo
+
+# Expo / Metro / native caches
+.expo/
+.metro-health-check*
+.gradle/
+.kotlin/
+.cxx/
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Python (content/ map scripts)
+__pycache__/
+*.pyc
+.venv/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# AI agent skills and tooling used while building (local only)
+.claude/
+.agents/
+.kiro/
+.lavish/
+skills-lock.json

@@ -94,16 +94,15 @@ The project is designed around the idea that a hiker should still be able to nav
 - `docs/plan.md`
 - `docs/adr/`
 - `docs/waves/`
-- `.lavish/tahak-prototype.html`
 
 ## AI development workflow
 
 The project uses a hybrid AI-assisted engineering workflow with:
 - Local model execution for on-device assistant functionality
-- Claude-style agent workflows and project skill scaffolding under `.agents/`
+- Claude-style agent workflows and project skills (kept local, not committed)
 - GitHub issue tracking and structured repository documentation
 - Copilot/VS Code AI-assisted development support
-- Skills registry and repo guidance in `AGENTS.md`, `CONTEXT.md`, and `skills-lock.json`
+- Repo guidance in `AGENTS.md` and `CONTEXT.md`
 
 ## Project structure
 
@@ -115,12 +114,9 @@ The project uses a hybrid AI-assisted engineering workflow with:
 ├── content/
 ├── docs/
 ├── scripts/            # dev-setup.sh: local backend in Docker
-├── .agents/
-├── .lavish/
 ├── AGENTS.md
 ├── CONTEXT.md
 ├── README.md
-├── skills-lock.json
 └── supabase/
 ```
 
