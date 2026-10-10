@@ -1,0 +1,12 @@
+shot,cut,start,end,type,what to record,how to stage it,asset in kit,status
+1,60/30,0:00,0:05,camera,Hand swipes down the shade: airplane mode on and no bars,Phone in hand outdoors or on a plain wall; airplane mode on before you start,03-graphics/overlays/badge-airplane-mode.png,needed
+2,60,0:05,0:08,graphic,Title card,—,03-graphics/title-end-cards/title-card_1920x1080.png,ready
+3,60,0:08,0:14,screen,Explore → Mt. Batulao → scroll Trails and Waypoints,Explore tab → tap Mt. Batulao → slow scroll,02-screenshots/raw-flip6/night-destination.png,still ready; video needed
+4,60/30,0:14,0:22,screen,Choose New Trail → Start Hike → map follows the dot,Hike tab → Simulated walk on → Start Hike (or deep link tahak://hike/simulate?speed=15),02-screenshots/raw-flip6/night-hike-active.png,still ready; video needed
+5,60/30/15,0:22,0:30,screen+camera,Go off the Trail → red banner + arrow + dashed line + buzz + tone,During the sim tap Go off the Trail (or tahak://hike/simulate/off-trail); wait 30 s; cut the wait,03-graphics/overlays/lower-third-deviation.png,needed (sound on)
+6,60,0:30,0:42,screen,Ask in Taglish; answer with source chips,Ask tab; type the question; record the real answer time,03-graphics/overlays/badge-on-device-ai.png + badge-real-speed.png,blocked until the Assistant is on main
+6-alt,60,0:30,0:40,screen,Batulao reference notes scroll,Explore → Mt. Batulao → scroll to Reference info,02-screenshots/raw-flip6/night-destination-passages.png,still ready; video needed
+7,60,0:42,0:52,screen,Snakebite question → Emergency Guide card → open Guide,Ask tab: 'My friend got bitten by a snake.',—,blocked until the Assistant is on main
+7-alt,60,0:40,0:52,screen,Guides tab → open Snakebite,Guides tab → Snakebite,02-screenshots/raw-flip6/night-guides.png,still ready; video needed
+8,60/30/15,0:52,0:57,camera,Hold to fire the Flare: strobe + torch + whistle,SOS (top right) → hold the red button; film the phone from 1–2 m in a dim room,02-screenshots/raw-flip6/night-flare.png,still ready; live video needed (LOUD)
+9,60/30/15,0:57,1:00,graphic,End card,—,03-graphics/title-end-cards/end-card_1920x1080.png,ready
