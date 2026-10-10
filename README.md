@@ -1,4 +1,4 @@
-# Tahak
+# TAHAK
 
 Tahak is an offline-first hiking and camping companion for Filipino mountain trails and campsites. It is designed to work in airplane mode once a destination pack is downloaded, giving hikers live trail guidance, emergency help, and local AI assistance without relying on network connectivity.
 
