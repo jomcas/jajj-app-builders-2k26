@@ -42,24 +42,19 @@ function MemberBanner({ member, onShowOnMap }: { member: Member; onShowOnMap: (p
         ? fill(s.memberOffTrailNoDistance, { name })
         : fill(s.memberOffTrail, { name, distance: formatDistance(member.offTrailM) });
   const position = member.position;
+  const hint = status === 'flare' ? s.memberFlareHint : s.memberOffTrailHint;
 
   return (
     <View
       accessibilityRole="alert"
       accessibilityLiveRegion="assertive"
+      accessibilityHint={hint}
       style={[styles.banner, { backgroundColor: colors.surface, borderColor: colors.danger }]}
     >
-      <View style={styles.row}>
-        <View style={[styles.badge, { backgroundColor: colors.danger }]}>
-          <MaterialCommunityIcons name={dot.icon ?? 'alert'} size={24} color={colors.onDanger} />
-        </View>
-        <View style={styles.grow}>
-          <Text style={[textStyles.bodyStrong, styles.numbers, { color: colors.ink }]}>{title}</Text>
-          <Text style={[textStyles.label, { color: colors.muted }]}>
-            {status === 'flare' ? s.memberFlareHint : s.memberOffTrailHint}
-          </Text>
-        </View>
+      <View style={[styles.badge, { backgroundColor: colors.danger }]}>
+        <MaterialCommunityIcons name={dot.icon ?? 'alert'} size={22} color={colors.onDanger} />
       </View>
+      <Text style={[textStyles.bodyStrong, styles.grow, styles.numbers, { color: colors.ink }]}>{title}</Text>
       {position ? (
         <Pressable
           accessibilityRole="button"
@@ -75,22 +70,21 @@ function MemberBanner({ member, onShowOnMap }: { member: Member; onShowOnMap: (p
 }
 
 const styles = StyleSheet.create({
+  // One compact row, so the map keeps room to show the member's dot below it.
   banner: {
-    borderRadius: 14,
-    borderWidth: 3,
-    padding: 10,
-    gap: 8,
-    elevation: 4,
-  },
-  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
+    borderRadius: 14,
+    borderWidth: 3,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    elevation: 4,
   },
   badge: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -103,7 +97,6 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start',
     gap: 6,
     minHeight: 40,
     paddingHorizontal: 12,

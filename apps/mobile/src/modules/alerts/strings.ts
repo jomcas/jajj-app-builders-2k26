@@ -20,7 +20,7 @@ const en = {
   addMember: 'Add simulated member',
   addMemberHint: 'Demo: a pretend group member walks this Trail with you.',
   memberIncident: '{name}: off Trail, then Flare',
-  memberIncidentRunning: '{name}: incident running…',
+  memberIncidentRunning: '{name}: running…',
   removeMember: 'Remove',
   removeMemberHint: 'Remove the simulated member',
 };
@@ -32,7 +32,7 @@ const fil = {
   memberFlare: 'Pinaputok ni {name} ang Flare',
   memberOffTrailHint: 'Lampas 40 m mula sa Trail nang higit 30 segundo.',
   memberFlareHint: 'Humihingi siya ng tulong. Nasa mapa ang kinaroroonan niya.',
-  showOnMap: 'Ipakita sa mapa',
+  showOnMap: 'Sa mapa',
   memberDot: 'Si {name} sa mapa. I-tap para itutok sa kanya.',
   memberDotAlert: 'Si {name} sa mapa, kailangan ng pansin. I-tap para itutok sa kanya.',
   notifyOffTrailBody: '{distance} ang layo niya sa Trail. Buksan ang Tahak para makita kung saan.',
@@ -41,8 +41,8 @@ const fil = {
   channelDescription: 'Kapag lumihis sa Trail o nagpaputok ng Flare ang kasama mo sa Group Hike.',
   addMember: 'Magdagdag ng kunwaring kasama',
   addMemberHint: 'Demo: may kunwaring kasama sa grupo na lalakad sa Trail na ito kasama mo.',
-  memberIncident: '{name}: lilihis, saka Flare',
-  memberIncidentRunning: '{name}: tumatakbo ang insidente…',
+  memberIncident: '{name}: lihis, saka Flare',
+  memberIncidentRunning: '{name}: tumatakbo…',
   removeMember: 'Alisin',
   removeMemberHint: 'Alisin ang kunwaring kasama',
 };
