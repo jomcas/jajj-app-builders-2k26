@@ -31,7 +31,7 @@ export const SIMULATED_MEMBER = {
   /** Starts this share of the walk ahead of the hiker (behind, near the end of the walk). */
   offsetFraction: 0.03,
   /** Simulated seconds per real second during the incident, slow enough to watch it. */
-  incidentSpeed: 2,
+  incidentSpeed: 4,
 } as const;
 
 type Running = {
