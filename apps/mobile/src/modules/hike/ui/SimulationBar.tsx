@@ -41,7 +41,9 @@ export function SimulationBar({
         <MaterialCommunityIcons name="walk" size={22} color={colors.onSky} />
         <View style={styles.grow}>
           <Text style={[textStyles.bodyStrong, styles.numbers, { color: colors.onSky }]}>
-            {fill(s.simulationRunning, { speed: Math.round(sim.speed) })}
+            {sim.paused
+              ? `${s.simulationPausedNote} · ${Math.round(sim.speed)}×`
+              : fill(s.simulationRunning, { speed: Math.round(sim.speed) })}
           </Text>
           <Text style={[textStyles.label, styles.numbers, { color: colors.onSky }]}>
             {simulationLine(offTrailM, s)}
@@ -49,6 +51,17 @@ export function SimulationBar({
         </View>
       </View>
       <View style={styles.row}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={sim.paused ? s.simulationResume : s.simulationPause}
+          onPress={() => (sim.paused ? walk.resume() : walk.pause())}
+          style={({ pressed }) => [styles.button, { backgroundColor: colors.surface, opacity: pressed ? 0.85 : 1 }]}
+        >
+          <MaterialCommunityIcons name={sim.paused ? 'play' : 'pause'} size={18} color={colors.ink} />
+          <Text style={[textStyles.labelStrong, { color: colors.ink }]}>
+            {sim.paused ? s.simulationResume : s.simulationPause}
+          </Text>
+        </Pressable>
         <Pressable
           accessibilityRole="button"
           accessibilityHint={s.simulationSpeedHint}
@@ -84,6 +97,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     gap: 8,
   },

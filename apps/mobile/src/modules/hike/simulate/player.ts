@@ -27,6 +27,8 @@ export type SimulationSnapshot = {
   excursion: ExcursionKind | null;
   intendedOffM: number;
   finished: boolean;
+  /** Paused by the hiker: the position and the simulated clock stand still. */
+  paused: boolean;
 };
 
 export type SimulatedWalk = {
@@ -35,6 +37,13 @@ export type SimulatedWalk = {
   start(): void;
   stop(): void;
   setSpeed(speed: number): void;
+  /**
+   * Freezes the walk: no new positions, and simulated time stops, so position timestamps (and
+   * with them the Deviation's 30 s and the pace) skip the paused time.
+   */
+  pause(): void;
+  /** Continues a paused walk from where it stood. */
+  resume(): void;
   /** Sends the walk 60 m off the Trail for 45 s, starting now (#8's on-demand Deviation). */
   goOffTrail(): void;
 };
@@ -65,6 +74,7 @@ export function createSimulatedWalk({
   const clockStart = now();
   let timer: ReturnType<typeof setInterval> | null = null;
   let lastTick = 0;
+  let paused = false;
   const listeners = new Set<() => void>();
 
   const snapshotAt = (): SimulationSnapshot => {
@@ -85,6 +95,7 @@ export function createSimulatedWalk({
       excursion: sample.intendedOffM > 0 ? sample.excursion : null,
       intendedOffM: sample.intendedOffM,
       finished: tS >= durationS,
+      paused,
     };
   };
   let snapshot = snapshotAt();
@@ -109,7 +120,7 @@ export function createSimulatedWalk({
   };
 
   const start = () => {
-    if (timer) return;
+    if (timer || paused) return;
     lastTick = now();
     timer = setInterval(tick, TICK_MS);
   };
@@ -122,6 +133,18 @@ export function createSimulatedWalk({
     },
     start,
     stop,
+    pause() {
+      if (paused) return;
+      paused = true;
+      stop();
+      emit();
+    },
+    resume() {
+      if (!paused) return;
+      paused = false;
+      emit();
+      start();
+    },
     setSpeed(next) {
       currentSpeed = next;
       emit();
@@ -129,7 +152,7 @@ export function createSimulatedWalk({
     goOffTrail() {
       samples = insertExcursion(trail, samples, tS, 'long').samples;
       emit();
-      // A walk that had already finished starts moving again for the excursion.
+      // A walk that had already finished starts moving again for the excursion (unless paused).
       start();
     },
   };

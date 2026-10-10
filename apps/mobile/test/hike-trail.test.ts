@@ -3,11 +3,12 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, test } from 'node:test';
+import { describe, mock, test } from 'node:test';
 
 import type { Waypoint, WaypointType } from '../src/modules/destination-pack/types.ts';
 import { fill, formatDistance, splitDuration } from '../src/modules/hike/format.ts';
 import { createSimulatedWalk } from '../src/modules/hike/simulate/player.ts';
+import { DEVIATION, startDeviationDetector, stepDeviation, type DeviationState } from '../src/modules/hike/deviation/detector.ts';
 import { DEFAULT_SPEED, parseHikeLink } from '../src/modules/hike/simulate/simLink.ts';
 import {
   EXCURSIONS,
@@ -423,6 +424,96 @@ describe('playing the simulated walk', () => {
     walk.goOffTrail();
     walk.stop();
     assert.equal(walk.getSnapshot().durationS, duration + 2 * 60 + 45);
+  });
+});
+
+describe('pausing the simulated walk', () => {
+  // A fake clock and fake timers: advance(ms) moves both together.
+  function setup() {
+    let clock = 1_000_000;
+    mock.timers.enable({ apis: ['setInterval'] });
+    const walk = createSimulatedWalk({ trail: east, trailId: 't', speed: 15, now: () => clock });
+    const advance = (ms: number) => {
+      for (let i = 0; i < ms / 250; i++) {
+        clock += 250;
+        mock.timers.tick(250);
+      }
+    };
+    return { walk, advance };
+  }
+
+  test('pause freezes the position and simulated time; resume continues from there', () => {
+    const { walk, advance } = setup();
+    try {
+      walk.start();
+      advance(2000);
+      walk.pause();
+      const held = walk.getSnapshot();
+      assert.equal(held.paused, true);
+      assert.ok(held.tS > 0);
+      advance(60_000);
+      const still = walk.getSnapshot();
+      assert.equal(still.tS, held.tS);
+      assert.deepEqual(still.position, held.position);
+      walk.resume();
+      assert.equal(walk.getSnapshot().paused, false);
+      advance(1000);
+      const resumed = walk.getSnapshot();
+      // 1 real second at 15x: 15 simulated seconds on from where it paused, not 60 s more.
+      near(resumed.tS, held.tS + 15, 1e-6);
+      assert.equal(resumed.position.timestamp - held.position.timestamp, 15_000);
+    } finally {
+      walk.stop();
+      mock.timers.reset();
+    }
+  });
+
+  test('goOffTrail while paused does not start the walk', () => {
+    const { walk, advance } = setup();
+    try {
+      walk.start();
+      walk.pause();
+      const held = walk.getSnapshot().tS;
+      walk.goOffTrail();
+      advance(5000);
+      assert.equal(walk.getSnapshot().tS, held);
+      assert.equal(walk.getSnapshot().paused, true);
+    } finally {
+      walk.stop();
+      mock.timers.reset();
+    }
+  });
+
+  test('paused time does not count towards a Deviation', () => {
+    const { walk, advance } = setup();
+    try {
+      walk.start();
+      // Off the Trail for 10 simulated seconds, then a long real pause, then 10 more.
+      let state: DeviationState = startDeviationDetector();
+      const feed = () => {
+        const { timestamp } = walk.getSnapshot().position;
+        const step = stepDeviation(state, { offTrailM: DEVIATION.startOffM + 20, timestamp });
+        state = step.state;
+        return step.event;
+      };
+      feed();
+      advance(250 * 3); // ~11 s simulated
+      assert.equal(feed(), null);
+      walk.pause();
+      advance(120_000); // two real minutes paused
+      assert.equal(feed(), null); // same timestamp: ignored
+      assert.notEqual(state.status, 'deviation');
+      walk.resume();
+      advance(250 * 3);
+      assert.equal(feed(), null);
+      assert.notEqual(state.status, 'deviation');
+      // Only the walking time counts: past 30 s it starts.
+      advance(250 * 3);
+      assert.equal(feed(), 'started');
+    } finally {
+      walk.stop();
+      mock.timers.reset();
+    }
   });
 });
 
