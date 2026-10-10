@@ -139,15 +139,19 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
   // Before a Hike (and when one ends), fit the whole Destination into the part of the map the
   // Trail card and top bars leave free. Uses the measured insets, and refits when the card's
   // height changes or another Destination is shown.
+  // fitBounds before the map has loaded is dropped, so wait for it (and refit after a theme
+  // switch remounts it).
+  const [loadedMap, setLoadedMap] = useState<string | null>(null);
+  const mapReady = loadedMap === mode;
   const fitTop = Math.max(FIT_PADDING.top, inset.top + 24);
   const fitBottom = Math.max(FIT_PADDING.bottom, inset.bottom + 24);
   useEffect(() => {
-    if (activeTrailId !== null || !geojson.bounds || inset.bottom === 0) return;
+    if (!mapReady || activeTrailId !== null || !geojson.bounds || inset.bottom === 0) return;
     camera.current?.fitBounds(geojson.bounds, {
       padding: { top: fitTop, right: FIT_PADDING.right, left: FIT_PADDING.left, bottom: fitBottom },
       duration: 600,
     });
-  }, [activeTrailId, geojson.bounds, inset.bottom, fitTop, fitBottom]);
+  }, [mapReady, activeTrailId, geojson.bounds, inset.bottom, fitTop, fitBottom]);
 
   useImperativeHandle(
     ref,
@@ -168,6 +172,7 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
       // A new map per theme. MapLibre Native keeps the previous style's sprite images when
       // the style changes in place, so the day pins and icons would stay on the night map.
       key={mode}
+      onDidFinishLoadingMap={() => setLoadedMap(mode)}
       onRegionWillChange={(event: NativeSyntheticEvent<ViewStateChangeEvent>) => {
         if (event.nativeEvent.userInteraction) onUserMove?.();
       }}
