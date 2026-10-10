@@ -1,0 +1,18 @@
+TAHAK — 60 s voice-over (read calm and low, like a trail guide, not a TV host)
+
+[0:00] No signal. Halfway up the mountain. Now what?
+[0:05] Meet Tahak.
+[0:08] It packs a whole mountain into your phone before you leave home.
+[0:14] An offline map with the Trail, where you are and the next Waypoint.
+[0:22] Wander off the Trail and it tells you which way to go back.
+[0:30] Ask in English, Filipino or Taglish. The AI runs on the phone itself.
+[0:42] In an emergency it never guesses. It opens a first-aid Guide.
+[0:52] And if you need to be found, fire the Flare.
+[0:57] Tahak. When the signal drops, your guide doesn't.
+
+FALLBACK LINES (no Assistant in the build):
+[0:30] Real trail notes for water, fees and campsites, each with its source.
+[0:40] Step-by-step first aid that works with zero signal.
+
+Filipino option for the tag line: "Tahak. Kahit walang signal, may gabay ka."
+(Have a native speaker check it before using it.)

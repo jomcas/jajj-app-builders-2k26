@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tahak Storyboard</title>
+<style>
+  @font-face { font-family: BC; src: url(04-brand/fonts/BarlowCondensed_700Bold.ttf); }
+  @font-face { font-family: B; src: url(04-brand/fonts/Barlow_400Regular.ttf); }
+  :root { --bg:#000; --surface:#141414; --ink:#EDEBE3; --muted:#A9AFA5; --olive:#C9D4B0; --tint:#2A3122; --trail:#FF8A3D; --line:#2b2f29; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.45 B, system-ui, sans-serif; }
+  header { padding:32px 16px 8px; max-width:1200px; margin:auto; }
+  header img { height:40px; }
+  h1 { font:700 40px/1.05 BC, sans-serif; margin:16px 0 4px; }
+  header p { color:var(--muted); margin:0; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; color:var(--muted); font-size:14px; }
+  main { max-width:1200px; margin:auto; padding:16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+  .scene { background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; }
+  .frame { aspect-ratio:9/16; background:#0a0a0a; display:flex; align-items:center; justify-content:center; }
+  .frame img { max-width:100%; max-height:100%; object-fit:contain; }
+  .frame.todo { color:var(--muted); font:700 22px BC, sans-serif; text-align:center; padding:24px; border-bottom:1px dashed var(--line); }
+  .meta { padding:12px 14px 16px; }
+  .time { font:700 20px BC, sans-serif; color:var(--trail); }
+  .vo { margin:6px 0; }
+  .note { color:var(--muted); font-size:14px; margin:0; }
+  .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:99px; background:var(--tint); color:var(--olive); margin-top:8px; }
+  .tag.need { background:#3a2a12; color:#F5DC8A; }
+</style>
+</head>
+<body>
+<header>
+  <img src="04-brand/logo/tahak-wordmark-night.png" alt="Tahak">
+  <h1>60-second hero cut</h1>
+  <p>Captures from the Flip 6 in airplane mode. Details per shot are in 01-script/SCRIPT.md and shot-list.csv.</p>
+  <div class="legend"><span><span class="tag">ready</span> still in the kit</span><span><span class="tag need">film</span> needs live video</span></div>
+</header>
+<main>
+  <div class="scene"><div class="frame todo">Phone in hand<br>swipe → airplane mode</div><div class="meta"><div class="time">0:00–0:05</div><p class="vo">“No signal. Halfway up the mountain. Now what?”</p><p class="note">Overlay: badge-airplane-mode</p><span class="tag need">film</span></div></div>
+  <div class="scene"><div class="frame"><img src="03-graphics/title-end-cards/title-card_1080x1920.png" alt="Title card"></div><div class="meta"><div class="time">0:05–0:08</div><p class="vo">“Meet Tahak.”</p><span class="tag">ready</span></div></div>
+  <div class="scene"><div class="frame"><img src="02-screenshots/raw-flip6/night-destination.png" alt="Mt. Batulao Destination Pack"></div><div class="meta"><div class="time">0:08–0:14</div><p class="vo">“It packs a whole mountain into your phone before you leave home.”</p><p class="note">Text: A whole mountain in 1.5 MB</p><span class="tag">ready</span> <span class="tag need">film scroll</span></div></div>
+  <div class="scene"><div class="frame"><img src="02-screenshots/raw-flip6/night-hike-active.png" alt="Hike in progress"></div><div class="meta"><div class="time">0:14–0:22</div><p class="vo">“An offline map with the Trail, where you are and the next Waypoint.”</p><p class="note">Overlay: badge-simulated-walk</p><span class="tag">ready</span> <span class="tag need">film walk</span></div></div>
+  <div class="scene"><div class="frame todo">Deviation<br>red banner · arrow · buzz · tone</div><div class="meta"><div class="time">0:22–0:30</div><p class="vo">“Wander off the Trail and it tells you which way to go back.”</p><p class="note">Overlay: lower-third-deviation · SFX: deviation_alert.wav</p><span class="tag need">film</span></div></div>
+  <div class="scene"><div class="frame todo"><div>Ask in Taglish<br>answer + source chips<p class="note" style="margin-top:16px">Fallback: trail notes</p></div></div><div class="meta"><div class="time">0:30–0:42</div><p class="vo">“Ask in English, Filipino or Taglish. The AI runs on the phone itself.”</p><p class="note">Real speed only. Fallback: night-destination-passages</p><span class="tag need">needs Assistant</span></div></div>
+  <div class="scene"><div class="frame"><img src="02-screenshots/raw-flip6/night-guides.png" alt="Guides library"></div><div class="meta"><div class="time">0:42–0:52</div><p class="vo">“In an emergency it never guesses. It opens a first-aid Guide.”</p><p class="note">Ideal: snakebite question → Emergency Guide card. Fallback: Guides → Snakebite.</p><span class="tag">fallback ready</span></div></div>
+  <div class="scene"><div class="frame"><img src="02-screenshots/raw-flip6/night-flare.png" alt="Flare screen"></div><div class="meta"><div class="time">0:52–0:57</div><p class="vo">“And if you need to be found, fire the Flare.”</p><p class="note">Film it firing with a camera in a dim room. LOUD.</p><span class="tag">ready</span> <span class="tag need">film firing</span></div></div>
+  <div class="scene"><div class="frame"><img src="03-graphics/title-end-cards/end-card_1080x1920.png" alt="End card"></div><div class="meta"><div class="time">0:57–1:00</div><p class="vo">“Tahak. When the signal drops, your guide doesn’t.”</p><span class="tag">ready</span></div></div>
+</main>
+</body>
+</html>
