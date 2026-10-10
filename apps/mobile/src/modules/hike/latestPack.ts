@@ -25,6 +25,35 @@ export function pickLatestPack(packs: readonly (DestinationPack | null)[]): Dest
   return latest;
 }
 
+/**
+ * The Destination the Hike tab shows. A running Hike's Destination always wins (the choice is
+ * locked during a Hike); then the hiker's saved choice, if that pack is still on the phone;
+ * otherwise the most recently downloaded pack.
+ */
+export function pickShownPack(
+  packs: readonly (DestinationPack | null)[],
+  chosenId: string | null,
+  hikeDestinationId: string | null = null,
+): DestinationPack | null {
+  for (const id of [hikeDestinationId, chosenId]) {
+    if (!id) continue;
+    const match = packs.find((pack) => pack?.destination.id === id);
+    if (match) return match;
+  }
+  return pickLatestPack(packs);
+}
+
+/** A downloaded Destination the hiker can switch the Hike tab to. */
+export type DestinationChoice = { id: string; name: string };
+
+/** Every downloaded Destination, by name, for the Destination choice. */
+export function destinationChoices(packs: readonly (DestinationPack | null)[]): DestinationChoice[] {
+  return packs
+    .filter((pack): pack is DestinationPack => pack !== null)
+    .map((pack) => ({ id: pack.destination.id, name: pack.destination.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 /** True when two picks show the same map and content, so the map need not re-render. */
 export function samePack(a: DestinationPack | null, b: DestinationPack | null): boolean {
   if (!a || !b) return a === b;

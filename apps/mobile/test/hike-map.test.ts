@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 
 import type { DestinationPack, Trail, Waypoint } from '../src/modules/destination-pack/types.ts';
-import { pickLatestPack, samePack } from '../src/modules/hike/latestPack.ts';
+import { destinationChoices, pickLatestPack, pickShownPack, samePack } from '../src/modules/hike/latestPack.ts';
 import { packToGeoJSON, positionToGeoJSON } from '../src/modules/hike/map/geojson.ts';
 import {
   ATTRIBUTION,
@@ -253,6 +253,40 @@ test('the Hike tab shows the most recently downloaded pack', () => {
   const broken = pack('broken', 'A broken date', 'not a date');
   assert.equal(pickLatestPack([broken, batulao])?.destination.id, 'batulao');
   assert.equal(pickLatestPack([broken])?.destination.id, 'broken');
+});
+
+test('the Hike tab shows the saved Destination choice, else the latest download', () => {
+  const batulao = pack('batulao', 'Mt. Batulao', '2026-10-10T01:00:00.000Z');
+  const ulap = pack('ulap', 'Mt. Ulap', '2026-10-10T02:00:00.000Z');
+  const packs = [batulao, ulap];
+  // Saved choice still downloaded.
+  assert.equal(pickShownPack(packs, 'batulao')?.destination.id, 'batulao');
+  // No saved choice: the most recent download.
+  assert.equal(pickShownPack(packs, null)?.destination.id, 'ulap');
+  // Saved choice since deleted: falls back to the most recent download.
+  assert.equal(pickShownPack(packs, 'pulag')?.destination.id, 'ulap');
+  assert.equal(pickShownPack([], 'batulao'), null);
+  // A running Hike locks its Destination, whatever the saved choice.
+  assert.equal(pickShownPack(packs, 'ulap', 'batulao')?.destination.id, 'batulao');
+});
+
+test('switching Destination switches the Trail list', () => {
+  const batulao = {
+    ...pack('batulao', 'Mt. Batulao', '2026-10-10T01:00:00.000Z'),
+    trails: [{ id: 'batulao-old', name: 'Old Trail' }],
+  } as unknown as ReturnType<typeof pack>;
+  const ulap = {
+    ...pack('ulap', 'Mt. Ulap', '2026-10-10T02:00:00.000Z'),
+    trails: [{ id: 'ulap-eco', name: 'Ulap Eco-Trail' }],
+  } as unknown as ReturnType<typeof pack>;
+  const packs = [ulap, batulao];
+  assert.deepEqual(pickShownPack(packs, 'ulap')?.trails.map((trail) => trail.id), ['ulap-eco']);
+  assert.deepEqual(pickShownPack(packs, 'batulao')?.trails.map((trail) => trail.id), ['batulao-old']);
+  // The choice lists every downloaded Destination, by name.
+  assert.deepEqual(destinationChoices([ulap, null, batulao]), [
+    { id: 'batulao', name: 'Mt. Batulao' },
+    { id: 'ulap', name: 'Mt. Ulap' },
+  ]);
 });
 
 test('samePack compares what the map shows', () => {

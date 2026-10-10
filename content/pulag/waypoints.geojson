@@ -1,0 +1,148 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8803508,
+     16.5721757
+    ]
+   },
+   "properties": {
+    "id": "pulag-ambangeg-trail-jump-off",
+    "trail": "pulag-ambangeg-trail",
+    "type": "jump_off",
+    "name": "Babadak Ranger Station",
+    "name_fil": "Babadak Ranger Station",
+    "order": 1,
+    "distance_from_start_m": 0,
+    "offset_from_trail_m": 0.0,
+    "source": "osm:node/312984720",
+    "osm_timestamp": "2020-08-10T04:46:07Z",
+    "note": "The Ambangeg Trail's ranger station in Bashoy, Kabayan (also spelled Badabak or Babalak). Register and attend the orientation at the DENR Visitor Center in Ambangeg, Bokod, first. Guides are hired here."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8930636,
+     16.5795584
+    ]
+   },
+   "properties": {
+    "id": "pulag-ambangeg-trail-campsite-2",
+    "trail": "pulag-ambangeg-trail",
+    "type": "campsite",
+    "name": "Camp 1",
+    "name_fil": "Camp 1",
+    "order": 2,
+    "distance_from_start_m": 2254,
+    "offset_from_trail_m": 4.2,
+    "source": "osm:node/1914649477",
+    "osm_timestamp": "2019-08-09T15:05:28Z",
+    "note": "In the mossy forest, about 1 hour from the ranger station. Toilets nearby. The park office closed Camps 1 and 2 for clean-up in February 2025. Hikers reported camping here again in late 2025, and a 2026 guide says weekdays only. Ask the park office when you book. No open fires.",
+    "ele_m": 2577.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8975204,
+     16.5770887
+    ]
+   },
+   "properties": {
+    "id": "pulag-ambangeg-trail-water-3",
+    "trail": "pulag-ambangeg-trail",
+    "type": "water",
+    "name": "Spring between Camp 1 and Camp 2",
+    "name_fil": "Bukal sa pagitan ng Camp 1 at Camp 2",
+    "order": 3,
+    "distance_from_start_m": 3058,
+    "offset_from_trail_m": 0.0,
+    "source": "osm:node/837190992",
+    "osm_timestamp": "2018-02-10T01:18:56Z",
+    "note": "Spring mapped in OpenStreetMap; flow isn't confirmed. Treat all water before drinking.",
+    "ele_m": 2650.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.9072982,
+     16.584059
+    ]
+   },
+   "properties": {
+    "id": "pulag-ambangeg-trail-water-4",
+    "trail": "pulag-ambangeg-trail",
+    "type": "water",
+    "name": "Spring by Camp 2",
+    "name_fil": "Bukal sa tabi ng Camp 2",
+    "order": 4,
+    "distance_from_start_m": 4848,
+    "offset_from_trail_m": 5.1,
+    "source": "osm:node/3266680875",
+    "osm_timestamp": "2018-02-10T01:19:02Z",
+    "note": "Spring mapped in OpenStreetMap; flow isn't confirmed. Treat all water before drinking. There's no water past Camp 2.",
+    "ele_m": 2700.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.906581,
+     16.5839276
+    ]
+   },
+   "properties": {
+    "id": "pulag-ambangeg-trail-campsite-5",
+    "trail": "pulag-ambangeg-trail",
+    "type": "campsite",
+    "name": "Camp 2",
+    "name_fil": "Camp 2",
+    "order": 5,
+    "distance_from_start_m": 4903,
+    "offset_from_trail_m": 33.1,
+    "source": "osm:way/320168582",
+    "osm_timestamp": "2015-01-03T10:07:41Z",
+    "note": "At the edge of the grassland, about 2,700 m up. Altitude can affect people who sleep here. The park office closed Camps 1 and 2 for clean-up in February 2025. Hikers reported camping here again in late 2025, and a 2026 guide says weekdays only. Ask the park office when you book. No open fires.",
+    "ele_m": 2709.0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     120.8987919,
+     16.5977263
+    ]
+   },
+   "properties": {
+    "id": "pulag-ambangeg-trail-summit",
+    "trail": "pulag-ambangeg-trail",
+    "type": "summit",
+    "name": "Mt. Pulag summit",
+    "name_fil": "Tuktok ng Mt. Pulag",
+    "order": 6,
+    "distance_from_start_m": 7425,
+    "offset_from_trail_m": 6.6,
+    "source": "osm:node/332020032",
+    "osm_timestamp": "2023-11-08T19:14:36Z",
+    "note": "About 2,922 m (DENR-CAR); OpenStreetMap gives 2,928 m. Cold and windy, especially before sunrise, with frost in the cool months. No camping on the summit.",
+    "ele_m": 2928.0
+   }
+  }
+ ]
+}

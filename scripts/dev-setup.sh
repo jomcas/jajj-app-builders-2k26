@@ -2,7 +2,7 @@
 # Runs the whole backend on this machine with Docker: no cloud project, no shared secrets.
 #
 #   1. Starts the local Supabase stack (Postgres, Auth, Storage, the REST API, Studio). The first
-#      start applies supabase/migrations/ and loads the Batulao and Ulap rows from supabase/seed/.
+#      start applies supabase/migrations/ and loads the Batulao, Ulap and Pulag rows from supabase/seed/.
 #   2. Adds a local Admin Portal account (supabase/seed/local-team.sql).
 #   3. Uploads each Destination's offline map to the local 'maps' bucket, cutting it first if
 #      content/<id>/<id>.pmtiles is missing (needs the `pmtiles` CLI and internet).
@@ -46,7 +46,7 @@ psql_local < supabase/seed/local-team.sql
 if [[ -n "${SKIP_MAPS:-}" ]]; then
   echo "==> Skipping maps (SKIP_MAPS is set). The Hike map will not download in the app."
 else
-  for id in batulao ulap; do
+  for id in batulao ulap pulag; do
     map_file="content/$id/$id.pmtiles"
     if [[ ! -f "$map_file" ]]; then
       pmtiles_bin="${PMTILES:-$(command -v pmtiles || echo "$HOME/.local/bin/pmtiles")}"

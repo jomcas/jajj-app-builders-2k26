@@ -14,6 +14,7 @@ import {
   parseAssistantBenchUrl,
   parseSpikeBenchUrl,
   parseTestUrl,
+  parseVisionBenchUrl,
   sweepThresholds,
   type AssistantBenchOptions,
 } from './benchLink';
@@ -25,6 +26,7 @@ import type { Reply } from './pipeline';
 import { runSpikeBench } from './spikeBench';
 import { TEST_SET } from './testSet';
 import { appIndex, createVectorIndex, type VectorIndex } from './vectorIndex';
+import { runVisionBench } from './visionBench';
 
 export const BENCH_TAG = 'TAHAK_ASSISTANT_BENCH';
 
@@ -38,6 +40,7 @@ const top = (hits: { chunk: { id: string }; score: number }[], n = 5) =>
 function verdictOf(reply: Reply): string {
   if (reply.kind === 'answer') return 'answer';
   if (reply.kind === 'emergency') return reply.distress ? 'distress' : `emergency:${reply.guideId}`;
+  if (reply.kind === 'tool') return `tool:${reply.toolId}`;
   return `off-topic-${reply.reason}`;
 }
 
@@ -79,7 +82,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
       }
       const reply = await answer(q.question, { language: ui, index, threshold, ignorePacks: options.ignorePacks });
       const verdict = verdictOf(reply);
-      const best = reply.kind === 'emergency' ? 1 : reply.gate.best;
+      const best = reply.kind === 'emergency' || reply.kind === 'tool' ? 1 : reply.gate.best;
       results.push({ id: q.id, best, expect: q.expect, verdict });
       const gen = reply.kind === 'answer' ? reply.generation : reply.kind === 'off-topic' ? reply.generation : undefined;
       if (gen) ttfts.push(gen.ttftMs);
@@ -93,7 +96,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
         verdict,
         correct: q.expect === 'answer' ? verdict === 'answer' : verdict.startsWith('off-topic'),
         best: round(best, 3),
-        top: reply.kind === 'emergency' ? [] : top(reply.hits),
+        top: reply.kind === 'emergency' || reply.kind === 'tool' ? [] : top(reply.hits),
         sources: reply.kind === 'answer' ? reply.sources.map((s) => s.id) : [],
         given: reply.kind === 'answer' ? reply.passages.map((s) => s.id) : [],
         llm_ran: !!gen,
@@ -106,7 +109,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
         total_ms: Date.now() - started,
         pss_kb: diagnostics.memoryKb().pss ?? null,
       });
-      logChunks(log, { type: 'a', run, id: q.id, question: q.question }, reply.kind === 'answer' ? reply.text : reply.kind === 'off-topic' ? `(off-topic reply; model said: ${reply.raw ?? 'not run'})` : '(emergency)');
+      logChunks(log, { type: 'a', run, id: q.id, question: q.question }, reply.kind === 'answer' ? reply.text : reply.kind === 'off-topic' ? `(off-topic reply; model said: ${reply.raw ?? 'not run'})` : reply.kind === 'tool' ? reply.result.text : '(emergency)');
     }
 
     const inScope = results.filter((r) => r.expect === 'answer');
@@ -150,7 +153,7 @@ export async function runAssistantBench(options: AssistantBenchOptions): Promise
 type BenchGlobals = { tahakAssistantLinks?: { remove(): void }; tahakAssistantInitialUrlSeen?: boolean };
 const benchGlobals = globalThis as BenchGlobals;
 
-/** Handles the Assistant's adb links: the test-set bench, the test switch and the Wave 0 bench. */
+/** Handles the Assistant's adb links: the test-set bench, the test switch, the Vision bench and the Wave 0 bench. */
 export function listenForAssistantLinks() {
   const handle = (url: string | null) => {
     const bench = parseAssistantBenchUrl(url);
@@ -161,6 +164,8 @@ export function listenForAssistantLinks() {
       log({ type: 'test-flag', ignore_packs: test.ignorePacks });
       return;
     }
+    const vision = parseVisionBenchUrl(url);
+    if (vision) return void runVisionBench(vision);
     const spike = parseSpikeBenchUrl(url, DEFAULT_THREADS);
     if (spike) void runSpikeBench(spike);
   };

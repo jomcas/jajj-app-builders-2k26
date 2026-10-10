@@ -1,5 +1,7 @@
 import type { ComponentType } from 'react';
 
+import type { Language } from '../i18n/types';
+
 /** The four bottom tabs. The shell owns them; Feature Modules plug screens into them. */
 export type TabId = 'explore' | 'hike' | 'ask' | 'guides';
 
@@ -31,6 +33,47 @@ export type SosAction = {
   Screen: ComponentType<{ visible: boolean; onClose: () => void }>;
   /** A hook: true while the signal runs, which turns the SOS control fully red (ADR 0004). */
   useActive: () => boolean;
+  /**
+   * Lets the module open its Screen without a tap on SOS, e.g. the Assistant's Flare tool.
+   * The shell subscribes the SOS control of the focused tab; returns the unsubscribe.
+   */
+  onOpenRequest?: (open: () => void) => () => void;
+};
+
+/** One parameter an Assistant tool takes, JSON-schema style. */
+export type ToolParameter = {
+  name: string;
+  type: 'string' | 'number' | 'boolean';
+  description: string;
+  enum?: readonly string[];
+  required?: boolean;
+};
+
+/**
+ * What a tool returns: fixed, translated text written by the module (never by the model),
+ * an optional title for its card, and structured data for logs and tests.
+ */
+export type ToolResult = {
+  text: string;
+  title?: string;
+  data?: Record<string, unknown>;
+};
+
+/**
+ * A tool the Assistant may call (ADR 0001). The owning module defines it and lists it in its
+ * `tools`; adding one touches only that module. The Assistant picks a tool with `match`, a
+ * cheap deterministic intent match (en, fil, Taglish), after emergency routing and before
+ * the relevance gate, then shows `run`'s result as is.
+ */
+export type AssistantTool = {
+  /** Unique across modules, e.g. 'hike.distance-to-next-waypoint'. */
+  id: string;
+  /** What the tool does, in each language. */
+  description: Record<Language, string>;
+  parameters: readonly ToolParameter[];
+  /** The arguments when the question asks for this tool, or null when it does not. */
+  match: (question: string) => Record<string, unknown> | null;
+  run: (args: Record<string, unknown>, context: { language: Language }) => Promise<ToolResult>;
 };
 
 /**
@@ -52,4 +95,6 @@ export type FeatureModule = TabSlot & {
   launchGate?: ComponentType<LaunchGateProps>;
   /** The SOS control's action. Only the Flare supplies one. */
   sos?: SosAction;
+  /** Tools the Assistant may call (ADR 0001). */
+  tools?: readonly AssistantTool[];
 };

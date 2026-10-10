@@ -1,7 +1,9 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import {
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -23,6 +25,8 @@ import { answer, testFlags } from './assistant';
 import type { Chunk } from './corpus';
 import { errorMessage, fill } from './format';
 import { engineStore, loadModel } from './llm';
+import { answerPhoto, photoActivity, readPhotoAhead, type PhotoTiming } from './photoAssistant';
+import type { PhotoReply } from './photoPipeline';
 import type { Reply } from './pipeline';
 import { chipGroups, chipLabel, inLanguage } from './sources';
 import strings from './strings';
@@ -30,12 +34,15 @@ import { appIndex } from './vectorIndex';
 
 type Strings = Record<keyof (typeof strings)['en'], string>;
 
-type Message =
-  | { id: string; role: 'user'; text: string }
-  | { id: string; role: 'assistant'; text: string; reply?: Reply; error?: string };
+type Photo = { uri: string; width: number; height: number };
 
-let nextId = 0;
-const newId = () => String(++nextId);
+type Message =
+  | { id: string; role: 'user'; text: string; photo?: string }
+  | { id: string; role: 'assistant'; text: string; reply?: Reply | (PhotoReply & { timing: PhotoTiming }); error?: string };
+
+// Random, not a module-level counter: Fast Refresh re-runs this file and would restart a
+// counter, giving two messages the same key.
+const newId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
 /** The Ask tab (U4): a chat with the on-device Assistant, answering from the search corpus. */
 export function AskScreen() {
@@ -49,7 +56,11 @@ export function AskScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [question, setQuestion] = useState('');
   const [busy, setBusy] = useState(false);
-  const [cameraNote, setCameraNote] = useState(false);
+  const [photo, setPhoto] = useState<Photo | null>(null);
+  const [photoSheet, setPhotoSheet] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+  const activity = useSyncExternalStore(photoActivity.subscribe, photoActivity.getSnapshot);
+  const [now, setNow] = useState(() => Date.now());
   const [sheet, setSheet] = useState<Chunk[] | null>(null);
   const [topOffset, setTopOffset] = useState(0);
   const containerRef = useRef<View>(null);
@@ -62,24 +73,56 @@ export function AskScreen() {
   }, []);
 
   useEffect(() => {
-    if (!cameraNote) return;
-    const timer = setTimeout(() => setCameraNote(false), 4000);
+    if (!notice) return;
+    const timer = setTimeout(() => setNotice(null), 5000);
     return () => clearTimeout(timer);
-  }, [cameraNote]);
+  }, [notice]);
+
+  // Ticks the seconds in the "Reading the photo… n s" status while the photo path works.
+  useEffect(() => {
+    if (activity.phase === 'idle') return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [activity]);
+
+  async function pickPhoto(source: 'camera' | 'gallery') {
+    setPhotoSheet(false);
+    if (source === 'camera') {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        setNotice(s.cameraDenied);
+        return;
+      }
+    }
+    // Full quality: anything lower re-encodes the 12 MP photo first (slower). llama.cpp scales
+    // it down to the vision token cap itself (vision.ts).
+    const options: ImagePicker.ImagePickerOptions = { mediaTypes: ['images'], quality: 1 };
+    const result = source === 'camera' ? await ImagePicker.launchCameraAsync(options) : await ImagePicker.launchImageLibraryAsync(options);
+    const asset = result.canceled ? undefined : result.assets[0];
+    if (!asset) return;
+    setPhoto({ uri: asset.uri, width: asset.width, height: asset.height });
+    // Read the photo now, while the hiker types: the answer then starts much sooner.
+    void readPhotoAhead(asset.uri, language).catch(() => undefined);
+  }
 
   const update = (id: string, patch: Partial<Extract<Message, { role: 'assistant' }>>) =>
     setMessages((all) => all.map((m) => (m.id === id && m.role === 'assistant' ? { ...m, ...patch } : m)));
 
   async function send(text = question) {
     const q = text.trim();
-    if (!q || busy) return;
+    const attached = photo;
+    if ((!q && !attached) || busy) return;
     const answerId = newId();
-    setMessages((all) => [...all, { id: newId(), role: 'user', text: q }, { id: answerId, role: 'assistant', text: '' }]);
+    setMessages((all) => [...all, { id: newId(), role: 'user', text: q, photo: attached?.uri }, { id: answerId, role: 'assistant', text: '' }]);
     setQuestion('');
+    setPhoto(null);
     setBusy(true);
     try {
-      const reply = await answer(q, { language, onDisplay: (shown) => update(answerId, { text: shown }) });
-      update(answerId, { reply, text: reply.kind === 'answer' ? reply.text : '' });
+      const onDisplay = (shown: string) => update(answerId, { text: shown });
+      const reply = attached
+        ? await answerPhoto(q || s.photoDefaultQuestion, attached.uri, { language, onDisplay, size: attached })
+        : await answer(q, { language, onDisplay });
+      update(answerId, { reply, text: reply.kind === 'answer' || reply.kind === 'photo-answer' ? reply.text : '' });
       // The source chips arrive with the final reply; bring them into view.
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 150);
     } catch (error) {
@@ -95,12 +138,18 @@ export function AskScreen() {
     else setSheet(chunks);
   }
 
+  const seconds = activity.phase === 'idle' ? 0 : Math.max(0, Math.round((now - activity.since) / 1000));
   const status =
     engine.status === 'loading'
       ? fill(s.loadingModel, { percent: Math.round(engine.percent) })
-      : index.phase === 'indexing'
-        ? fill(s.indexing, { done: index.done, total: index.total })
-        : null;
+      : activity.phase === 'reading'
+        ? fill(s.readingPhoto, { seconds })
+        : activity.phase === 'answering'
+          ? fill(s.answeringPhoto, { seconds })
+          : index.phase === 'indexing'
+            ? fill(s.indexing, { done: index.done, total: index.total })
+            : null;
+  const canSend = !busy && (!!question.trim() || !!photo);
 
   const ink = { color: colors.ink };
   const muted = { color: colors.muted };
@@ -140,7 +189,8 @@ export function AskScreen() {
           renderItem={({ item }) =>
             item.role === 'user' ? (
               <View accessibilityLabel={s.you} style={[styles.bubble, styles.userBubble, { backgroundColor: colors.tint }]}>
-                <Text selectable style={[textStyles.body, { color: colors.onTint }]}>{item.text}</Text>
+                {item.photo ? <Image source={{ uri: item.photo }} accessibilityLabel={s.yourPhoto} style={styles.sentPhoto} /> : null}
+                {item.text ? <Text selectable style={[textStyles.body, { color: colors.onTint }]}>{item.text}</Text> : null}
               </View>
             ) : (
               <AssistantBubble message={item} s={s} colors={colors} onSource={openSource} />
@@ -149,23 +199,39 @@ export function AskScreen() {
         />
 
         {status ? <Text style={[textStyles.label, muted, styles.status]}>{status}</Text> : null}
-        {cameraNote ? <Text style={[textStyles.label, muted, styles.status]}>{s.cameraNote}</Text> : null}
+        {notice ? <Text style={[textStyles.label, muted, styles.status]}>{notice}</Text> : null}
+
+        {photo ? (
+          <View style={[styles.attachment, { borderTopColor: colors.line, backgroundColor: colors.page }]}>
+            <Image source={{ uri: photo.uri }} accessibilityLabel={s.yourPhoto} style={styles.thumb} />
+            <Text style={[textStyles.label, muted, styles.fill]}>{s.photoAttached}</Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={s.removePhoto}
+              disabled={busy}
+              onPress={() => setPhoto(null)}
+              style={[styles.removeButton, { backgroundColor: colors.tint }]}
+            >
+              <MaterialCommunityIcons name="close" size={22} color={colors.onTint} />
+            </Pressable>
+          </View>
+        ) : null}
 
         <View style={[styles.inputBar, { borderTopColor: colors.line, backgroundColor: colors.page }]}>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={s.camera}
-            accessibilityHint={s.cameraNote}
-            accessibilityState={{ disabled: true }}
-            onPress={() => setCameraNote(true)}
-            style={[styles.iconButton, { backgroundColor: colors.tint, opacity: 0.45 }]}
+            accessibilityState={{ disabled: busy }}
+            disabled={busy}
+            onPress={() => setPhotoSheet(true)}
+            style={[styles.iconButton, { backgroundColor: colors.tint, opacity: busy ? 0.5 : 1 }]}
           >
-            <MaterialCommunityIcons name="camera-off-outline" size={24} color={colors.onTint} />
+            <MaterialCommunityIcons name="camera-outline" size={24} color={colors.onTint} />
           </Pressable>
           <TextInput
             value={question}
             onChangeText={setQuestion}
-            placeholder={s.inputPlaceholder}
+            placeholder={photo ? s.photoPlaceholder : s.inputPlaceholder}
             placeholderTextColor={colors.muted}
             multiline
             maxLength={500}
@@ -174,10 +240,10 @@ export function AskScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={s.send}
-            accessibilityState={{ disabled: busy || !question.trim() }}
-            disabled={busy || !question.trim()}
+            accessibilityState={{ disabled: !canSend }}
+            disabled={!canSend}
             onPress={() => send()}
-            style={[styles.iconButton, { backgroundColor: colors.primary, opacity: busy || !question.trim() ? 0.5 : 1 }]}
+            style={[styles.iconButton, { backgroundColor: colors.primary, opacity: canSend ? 1 : 0.5 }]}
           >
             <MaterialCommunityIcons name="send" size={22} color={colors.onPrimary} />
           </Pressable>
@@ -185,7 +251,45 @@ export function AskScreen() {
       </KeyboardAvoidingView>
 
       <SourceSheet chunks={sheet} onClose={() => setSheet(null)} s={s} colors={colors} />
+      <PhotoSheet visible={photoSheet} onPick={pickPhoto} onClose={() => setPhotoSheet(false)} s={s} colors={colors} />
     </View>
+  );
+}
+
+/** Take a photo or choose one from the gallery. */
+function PhotoSheet({
+  visible,
+  onPick,
+  onClose,
+  s,
+  colors,
+}: {
+  visible: boolean;
+  onPick: (source: 'camera' | 'gallery') => void;
+  onClose: () => void;
+  s: Strings;
+  colors: Palette;
+}) {
+  const insets = useSafeAreaInsets();
+  const option = (source: 'camera' | 'gallery', icon: 'camera-outline' | 'image-outline', label: string) => (
+    <Pressable accessibilityRole="button" onPress={() => onPick(source)} style={[styles.sheetOption, { backgroundColor: colors.tint }]}>
+      <MaterialCommunityIcons name={icon} size={24} color={colors.onTint} />
+      <Text style={[textStyles.bodyStrong, { color: colors.onTint }]}>{label}</Text>
+    </Pressable>
+  );
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <Pressable accessibilityRole="button" accessibilityLabel={s.cancel} style={[styles.scrim, { backgroundColor: colors.scrim }]} onPress={onClose} />
+      <View style={[styles.sheet, { backgroundColor: colors.surface, paddingBottom: 16 + insets.bottom }]}>
+        <Text style={[textStyles.heading, { color: colors.ink }]}>{s.camera}</Text>
+        <Text style={[textStyles.body, { color: colors.muted }]}>{s.photoSheetBody}</Text>
+        {option('camera', 'camera-outline', s.takePhoto)}
+        {option('gallery', 'image-outline', s.choosePhoto)}
+        <Pressable accessibilityRole="button" onPress={onClose} style={[styles.closeButton, { borderWidth: 1, borderColor: colors.line }]}>
+          <Text style={[textStyles.bodyStrong, { color: colors.ink }]}>{s.cancel}</Text>
+        </Pressable>
+      </View>
+    </Modal>
   );
 }
 
@@ -228,17 +332,35 @@ function AssistantBubble({
     );
   }
 
+  // A module's tool answered (ADR 0001): its own fixed text, never the model's.
+  if (!error && reply?.kind === 'tool') {
+    return (
+      <View accessibilityLabel={s.assistant} style={box}>
+        {reply.result.title ? <Text style={[textStyles.labelStrong, { color: colors.muted }]}>{reply.result.title}</Text> : null}
+        <Text selectable style={[textStyles.body, { color: colors.ink }]}>{reply.result.text}</Text>
+      </View>
+    );
+  }
+
   let body: React.ReactNode;
   if (error) body = <Text style={[textStyles.body, { color: colors.ink }]}>{fill(s.answerError, { error })}</Text>;
-  else if (reply?.kind === 'off-topic') body = <Text style={[textStyles.body, { color: colors.ink }]}>{s.offTopic}</Text>;
+  else if (reply?.kind === 'off-topic') {
+    const photoNoAnswer = 'photo' in reply && reply.reason === 'no-source';
+    body = <Text style={[textStyles.body, { color: colors.ink }]}>{photoNoAnswer ? s.photoOffTopic : s.offTopic}</Text>;
+  }
   else if (text) body = <Text selectable style={[textStyles.body, { color: colors.ink }]}>{text}</Text>;
   else body = <Text style={[textStyles.body, { color: colors.muted }]}>{s.answering}</Text>;
 
-  const chips = reply?.kind === 'answer' ? chipGroups(reply.sources.map((c) => inLanguage(c, language, corpus)), s) : [];
+  const chips =
+    reply?.kind === 'answer' || reply?.kind === 'photo-answer'
+      ? chipGroups(reply.sources.map((c) => inLanguage(c, language, corpus)), s)
+      : [];
+  const timing = reply?.kind === 'photo-answer' ? fill(s.photoTiming, { seconds: Math.round(reply.timing.firstWordMs / 1000) }) : null;
 
   return (
     <View accessibilityLabel={s.assistant} style={box}>
       {body}
+      {timing ? <Text style={[textStyles.label, { color: colors.muted }]}>{timing}</Text> : null}
       {chips.length > 0 ? (
         <View style={styles.sources}>
           <Text style={[textStyles.label, { color: colors.muted }]}>{s.sources}</Text>
@@ -307,6 +429,11 @@ const styles = StyleSheet.create({
   sources: { gap: 6 },
   status: { paddingHorizontal: 16, paddingBottom: 4 },
   inputBar: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, padding: 8, borderTopWidth: 1 },
+  attachment: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 8, paddingTop: 8, borderTopWidth: 1 },
+  thumb: { width: 56, height: 56, borderRadius: 8 },
+  sentPhoto: { width: 180, height: 180, borderRadius: 10 },
+  removeButton: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
+  sheetOption: { minHeight: 52, borderRadius: 12, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16 },
   iconButton: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
   input: { flex: 1, minHeight: 48, maxHeight: 120, borderWidth: 1, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 12 },
   scrim: { ...StyleSheet.absoluteFill },

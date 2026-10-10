@@ -33,7 +33,9 @@ import { DeviationBanner } from './ui/DeviationBanner';
 import { EndSuggestion } from './ui/EndSuggestion';
 import { HikePanel } from './ui/HikePanel';
 import { SimulationBar } from './ui/SimulationBar';
+import { publishLiveHike } from './tools/liveHike';
 import { TrailPickerCard } from './ui/TrailPickerCard';
+import type { DestinationChoice } from './latestPack';
 import { useLatestPack } from './useLatestPack';
 
 const NOTICE_MS = 5000;
@@ -115,6 +117,16 @@ function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, positi
   }, []);
 
   const current = state && state.hikeId === hikeId ? state : null;
+
+  // The Assistant's distance tool reads the same view as the panel (tools/liveHike.ts).
+  useEffect(() => {
+    publishLiveHike(
+      current && entry
+        ? { hikeId: current.hikeId, view: current.view, tracker: current.tracker, placed: entry.placed }
+        : null,
+    );
+  }, [current, entry]);
+  useEffect(() => () => publishLiveHike(null), []);
   const detector = current?.detector;
   const deviation: DeviationView | null =
     current && detector && isDeviation(detector)
@@ -126,7 +138,15 @@ function useHikeTracking(hikeId: number | null, entry: TrailEntry | null, positi
 }
 
 /** The map of one Destination with the hiker's position, and the Hike on top of it. */
-function DestinationMap({ pack }: { pack: DestinationPack }) {
+function DestinationMap({
+  pack,
+  choices,
+  onChooseDestination,
+}: {
+  pack: DestinationPack;
+  choices: DestinationChoice[];
+  onChooseDestination: (destinationId: string) => void;
+}) {
   const s = useStrings(strings);
   const focused = useIsFocused();
   const { hike: anyHike, pendingSimulation } = useSyncExternalStore(hikeStore.subscribe, hikeStore.getSnapshot);
@@ -271,6 +291,12 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
           </>
         ) : (
           <TrailPickerCard
+            destinationId={pack.destination.id}
+            destinations={choices}
+            onChooseDestination={onChooseDestination}
+            // A Hike locks its Destination; the card only shows before one, but a Hike on
+            // another Destination (started by a deep link) also locks the choice.
+            destinationLocked={anyHike !== null}
             trails={pickable}
             selectedId={selectedTrailId}
             onSelect={setSelectedTrailId}
@@ -285,7 +311,7 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
 }
 
 /**
- * The Hike tab: the most recently downloaded Destination's map, full screen, with the Trail
+ * The Hike tab: the chosen (or most recently downloaded) Destination's map, full screen, with the Trail
  * picker before a Hike and the Hike panel during one (issues #6 and #7), or a pointer to
  * Explore when no pack is on the phone.
  */
@@ -305,7 +331,15 @@ export function HikeScreen() {
   if (latest.status === 'none') {
     return <EmptyState icon="map-outline" title={s.emptyTitle} body={s.emptyBody} />;
   }
-  return <DestinationMap key={latest.pack.destination.id} pack={latest.pack} />;
+  // Keyed by Destination, so switching remounts the map and refits it to the new Destination.
+  return (
+    <DestinationMap
+      key={latest.pack.destination.id}
+      pack={latest.pack}
+      choices={latest.choices}
+      onChooseDestination={latest.choose}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
