@@ -48,15 +48,18 @@ export function createSimulatedWalk({
   trailId,
   speed = DEFAULT_SPEED,
   startFraction = 0,
+  excursions = true,
   now = Date.now,
 }: {
   trail: PreparedTrail;
   trailId: string;
   speed?: number;
   startFraction?: number;
+  /** false: no scripted excursions, only goOffTrail() (the simulated group member, #24). */
+  excursions?: boolean;
   now?: () => number;
 }): SimulatedWalk {
-  let samples: WalkSample[] = buildSimulatedWalk(trail);
+  let samples: WalkSample[] = buildSimulatedWalk(trail, { excursions });
   let tS = Math.max(0, Math.min(1, startFraction)) * walkDurationS(samples);
   let currentSpeed = speed;
   const clockStart = now();

@@ -4,6 +4,7 @@
 //   export { default as <id> } from './<id>';
 // Nothing in src/shell/ changes.
 
+export { default as alerts } from './alerts';
 export { default as assistant } from './assistant';
 export { default as assistantModel } from './assistant-model';
 export { default as destinationPack } from './destination-pack';

@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore, type ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useStrings, useTheme } from '../../../settings/preferences';
@@ -19,10 +19,13 @@ import strings from '../strings';
 export function SimulationBar({
   walk,
   offTrailM,
+  children,
 }: {
   walk: SimulatedWalk;
   /** The real distance from the whole Trail, as the Deviation measures it; null before a position. */
   offTrailM: number | null;
+  /** Extra demo controls on their own row (the simulated group member, #24). */
+  children?: ReactNode;
 }) {
   const s = useStrings(strings);
   const { colors } = useTheme();
@@ -66,6 +69,7 @@ export function SimulationBar({
           <Text style={[textStyles.labelStrong, { color: colors.ink }]}>{s.goOffTrail}</Text>
         </Pressable>
       </View>
+      {children}
     </View>
   );
 }
