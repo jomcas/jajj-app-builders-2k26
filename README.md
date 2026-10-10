@@ -2,6 +2,12 @@
 
 Tahak is an offline-first hiking and camping companion for Filipino mountain trails and campsites. It is designed to work in airplane mode once a destination pack is downloaded, giving hikers live trail guidance, emergency help, and local AI assistance without relying on network connectivity.
 
+## Showcase
+
+**[See the app in screenshots, and the demo-video kit →](showcase/README.md)**
+
+Real screens from a Galaxy Z Flip 6 in airplane mode, promo cards, the video scripts and the soundtrack are all in [`showcase/`](showcase/README.md).
+
 ## Why local AI matters
 
 Tahak benefits from running AI locally because hikers often lose signal exactly when they need help most. Local inference keeps the assistant available in remote or offline environments, reduces latency, improves privacy, and ensures critical guidance remains accessible in the field.
@@ -114,6 +120,7 @@ The project uses a hybrid AI-assisted engineering workflow with:
 ├── content/
 ├── docs/
 ├── scripts/            # dev-setup.sh: local backend in Docker
+├── showcase/           # Screenshots, promo cards and the demo-video kit
 ├── AGENTS.md
 ├── CONTEXT.md
 ├── README.md
