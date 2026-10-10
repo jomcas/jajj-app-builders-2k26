@@ -81,10 +81,7 @@ function DestinationChooser({
         ]}
       >
         <MaterialCommunityIcons name="terrain" size={22} color={colors.primary} />
-        <View style={styles.grow}>
-          <Text style={[textStyles.label, { color: colors.muted }]}>{s.destinationLabel}</Text>
-          <Text style={[textStyles.bodyStrong, { color: colors.ink }]}>{current?.name}</Text>
-        </View>
+        <Text style={[textStyles.bodyStrong, styles.grow, { color: colors.ink }]}>{current?.name}</Text>
         {canSwitch ? <MaterialCommunityIcons name="chevron-down" size={24} color={colors.ink} /> : null}
       </Pressable>
       <Sheet visible={open} onClose={() => setOpen(false)} title={s.chooseDestination}>
@@ -310,9 +307,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    minHeight: 52,
+    minHeight: 48,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 4,
     borderRadius: 12,
     borderWidth: 1.5,
   },
@@ -330,8 +327,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 6,
     minHeight: 48,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
   },
   badge: {
     borderRadius: 8,
