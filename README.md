@@ -30,7 +30,7 @@ The project is designed around the idea that a hiker should still be able to nav
 
 ### Models used
 - Qwen3.5-4B Q4_K_M GGUF via `llama.rn`
-- Qwen vision file in F16 format for image-based prompting
+- Qwen vision file (`Qwen3.5-4B-mmproj-Q8_0.gguf`, Q8_0) for photo questions; all model files total about 3.4 GB (3,441,423,488 bytes)
 - Lightweight local embedding/search model for offline RAG-style retrieval
 
 ### Local AI behavior
