@@ -15,7 +15,7 @@ import {
   remainingDays,
   shouldRefresh,
 } from '../src/modules/forecast/rules.ts';
-import { createForecastStore, destinationKey, HERE_KEY } from '../src/modules/forecast/store.ts';
+import { createForecastStore, destinationKey, HERE_KEY, RETRY_DELAYS_MS } from '../src/modules/forecast/store.ts';
 import strings from '../src/modules/forecast/strings.ts';
 import type { ForecastDay } from '../src/modules/forecast/types.ts';
 
@@ -288,11 +288,20 @@ describe('weather warnings', () => {
 });
 
 describe('store', () => {
-  function setup(options: { online?: boolean; here?: { latitude: number; longitude: number } | null } = {}) {
+  function setup(
+    options: {
+      online?: boolean;
+      here?: { latitude: number; longitude: number } | null;
+      retryDelaysMs?: readonly number[];
+      failFirst?: number;
+    } = {},
+  ) {
     const saved = new Map<string, string>();
     const fetched: string[] = [];
     const packListeners = new Set<() => void>();
     const timers: (() => void)[] = [];
+    const slept: number[] = [];
+    let failuresLeft = options.failFirst ?? 0;
     const state = {
       online: options.online ?? true,
       now: new Date('2026-10-10T01:00:00Z'),
@@ -308,6 +317,10 @@ describe('store', () => {
       fetchJson: async (url) => {
         fetched.push(url);
         if (!state.online) throw new TypeError('Network request failed');
+        if (failuresLeft > 0) {
+          failuresLeft--;
+          throw new TypeError('Network request failed');
+        }
         return openMeteoJson();
       },
       packs: {
@@ -319,6 +332,10 @@ describe('store', () => {
       },
       lastKnownLocation: async () => options.here ?? null,
       now: () => state.now,
+      retryDelaysMs: options.retryDelaysMs ?? [],
+      sleep: async (ms) => {
+        slept.push(ms);
+      },
       setTimer: (run) => {
         timers.push(run);
         return () => {
@@ -338,7 +355,7 @@ describe('store', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     };
     const notifyPacks = () => packListeners.forEach((listener) => listener());
-    return { store, saved, fetched, state, advance, settle, notifyPacks };
+    return { store, saved, fetched, slept, state, advance, settle, notifyPacks };
   }
 
   const key = destinationKey('batulao');
@@ -383,6 +400,28 @@ describe('store', () => {
     await t.settle();
     assert.equal(t.fetched.length, 1);
     assert.ok(t.saved.has(key));
+  });
+
+  test('a first fetch after a pack download that fails once is retried, not shown as failed', async () => {
+    const t = setup({ failFirst: 1, retryDelaysMs: [...RETRY_DELAYS_MS] });
+    t.state.downloaded = [];
+    t.store.start();
+    t.state.downloaded = [{ id: 'batulao', latitude: 14.0397, longitude: 120.8027 }];
+    t.notifyPacks();
+    await t.settle();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    assert.equal(t.fetched.length, 2);
+    assert.deepEqual(t.slept, [RETRY_DELAYS_MS[0]]);
+    assert.equal(t.store.getEntry(key).status, 'idle');
+    assert.ok(t.saved.has(key));
+  });
+
+  test('offline, a fetch gives up after its retries and says it failed', async () => {
+    const t = setup({ online: false, retryDelaysMs: [...RETRY_DELAYS_MS] });
+    await t.store.refreshDue();
+    assert.equal(t.fetched.length, 1 + RETRY_DELAYS_MS.length);
+    assert.deepEqual(t.slept, [...RETRY_DELAYS_MS]);
+    assert.equal(t.store.getEntry(key).status, 'failed');
   });
 
   test('re-downloading a pack refetches a Forecast older than a minute', async () => {

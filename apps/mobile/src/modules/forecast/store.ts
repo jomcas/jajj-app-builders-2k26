@@ -41,6 +41,12 @@ export const HERE_KEY = 'here';
 
 const FORMAT = 1;
 const PACK_SETTLE_MS = 1_000;
+/**
+ * A failed fetch is retried after these waits before the card says "Couldn't update". The first
+ * fetch after a pack download can fail on a transient network error (seen on the Flip 6 with
+ * Mt. Pulag, #22); one quick retry fixes it. Offline, the retries just fail too.
+ */
+export const RETRY_DELAYS_MS = [2_000, 5_000] as const;
 
 type Saved = { format: number; forecast: Forecast };
 
@@ -52,6 +58,9 @@ export function createForecastStore(deps: {
   lastKnownLocation: () => Promise<{ latitude: number; longitude: number } | null>;
   now?: () => Date;
   setTimer?: (run: () => void, ms: number) => () => void;
+  /** Waits before each retry of a failed fetch. Defaults to RETRY_DELAYS_MS. */
+  retryDelaysMs?: readonly number[];
+  sleep?: (ms: number) => Promise<void>;
 }): ForecastStore {
   const now = deps.now ?? (() => new Date());
   const setTimer =
@@ -60,6 +69,8 @@ export function createForecastStore(deps: {
       const id = setTimeout(run, ms);
       return () => clearTimeout(id);
     });
+  const retryDelaysMs = deps.retryDelaysMs ?? RETRY_DELAYS_MS;
+  const sleep = deps.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
   const listeners = new Set<() => void>();
   const entries = new Map<string, ForecastEntry>();
   const loading = new Map<string, Promise<Forecast | null>>();
@@ -106,12 +117,24 @@ export function createForecastStore(deps: {
     inFlight.add(key);
     setEntry(key, { status: 'refreshing' });
     try {
-      const at = now();
-      const forecast = parseForecast(await deps.fetchJson(forecastUrl(target)), target, at);
-      await deps.storage.write(key, JSON.stringify({ format: FORMAT, forecast } satisfies Saved));
-      attempts.set(key, { at: at.getTime(), failed: false });
-      setEntry(key, { forecast, status: 'idle' });
-    } catch {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          const at = now();
+          const forecast = parseForecast(await deps.fetchJson(forecastUrl(target)), target, at);
+          await deps.storage.write(key, JSON.stringify({ format: FORMAT, forecast } satisfies Saved));
+          attempts.set(key, { at: at.getTime(), failed: false });
+          setEntry(key, { forecast, status: 'idle' });
+          console.info(`[forecast] saved ${key} (try ${attempt + 1})`);
+          return;
+        } catch (error) {
+          const delay = retryDelaysMs[attempt];
+          if (delay === undefined) throw error;
+          console.warn(`[forecast] fetch ${key} failed (try ${attempt + 1}), retrying in ${delay} ms:`, String(error));
+          await sleep(delay);
+        }
+      }
+    } catch (error) {
+      console.warn(`[forecast] fetch ${key} failed:`, String(error));
       attempts.set(key, { at: now().getTime(), failed: true });
       setEntry(key, { status: 'failed' });
     } finally {
