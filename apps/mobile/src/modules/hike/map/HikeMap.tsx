@@ -26,10 +26,11 @@ import {
   trailLayers,
   waypointLayer,
 } from './mapStyle';
+import { MemberMarkers, type MapMember } from './MemberMarkers';
 
 export type HikeMapHandle = {
   /** Moves the map to the hiker's position. */
-  centerOn(position: HikerPosition): void;
+  centerOn(position: Pick<HikerPosition, 'latitude' | 'longitude'>): void;
 };
 
 type Inset = { top: number; bottom: number };
@@ -50,7 +51,13 @@ type HikeMapProps = {
   onBearingChange?: (bearingDeg: number) => void;
   /** Space taken by panels over the map, so the camera centres in what is left. */
   inset?: Inset;
+  /** Group Hike members (#24), drawn above the hiker's dot. */
+  members?: readonly MapMember[];
+  /** A member's dot was tapped. */
+  onMemberPress?: (member: MapMember) => void;
 };
+
+const NO_MEMBERS: readonly MapMember[] = [];
 
 // The PMTiles files are cut to zoom 15; MapLibre overzooms them up to MAX_ZOOM.
 const MIN_ZOOM = 8;
@@ -75,6 +82,8 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
     onUserMove,
     onBearingChange,
     inset = NO_INSET,
+    members = NO_MEMBERS,
+    onMemberPress,
   },
   ref,
 ) {
@@ -199,6 +208,7 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
         <Layer {...gpsHalo} />
         <Layer {...gpsDot} />
       </GeoJSONSource>
+      <MemberMarkers members={members} onPress={(member) => onMemberPress?.(member)} />
     </Map>
   );
 });

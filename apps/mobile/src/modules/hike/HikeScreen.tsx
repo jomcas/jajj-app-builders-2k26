@@ -6,6 +6,21 @@ import { ActivityIndicator, Alert, StyleSheet, Text, View, type LayoutChangeEven
 import { EmptyState } from '../../shell/EmptyState';
 import { useStrings, useTheme } from '../../settings/preferences';
 import { textStyles } from '../../theme/typography';
+import {
+  addSimulatedMember,
+  GroupAlertBanners,
+  initials,
+  memberDot,
+  memberLabel,
+  memberStatus,
+  removeSimulatedMember,
+  SimulatedMemberControls,
+  useGroupAlertNotifications,
+  useMembers,
+  useSelfAlerts,
+  type AlertPosition,
+} from '../alerts';
+import alertStrings from '../alerts/strings';
 import type { DestinationPack, Trail } from '../destination-pack';
 import {
   isDeviation,
@@ -18,6 +33,8 @@ import { clearPendingSimulation, endHike, hikeStore, startHike, type RunningHike
 import { useHikerPosition, type HikerPosition } from './location/useHikerPosition';
 import { HikeMap, type HikeMapHandle } from './map/HikeMap';
 import { MapControls } from './map/MapControls';
+import type { MapMember } from './map/MemberMarkers';
+import { fill } from './format';
 import strings from './strings';
 import { locateOnTrail, prepareTrail, type PreparedTrail, type TrailLocation } from './trail/geometry';
 import {
@@ -152,6 +169,37 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
   });
   const { view, deviation, offTrailM, dismiss } = useHikeTracking(hike?.id ?? null, entry, position);
   useDeviationAlerts(hike?.id ?? null, deviation);
+  // Group Hike Alerts (#24): this phone's own Alerts out, other members' Alerts in.
+  useSelfAlerts(hike?.id ?? null, deviation, position);
+  useGroupAlertNotifications();
+  const sa = useStrings(alertStrings);
+  const memberRecords = useMembers();
+  const members = useMemo<MapMember[]>(
+    () =>
+      Object.values(memberRecords).flatMap((member) => {
+        if (!member.position) return [];
+        const status = memberStatus(member);
+        const label = memberLabel(member, sa);
+        return [
+          {
+            id: member.id,
+            initials: initials(member.name),
+            label,
+            accessibilityLabel: fill(status === 'ok' ? sa.memberDot : sa.memberDotAlert, { name: label }),
+            latitude: member.position.latitude,
+            longitude: member.position.longitude,
+            dot: memberDot(status),
+          },
+        ];
+      }),
+    [memberRecords, sa],
+  );
+  const hikeId = hike?.id ?? null;
+  // The simulated member belongs to one Hike.
+  useEffect(() => {
+    if (hikeId === null) return;
+    return removeSimulatedMember;
+  }, [hikeId]);
 
   const map = useRef<HikeMapHandle>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -171,7 +219,8 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
     ? pickedTrailId
     : (pickable[0]?.id ?? null);
   const follow = hike !== null && unfollowedHikeId !== hike.id;
-  const showTop = hike !== null && (hike.simulation !== null || deviation !== null);
+  const membersAlerting = Object.values(memberRecords).some((member) => memberStatus(member) !== 'ok');
+  const showTop = hike !== null && (hike.simulation !== null || deviation !== null || membersAlerting);
   const topInset = showTop ? measured.top : 0;
   const inset = useMemo(() => ({ top: topInset, bottom: measured.bottom }), [topInset, measured.bottom]);
 
@@ -222,6 +271,25 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
     setNotice(servicesEnabled ? s.noFix : s.servicesOff);
   }, [permission, position, retry, s.noFix, s.servicesOff]);
 
+  const showMember = useCallback(
+    (at: AlertPosition) => {
+      setUnfollowedHikeId(hike?.id ?? null);
+      map.current?.centerOn(at);
+    },
+    [hike?.id],
+  );
+
+  const addMember = useCallback(() => {
+    if (!hike || !entry) return;
+    const sim = hike.simulation?.getSnapshot();
+    addSimulatedMember({
+      trail: entry.line,
+      trailId: entry.trail.id,
+      speed: sim?.speed ?? 15,
+      startFraction: sim && sim.durationS > 0 ? sim.tS / sim.durationS : 0,
+    });
+  }, [hike, entry]);
+
   const confirmEnd = useCallback(() => {
     Alert.alert(s.endConfirmTitle, s.endConfirmBody, [
       { text: s.keepHiking, style: 'cancel' },
@@ -249,6 +317,8 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
         // A Deviation dashes the Trail line until the hiker is back (ADR 0004: never red alone).
         trailDashed={deviation !== null}
         follow={follow}
+        members={members}
+        onMemberPress={showMember}
         onUserMove={() => setUnfollowedHikeId(hike?.id ?? null)}
         onBearingChange={setMapBearingDeg}
         inset={inset}
@@ -256,7 +326,11 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
       {hike ? <KeepScreenOn /> : null}
       {showTop ? (
         <View style={styles.top} onLayout={onTopLayout}>
-          {hike?.simulation ? <SimulationBar walk={hike.simulation} offTrailM={offTrailM} /> : null}
+          {hike?.simulation ? (
+            <SimulationBar walk={hike.simulation} offTrailM={offTrailM}>
+              <SimulatedMemberControls onAdd={addMember} />
+            </SimulationBar>
+          ) : null}
           {deviation ? (
             <DeviationBanner
               offTrailM={deviation.toTrail.offTrailM}
@@ -264,6 +338,7 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
               mapBearingDeg={mapBearingDeg}
             />
           ) : null}
+          <GroupAlertBanners onShowOnMap={showMember} />
         </View>
       ) : null}
       <MapControls
@@ -278,6 +353,7 @@ function DestinationMap({ pack }: { pack: DestinationPack }) {
         {hike && entry ? (
           <>
             {view?.suggestEnd ? <EndSuggestion onEnd={endHike} onDismiss={dismiss} /> : null}
+            {hike.simulation ? null : <SimulatedMemberControls card onAdd={addMember} />}
             <HikePanel destinationId={pack.destination.id} trailName={entry.trail.name} view={view} onEnd={confirmEnd} />
           </>
         ) : (
