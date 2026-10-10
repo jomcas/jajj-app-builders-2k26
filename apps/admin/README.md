@@ -13,6 +13,10 @@ cp .env.example .env.local   # then fill in the two values
 npm run dev                  # http://localhost:5174
 ```
 
+To run against a local Supabase in Docker instead of the cloud project, run
+`scripts/dev-setup.sh` from the repo root: it writes `.env.local` for you and creates a local
+team account (see the root [README](../../README.md)).
+
 `.env.local` (git-ignored) holds `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`: the same
 project URL and anon/publishable key as `apps/mobile/.env.local`. **Never put the service_role or
 secret key here.** The portal acts as the logged-in team member, and the database decides what
