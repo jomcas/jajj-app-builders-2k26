@@ -4,10 +4,9 @@ Checkpoint: **Wave 4 is "ordered, cut from the bottom": 4a the custom Admin Port
 - **The Admin Portal has no live check yet.** Its code is merged and its migration is applied to the hosted project, and the team allowlist has 3 emails. The 3 team accounts don't exist in Supabase Auth yet, so nobody has logged in, previewed a GPX file or published from it against the live project. That's a human step (item 1A), and [#21](https://github.com/jomcas/jajj-app-builders-2k26/issues/21) stays open until it's done.
 - **The Hike tab's map hides part of the Trail before a Hike.** The new Destination choice made the Trail card taller, and the map still fits with a fixed bottom padding, so much of Batulao's Trail sits under the card until the Hike starts. The fix is planned for Wave 5.
 - **Group Hike joining ([#23](https://github.com/jomcas/jajj-app-builders-2k26/issues/23)) is deferred** and shows as "coming soon". Group Hike Alerts ([#24](https://github.com/jomcas/jajj-app-builders-2k26/issues/24)) work on one phone through a loopback, with a clearly labelled simulated member. They don't link two phones yet.
+- **Alerts and the Deviation check run only while Tahak is open on screen.** There's no Android foreground service yet. This is being tested now, and a post-tournament ticket is being filed.
 
-Mt. Ulap and Mt. Pulag both passed on the Flip 6, and [#22](https://github.com/jomcas/jajj-app-builders-2k26/issues/22) is closed. The Hike tab's Destination choice ([#52](https://github.com/jomcas/jajj-app-builders-2k26/issues/52), PR [#58](https://github.com/jomcas/jajj-app-builders-2k26/pull/58)) is merged.
-
-**TBD:** #24 hasn't merged yet. The sections marked **TBD** below get filled in from its PR when it does.
+Mt. Ulap and Mt. Pulag both passed on the Flip 6, and [#22](https://github.com/jomcas/jajj-app-builders-2k26/issues/22) is closed. The Hike tab's Destination choice ([#52](https://github.com/jomcas/jajj-app-builders-2k26/issues/52), PR [#58](https://github.com/jomcas/jajj-app-builders-2k26/pull/58)) and Group Hike Alerts ([#24](https://github.com/jomcas/jajj-app-builders-2k26/issues/24), PR [#60](https://github.com/jomcas/jajj-app-builders-2k26/pull/60)) are merged.
 
 ## 1. What was built
 
@@ -52,7 +51,15 @@ Status: the migration is applied to the hosted project, and `team_members` holds
 
 This removes the Wave 3 demo risk: Batulao no longer has to be the last download.
 
-**Group Hike Alerts ([#24](https://github.com/jomcas/jajj-app-builders-2k26/issues/24), PR TBD).** **TBD.** It's in progress on `wave-4/24-group-alerts`. As revised, a Deviation or a Flare by a Group Hike member reaches this phone as an Alert, through a swappable `AlertTransport`. Today that's a local loopback; later it will be Nearby Connections, from #23. For the demo, a clearly labelled simulated member walks the Trail, goes into a Deviation and fires a Flare. This phone shows a banner and a notification (mirrored to the watch), and the member's dot changes. The dot is olive, and **red only during a Deviation or a Flare**, always with an icon and text too ([ADR 0004](../adr/0004-red-means-danger-only.md)).
+**Group Hike Alerts ([#24](https://github.com/jomcas/jajj-app-builders-2k26/issues/24), PR [#60](https://github.com/jomcas/jajj-app-builders-2k26/pull/60)).** When a Group Hike member goes off the Trail or fires the Flare, this phone gets an Alert. Until #23 links phones, the Alerts go through a local loopback, and the member is a clearly labelled simulated one:
+- **The simulated member.** During a simulated walk, the simulation bar has **Add simulated member**. "Ana (simulated)" ("Ana (kunwari)" in Filipino) then walks the same Trail a little ahead of the hiker. During a GPS Hike, a small card offers the same button.
+- **The incident.** One button, **Ana: off Trail, then Flare**, plays a scripted incident: Ana walks 60 m off the Trail, comes back, fires the Flare 20 s later, and stops it 60 s after that. The walk slows to 4× during the incident so it can be watched. The Deviation shows about 27 s after the tap.
+- **The banner.** It's one compact row with a danger border, an icon, the words and **Show on map**: "Ana (simulated) is off the Trail · 60 m", then "Ana (simulated) fired the Flare". In Filipino: "Lihis sa Trail si Ana (kunwari) · 60 m".
+- **The notification.** It goes on a new **Group Alerts** channel, with its own vibration, and is mirrored to a paired watch. It's dismissed when the Deviation clears or the Flare stops.
+- **The dot.** It's olive with **AN** and an "Ana (simulated)" caption. It's red with an icon only during a Deviation, and red with a pulsing ring during a Flare ([ADR 0004](../adr/0004-red-means-danger-only.md)). Tapping the dot or **Show on map** centres the map on Ana.
+- **This phone's own Deviation and Flare** are sent out as Alerts too, ready for when other phones can receive them. For now they're only logged.
+
+All of this works in airplane mode.
 
 **Every cited source gets a chip ([#53](https://github.com/jomcas/jajj-app-builders-2k26/issues/53), PR [#55](https://github.com/jomcas/jajj-app-builders-2k26/pull/55)).** The Wave 3 bug is fixed. An answer that cites 3 passages now shows 3 chips. "Magkano ang bayad sa Mt. Ulap?" shows **Mt. Ulap · Fees**, **Mt. Ulap · Guides and porters** and **Mt. Ulap · Campsites**. When two different passages share a topic, each chip is named after its passage.
 
@@ -81,10 +88,10 @@ main
 ├── #50  wave-4/22-pulag              (#22, part 2)  2026-10-09 23:40Z
 ├── #55  wave-4/53-chips              (#53)          2026-10-10 00:01Z
 ├── #58  wave-4/52-hike-destination   (#52)          2026-10-10 00:19Z
-└── TBD  wave-4/24-group-alerts       (#24)          TBD
+└── #60  wave-4/24-group-alerts       (#24)          2026-10-10 00:33Z
 ```
 
-The mobile test count went from 324 to 325 (#55) and 326 (#58), TBD after #24. The Admin Portal has its own 33 Vitest tests. **No native build so far this wave:** #43, #40, #48 and #50 changed no app code, and #55 and #58 were JavaScript-only. TBD: whether #24 needed one (the plan says no).
+The mobile test count went from 324 to 325 (#55), 326 (#58) and 343 (#60, with 16 new tests in `test/alerts.test.ts`). The Admin Portal has its own 33 Vitest tests. **No native build so far this wave:** #43, #40, #48 and #50 changed no app code, and #55, #58 and #60 were JavaScript-only.
 
 **Key libraries.**
 - **The Admin Portal:** Vite and React 18, `@supabase/supabase-js` with the anon key plus the member's session (never the service-role key), and MapLibre GL JS on OpenStreetMap tiles for the GPX preview and Waypoint placing. The GPX parsing, distances, validation, publish payload, "what changed" and Waypoint reordering are pure functions in `src/lib/`, tested with Vitest.
@@ -99,7 +106,18 @@ The mobile test count went from 324 to 325 (#55) and 326 (#58), TBD after #24. T
 - **Pulag's map is the Trail plus 6 km** (not 5 km), so it includes the DENR Visitor Center. Its summit elevation is 2,922 m (DENR-CAR), not OSM's 2,928.
 - **Pulag's fees and guide rates now come from the Benguet Provincial Tourism Office (2026),** replacing the low-trust blog in the first drafts. The orientation, the visitor cap and campsite status (including the February 2025 closure) are each attributed to their own source and date.
 - **Chips are grouped by passage, not by label (#55).** The numbered parts of one topic (Batulao `water-1` and `water-2`) still share a chip. A chip is named after its passage only when its label would clash with another.
-- **#23 was deferred and #24 revised (2026-10-10).** Instead of waiting for Nearby Connections, Alerts were built behind an `AlertTransport` interface (`send` / `onReceive`) with a loopback and a simulated member. **TBD:** the module's shape, the simulated member's controls and any departures, from #24's PR.
+- **#23 was deferred and #24 revised (2026-10-10).** Instead of waiting for Nearby Connections, Alerts were built so the Nearby link can be added later without touching their UI:
+  - **The `alerts` module** (`src/modules/alerts/`, no tab) defines `Alert = { id, type, memberId, memberName, position, time }`. The type is `deviation`, `deviation-cleared`, `flare` or `flare-stopped`.
+  - **The `AlertTransport` interface** has `send`/`onReceive` for Alerts and `sendPosition`/`onPosition` so a member's dot can move. Today it's a linked-pair `LoopbackTransport`. `setTransport()` is the seam where #23 will plug in Nearby.
+  - **Every Alert reaches this phone through the transport,** never by a direct call.
+- **The simulated member reuses the Hike's own parts.** It walks on the simulated-walk player (with a new `excursions: false` option), and the Deviation detector runs on Ana's own track, so it decides when her Deviation starts and clears, with the real 40 m / 30 s rule. Tests check that the script gives exactly one Deviation Alert and one Flare Alert, at 2× and at 15×.
+- **The notification channel is `group-alerts` at maximum importance** (5), so the Alert shows as a heads-up.
+- **Small edits to `hike`:**
+  - `createSimulatedWalk({ excursions })`, exported from `hike/index.ts`;
+  - `members`/`onMemberPress` props on `HikeMap`, and `centerOn` takes coordinates;
+  - `children` on `SimulationBar`;
+  - the wiring in `HikeScreen`.
+- **The Solo | Group "Coming soon" criterion of #24** shipped in #58.
 - **The Hike tab's Destination choice (#58)** is saved in AsyncStorage (`tahak.hike.destination`). It uses only `destination-pack`'s public interface (`listDownloaded`, `getPack`, `subscribe`), and the shown pack is picked by the pure helper `pickShownPack` in `hike/latestPack.ts`: the saved choice if it's still downloaded, else the latest download, and always the running Hike's own Destination. Switching remounts the map so it refits. The Solo | Group choice, part of #24, landed in the same PR, because it sits on the same card. "Destination" and "Group Hike" are in the i18n glossary of words kept the same in Filipino.
 
 **Known limits and shortcuts.**
@@ -109,7 +127,11 @@ The mobile test count went from 324 to 325 (#55) and 326 (#58), TBD after #24. T
 - **In the Filipino UI, a chip named after its passage reads in English** (for example "Mt. Ulap · Guides and porters"). The source sheet's heading still shows the topic label.
 - **Before a Hike, the Trail card hides part of the Trail (#58).** `HikeMap` fits the Destination with a fixed bottom padding of 140, and the card is now taller, so Batulao's Trail is the most affected. The fix belongs in `hike/map/` (fit with the card's measured height) and is planned for Wave 5. During the demo, pinch out or start the Hike, which follows the hiker.
 - **The Forecast's first automatic fetch after the Pulag download failed,** and it needed a retry. It refreshes by itself every 30 s while it's missing.
-- **TBD:** limits from #24. One is already known: Group Hike Alerts only loop back on one phone until #23.
+- **Group Hike Alerts only loop back on one phone** until #23 adds Nearby Connections. The only other member is the simulated one.
+- **Alerts and the Deviation check run only while Tahak is open on screen.** There's no Android foreground service. This is being tested now, and a post-tournament ticket is being filed. For the demo, keep Tahak in the foreground.
+- **During a Hike, the bars and the panel leave little map space on the Flip** (the simulation bar, the Alert banner and the Hike panel). This is a Wave 5 fix.
+- **The `alerts` and `hike` modules import each other** through their public `index.ts` files. Babel's live bindings resolve the cycle, and the app runs, but it's a seam to untangle later.
+- **The Group Alerts channel name is fixed by whichever language first creates it.** Android lets the app rename the channel later, but not change its importance.
 - **Still open from earlier waves:** the Red Cross check on all 15 Guides ([#11](https://github.com/jomcas/jajj-app-builders-2k26/issues/11)), Assistant latency, the dev-only MapLibre toast on a theme switch, and the F16 file (#54).
 
 ## 3. How to test it
@@ -122,7 +144,7 @@ The mobile test count went from 324 to 325 (#55) and 326 (#58), TBD after #24. T
 
 Run everything from a Mac terminal with the phone (serial `R5CX728V0LN`) plugged in over USB. To mirror the phone on the Mac, run `scrcpy -s R5CX728V0LN`.
 
-**Which code runs.** The installed APK was built from #12's branch at 05:12 on 2026-10-10. #55 and #58 were JavaScript-only. TBD: confirm #24 was too. The JavaScript comes from Metro, so run Metro in the main checkout on `main`.
+**Which code runs.** The installed APK was built from #12's branch at 05:12 on 2026-10-10. #55, #58 and #60 were all JavaScript-only, so it still has everything needed. The JavaScript comes from Metro, so run Metro in the main checkout on `main`.
 
 **Photosensitivity:** the Flare strobes the screen at 2 Hz. Look away from it if flashing light bothers you.
 
@@ -346,28 +368,43 @@ The portal has no Destination delete, so use the Supabase CLI from the main chec
 - **Step 6:** "Pumili ng Destination", **Mag-isa | Grupo**, "Malapit na", and the Filipino sheet text.
 - **Known (Wave 5 fix):** before the Hike, the taller card hides much of Batulao's Trail at the bottom of the map. Pinch out to see it all. It's not a failure for this item.
 
-### 4. Group Hike Alerts with the simulated member (#24)
+### 4. Group Hike Alerts with the simulated member (#24, PR #60)
 
-**TBD: fill in from #24's PR once it merges** (the control that adds the simulated member, its label, the banner, notification and dot texts, timings).
+**Start:** airplane mode with Wi-Fi off, Metro running, English, Day theme, a Destination downloaded, no Hike running, media volume about two-thirds, **Tahak open on screen the whole time** (Alerts don't run in the background). The watch is paired (optional).
 
-**Start:** airplane mode with Wi-Fi off, Metro running, English, a Destination downloaded, no Hike running, media volume about two-thirds. The watch is paired (optional).
+In terminal 3, watch the Alerts log:
+```sh
+~/Library/Android/sdk/platform-tools/adb -s R5CX728V0LN logcat -c
+~/Library/Android/sdk/platform-tools/adb -s R5CX728V0LN logcat -v time -s ReactNativeJS:I | grep alerts
+```
 
-1. On **Hike**, start a simulated walk.
-2. Add the simulated group member (TBD: control and label). Watch its dot on the map.
-3. Let the member go into a Deviation (TBD: automatic or a tap; #24 slows it to 4× during its incident).
-4. Wait for it to come back on the Trail.
-5. Let the member fire a Flare (TBD).
-6. Check the notification shade and the watch.
-7. End the Hike with `tahak://hike/end`.
+1. On **Hike**, keep **Solo** selected, choose a Trail, turn **Simulated walk** on, and tap **Start Hike**.
+2. On the simulation bar, tap **Add simulated member**. Watch its dot.
+3. Tap **Ana: off Trail, then Flare** and start a timer. Watch the map and the top of the screen.
+4. Tap **Show on map** on the banner.
+5. Keep watching as Ana comes back, then fires the Flare (about 20 s later).
+6. While the Flare Alert is up, pull down the notification shade and look at the watch. In terminal 2, run:
+   ```sh
+   ~/Library/Android/sdk/platform-tools/adb -s R5CX728V0LN shell dumpsys notification | grep -i "group-alerts"
+   ```
+7. Wait for the Flare to stop (about 60 s at 4×). Then tap **Go off the Trail** for this phone's own Deviation and check the log.
+8. Tap the cog: choose **Filipino** and **Night**. Tap **Remove**, then add the member again (**Magdagdag ng kunwaring kasama**) and run the incident once more (**Ana: lihis, saka Flare**). Switch back to **English** and **Day**.
+9. End the Hike with `tahak://hike/end`.
 
-**Expected (TBD: confirm against #24):**
-- **Step 2:** a clearly labelled simulated member (TBD: label) with an **olive** dot and initials, moving along the Trail.
-- **Step 3:** within a few seconds, an Alert: a banner naming the member and the Deviation, an Android notification, and the member's dot turning **red with an icon and text**. Red is never the only signal.
-- **Step 4:** the dot goes back to olive.
-- **Step 5:** a Flare Alert with the member's position on the map. The dot is red while the Flare lasts.
-- **Step 6:** the notifications are there, and mirrored on the watch.
-- **Step 7:** the simulated member disappears with the Hike. Nothing needed the network.
-- **This phone's own Flare and Deviation still work as before** (item 5).
+**Expected:**
+- **Step 2:** a clearly labelled **"Ana (simulated)"** caption under an **olive dot with AN**, a little ahead of the hiker on the Trail and moving along it. The button now says **Ana: off Trail, then Flare**.
+- **Step 3:** the button says "Ana: running…" and the walk slows to 4×. **About 27 s after the tap**:
+  - the Alert banner, one compact row with a danger border and icon: **"Ana (simulated) is off the Trail · 60 m"** and **Show on map**;
+  - a heads-up notification;
+  - **Ana's dot turns red with an icon**. Red is never the only signal.
+  - The log has `received deviation` from Ana (simulated-ana).
+- **Step 4:** the map centres on Ana, off the Trail.
+- **Step 5:** when Ana is back on the Trail, the dot turns **olive** again, the banner goes, and the notification is dismissed (`deviation-cleared`). About 20 s later: **"Ana (simulated) fired the Flare"**, and the dot is red with a **pulsing ring** at her position (`received flare`).
+- **Step 6:** the notification is in the shade (and on the watch). The `dumpsys` output has `channel=group-alerts` with `importance=5`.
+- **Step 7:** when the Flare stops, the dot is olive, and no Group Alerts notification is left (`flare-stopped`). The phone's own Deviation works as before (banner, vibration, sound), and the log adds `[alerts] sent deviation from this phone`, then `sent deviation-cleared`.
+- **Step 8:** "Ana (kunwari)", **"Lihis sa Trail si Ana (kunwari) · 60 m"**, then "Pinaputok ni Ana (kunwari) ang Flare". It's readable in Night, and the dot follows the same colour rule.
+- **Step 9:** Ana disappears with the Hike. Nothing needed the network.
+- **Known (Wave 5 fix):** during the Hike, the bars and the panel leave little map; pinch out if Ana's dot is under them.
 
 ### 5. Regression pass: the core loop, Waves 1–3
 
