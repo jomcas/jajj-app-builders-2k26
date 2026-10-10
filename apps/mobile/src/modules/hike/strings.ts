@@ -60,6 +60,9 @@ const en = {
   // The button shows the speed it switches to, not the current one (the title says that).
   simulationSpeed: 'Switch to {speed}×',
   simulationSpeedHint: 'Change how fast the simulated walk goes',
+  simulationPause: 'Pause',
+  simulationResume: 'Resume',
+  simulationPausedNote: 'Simulated walk paused',
   goOffTrail: 'Go off the Trail',
   // The real distance from the Trail, as the Deviation measures it (see simulate/simulationLine.ts).
   simulatedOffTrail: '{distance} off the Trail',
@@ -154,6 +157,9 @@ const fil: Record<keyof typeof en, string> = {
   simulationNote: 'Hindi ito ang totoong kinaroroonan mo.',
   simulationSpeed: 'Gawing {speed}×',
   simulationSpeedHint: 'Palitan ang bilis ng kunwaring lakad',
+  simulationPause: 'Ihinto',
+  simulationResume: 'Ituloy',
+  simulationPausedNote: 'Nakahinto ang kunwaring lakad',
   goOffTrail: 'Lumihis sa Trail',
   simulatedOffTrail: '{distance} palayo sa Trail',
   deviationTitle: 'Lihis sa Trail · {distance}',

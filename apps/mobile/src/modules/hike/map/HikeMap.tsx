@@ -136,17 +136,18 @@ export const HikeMap = forwardRef<HikeMapHandle, HikeMapProps>(function HikeMap(
     [geojson.bounds, pack.destination.latitude, pack.destination.longitude],
   );
 
-  // When a Hike ends, show the whole Destination again for picking the next Trail.
-  const previousTrailId = useRef(activeTrailId);
+  // Before a Hike (and when one ends), fit the whole Destination into the part of the map the
+  // Trail card and top bars leave free. Uses the measured insets, and refits when the card's
+  // height changes or another Destination is shown.
+  const fitTop = Math.max(FIT_PADDING.top, inset.top + 24);
+  const fitBottom = Math.max(FIT_PADDING.bottom, inset.bottom + 24);
   useEffect(() => {
-    const ended = previousTrailId.current !== null && activeTrailId === null;
-    previousTrailId.current = activeTrailId;
-    if (!ended || !geojson.bounds) return;
+    if (activeTrailId !== null || !geojson.bounds || inset.bottom === 0) return;
     camera.current?.fitBounds(geojson.bounds, {
-      padding: { top: 48, right: 48, left: 48, bottom: inset.bottom + 24 },
-      duration: 800,
+      padding: { top: fitTop, right: FIT_PADDING.right, left: FIT_PADDING.left, bottom: fitBottom },
+      duration: 600,
     });
-  }, [activeTrailId, geojson.bounds, inset.bottom]);
+  }, [activeTrailId, geojson.bounds, inset.bottom, fitTop, fitBottom]);
 
   useImperativeHandle(
     ref,
